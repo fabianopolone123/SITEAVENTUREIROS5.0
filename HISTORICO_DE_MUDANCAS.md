@@ -217,3 +217,97 @@ Sem isso, nenhuma modificaÃ§Ã£o deve ser feita.
 - Disponibiliza o core Django alinhado à arquitetura backend-first.
 - Fornece módulos básicos de diagnóstico, integrações e workers para serem estendidos.
 - Sistema ainda precisa de modelos reais, lógica de negócios e configuração de banco real; essa é uma base inicial.
+---
+
+### ğŸ”„ AlteraÃ§Ã£o NÂº 0004
+**Data:** 2026-02-01  
+**Autor:** Codex  
+**Tipo:** infra  
+
+#### ğŸ“Œ Contexto
+> O Django carregava o middleware `backend.diagnostics` apenas quando o pacote `backend` estava acessível no caminho de importação, o que falhava ao executar `python manage.py runserver` dentro da própria pasta `backend`.
+
+#### ğŸ› ï¸ O que foi feito
+- Adicionado `backend/__init__.py` para garantir que o diretório seja reconhecido como pacote Python.
+- Ajustado `manage.py` para inserir o diretório pai do backend (`project root`) em `sys.path` antes de carregar o Django, garantindo que `backend.*` seja resolvido independentemente de onde o comando for executado.
+
+#### ğŸ“ Arquivos afetados
+- backend/__init__.py
+- backend/manage.py
+
+#### ğŸ”— Relacionado a
+- infra: carregamento do projeto Django
+
+#### âš ï¸ Impacto / ObservaÃ§Ãµes
+- Agora `runserver` consegue importar `backend.diagnostics` e outras referências sem depender do diretório atual.
+- O projeto permanece alinhado com a arquitetura backend-first e pronto para receber mais apps.
+---
+
+### ğŸ”„ AlteraÃ§Ã£o NÂº 0005
+**Data:** 2026-02-01  
+**Autor:** Codex  
+**Tipo:** infra  
+
+#### ğŸ“Œ Contexto
+> Ao rodar `manage.py runserver` no host local, o Django rejeitou o `HTTP_HOST` porque `127.0.0.1` não fazia parte de `ALLOWED_HOSTS`, bloqueando a página inicial.
+
+#### ğŸ› ï¸ O que foi feito
+- Ajustado `ALLOWED_HOSTS` em `config/settings.py` para incluir `127.0.0.1` por padrão e filtrar valores vazios, garantindo que o host local seja aceito mesmo sem variáveis de ambiente.
+
+#### ğŸ“ Arquivos afetados
+- backend/config/settings.py
+
+#### ğŸ”— Relacionado a
+- infra: configuração do servidor
+
+#### âš ï¸ Impacto / ObservaÃ§Ãµes
+- `python manage.py runserver` agora responde normalmente para `127.0.0.1:8000` (e para hosts adicionais declarados via `DJANGO_ALLOWED_HOSTS`).
+---
+
+### ğŸ”„ AlteraÃ§Ã£o NÂº 0006
+**Data:** 2026-02-01  
+**Autor:** Codex  
+**Tipo:** infra  
+
+#### ğŸ“Œ Contexto
+> A rota raiz (`/`) retornava 404 porque apenas `/admin/` e `/health/` estavam definidos, prejudicando a verificação inicial do backend.
+
+#### ğŸ› ï¸ O que foi feito
+- Adicionado um view simples em `config/urls.py` que responde na raiz com um `HttpResponse` indicando que o backend está em funcionamento, além da rota de saúde já existente.
+
+#### ğŸ“ Arquivos afetados
+- backend/config/urls.py
+
+#### ğŸ”— Relacionado a
+- infra: resposta padrão para `/`
+
+#### âš ï¸ Impacto / ObservaÃ§Ãµes
+- Agora `http://127.0.0.1:8000/` exibe uma mensagem informando que o backend está ativo, facilitando testes manuais e validações do ambiente.
+---
+
+### ğŸ”„ AlteraÃ§Ã£o NÂº 0007
+**Data:** 2026-02-01  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### ğŸ“Œ Contexto
+> Era necessário que `python manage.py runserver` exibisse a tela de login completa sem depender do Next.js em `localhost:3000`, mantendo o backend como ponto único de controle.
+
+#### ğŸ› ï¸ O que foi feito
+- Criado um template `login.html` e estilos `static/css/login.css` no backend que replicam o visual do mock.
+- Copiado o `logo.png` para `static/images/` e configurado o Django para servir os assets e templates usando `STATICFILES_DIRS` e `BASE_DIR / 'templates'`.
+- Atualizado `config/urls.py` para renderizar o template de login na raiz, preservando `/health/` e `/admin/`.
+
+#### ğŸ“ Arquivos afetados
+- backend/config/settings.py
+- backend/config/urls.py
+- backend/templates/login.html
+- backend/static/css/login.css
+- backend/static/images/logo.png
+
+#### ğŸ”— Relacionado a
+- feature: experiência inicial do backend
+
+#### âš ï¸ Impacto / ObservaÃ§Ãµes
+- `runserver` agora mostra a tela de login completa, o que facilita testes rápidos sem rodar o Next separadamente.
+- A arquitetura continua backend-first e mantém o frontend Next.js disponível para evoluções futuras.

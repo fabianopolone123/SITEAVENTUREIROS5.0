@@ -1,62 +1,63 @@
-📁 Arquitetura de Pastas do Projeto
-Organização Oficial do Código – Backend-First
+# 📁 ARQUITETURA_DE_PASTAS.md
+## Organização Oficial do Código – Django Monolito (Backend-First)
 
-Este documento define ONDE cada coisa deve morar no projeto.
+Este documento define **ONDE cada coisa deve morar** no projeto.
 
-⚠️ Qualquer código criado fora desta arquitetura é considerado ERRO
-⚠️ Qualquer estrutura não prevista aqui deve ser recusada
-⚠️ O Codex deve ler este arquivo ANTES de criar, mover ou sugerir arquivos
+⚠️ Qualquer código criado fora desta arquitetura é considerado **ERRO**  
+⚠️ Qualquer estrutura não prevista aqui deve ser **recusada**  
+⚠️ O Codex deve ler este arquivo **ANTES** de criar, mover ou sugerir arquivos
 
-❗ DIRETRIZ FUNDAMENTAL
+---
 
-Este projeto é BACKEND-FIRST.
+## ❗ DIRETRIZ FUNDAMENTAL
 
-O Django (Python) é o núcleo do sistema
+Este projeto é **BACKEND-FIRST** e **MONOLÍTICO EM DJANGO**.
 
-O frontend é apenas um cliente de interface
+- **Django (Python) é o núcleo do sistema**
+- **A interface (UI) também mora no Django**
+- **Não existe frontend separado**
 
-A arquitetura NÃO é decidida pelo frontend
+✅ Resultado: desenvolvimento pode rodar com **um único servidor** (`runserver`), com UI + API + diagnóstico no mesmo lugar.
 
-🚫 PROIBIÇÕES ABSOLUTAS
+---
+
+## 🚫 PROIBIÇÕES ABSOLUTAS
 
 É expressamente proibido:
 
-usar Nx
+- usar Next.js
+- usar React SPA separado do Django
+- usar Nx
+- usar Turborepo
+- usar Lerna
+- criar monorepo JavaScript
+- criar estruturas do tipo:
+  - `/apps` (no root)
+  - `/libs`
+  - `/packages`
+- criar pasta `/frontend`
+- espalhar UI fora do módulo oficial de UI
+- espalhar lógica de diagnóstico dentro de apps de negócio
 
-usar Turborepo
+Qualquer tentativa de introduzir essas ferramentas ou padrões é considerada **ERRO DE ARQUITETURA**.
 
-usar Lerna
+---
 
-criar monorepo JavaScript
-
-criar estruturas do tipo:
-
-/apps
-
-/libs
-
-/packages
-
-misturar código Python dentro de estruturas JavaScript
-
-Qualquer tentativa de introduzir essas ferramentas ou padrões é considerada
-ERRO DE ARQUITETURA.
-
-🎯 Objetivo da Arquitetura
+## 🎯 Objetivo da Arquitetura
 
 Garantir que:
 
-o projeto seja fácil de entender
+- o projeto seja fácil de entender
+- o diagnóstico não fique espalhado
+- integrações não virem gambiarra
+- o Codex não “invente” caminhos
+- cada responsabilidade tenha um lugar único e claro
+- o projeto tenha **1 deploy**, **1 servidor**, **1 fluxo**
 
-o diagnóstico não fique espalhado
+---
 
-integrações não virem gambiarra
+## 🧱 Visão Geral da Estrutura (OFICIAL)
 
-o Codex não “invente” caminhos
-
-cada responsabilidade tenha um lugar único e claro
-
-🧱 Visão Geral da Estrutura
 /project-root
 │
 ├── README.md
@@ -66,212 +67,191 @@ cada responsabilidade tenha um lugar único e claro
 ├── DIAGNOSTICO_AUTODIAGNOSTICAVEL.md
 ├── ARQUITETURA_DE_PASTAS.md
 │
-├── backend/        # CORE DO SISTEMA (Django)
-├── frontend/       # Interface (Next.js)
-├── infra/          # Docker, Nginx, deploy
-├── docs/           # Documentação auxiliar
-└── scripts/        # Scripts utilitários
+├── backend/ # ✅ CORE + UI + API + DIAGNÓSTICO (Django)
+├── infra/ # Docker, Nginx, deploy
+├── docs/ # Documentação auxiliar
+└── scripts/ # Scripts utilitários
 
 
-Qualquer variação dessa estrutura é inválida.
+⚠️ Qualquer variação dessa estrutura é inválida.
 
-🖥️ FRONTEND (/frontend)
+---
 
-Tecnologia: Next.js (React – App Router)
+# 🧠 BACKEND (/backend)
 
-Responsabilidades
+Tecnologia: **Django + Django REST Framework**
 
-interface do usuário
+👉 Este é o **CORE do projeto** e também contém a **UI**.
 
-captura de eventos de diagnóstico
+Responsabilidades:
 
-interceptação de requisições
+- regras de negócio
+- autenticação
+- APIs
+- persistência
+- UI (templates + static)
+- correlação de eventos
+- fila, workers e webhooks
+- diagnóstico completo do sistema
 
-geração de session_id e trace_id
+---
 
-Estrutura Oficial
-frontend/
-├── app/                    # Rotas e páginas
-│   ├── (public)/
-│   ├── (auth)/
-│   ├── admin/
-│   └── diagnostics/        # Tela de diagnóstico (admin)
-│
-├── components/
-│   ├── ui/                 # Componentes visuais puros
-│   ├── forms/
-│   └── layout/
-│
-├── diagnostics/            # ⭐ DIAGNÓSTICO (FRONT)
-│   ├── session.ts          # session_id
-│   ├── trace.ts            # trace_id
-│   ├── logger.ts           # envio de eventos
-│   ├── interceptors.ts     # fetch / XHR
-│   └── mask.ts             # mascaramento
-│
-├── services/
-│   ├── api.ts
-│   ├── auth.ts
-│   └── payments.ts
-│
-├── hooks/
-├── store/
-├── utils/
-└── styles/
+## ✅ Estrutura Oficial do Backend
 
-Regras Críticas (Frontend)
-
-❌ NÃO conter regra de negócio
-
-❌ NÃO decidir arquitetura
-
-❌ NÃO misturar UI com diagnóstico
-
-✅ Todo diagnóstico fica em frontend/diagnostics/
-
-✅ Toda ação relevante gera trace_id
-
-✅ Toda API propaga session_id e trace_id
-
-🧠 BACKEND (/backend)
-
-Tecnologia: Django + Django REST Framework
-
-👉 Este é o CORE do projeto
-
-Responsabilidades
-
-regras de negócio
-
-autenticação
-
-APIs
-
-persistência
-
-correlação de eventos
-
-fila, workers e webhooks
-
-Estrutura Oficial
 backend/
 ├── manage.py
-├── config/                 # settings, urls, wsgi, asgi
+├── config/ # settings, urls, wsgi, asgi
 │
-├── apps/
-│   ├── accounts/           # usuários e permissões
-│   ├── members/            # membros do clube
-│   ├── documents/          # documentação interna
-│   ├── store/              # lojinha interna
-│   ├── payments/           # pagamentos
-│   ├── notifications/      # WhatsApp / notificações
-│   └── diagnostics/        # ⭐ APP DE DIAGNÓSTICO
+├── apps/ # apps de NEGÓCIO (apenas domínio)
+│ ├── accounts/ # usuários e permissões
+│ ├── members/ # membros do clube
+│ ├── documents/ # documentação interna
+│ ├── store/ # lojinha interna
+│ ├── payments/ # pagamentos
+│ └── notifications/ # WhatsApp / notificações
 │
-├── diagnostics/             # ⭐ IMPLEMENTAÇÃO DO DIAGNÓSTICO
-│   ├── middleware.py        # request_id
-│   ├── models.py            # diagnostic_events
-│   ├── serializers.py
-│   ├── views.py             # /client-events, /stream
-│   ├── services.py          # gravação / mascaramento
-│   └── retention.py         # limpeza automática
+├── ui/ # ⭐ INTERFACE DO USUÁRIO (Django UI)
+│ ├── templates/ # HTML templates (Django)
+│ │ ├── base/
+│ │ ├── public/
+│ │ ├── auth/
+│ │ ├── admin/
+│ │ └── diagnostics/ # tela de diagnóstico (admin)
+│ ├── static/ # CSS/JS/IMG do projeto
+│ │ ├── css/
+│ │ ├── js/
+│ │ └── img/
+│ ├── views.py # views que rendem templates
+│ ├── urls.py # rotas da UI
+│ └── components/ # includes/partials/macros de template
 │
-├── integrations/
-│   ├── mercadopago/
-│   ├── whatsapp/
-│   └── base.py
+├── diagnostics/ # ⭐ DIAGNÓSTICO (MÓDULO CENTRAL)
+│ ├── middleware.py # request_id / trace_id / session_id
+│ ├── models.py # diagnostic_events
+│ ├── serializers.py
+│ ├── views.py # /client-events, /stream (SSE)
+│ ├── services.py # gravação / mascaramento / correlação
+│ ├── retention.py # limpeza automática
+│ └── js/ # JS mínimo de diagnóstico (se necessário)
 │
-├── workers/
-│   ├── payments.py
-│   ├── notifications.py
-│   └── diagnostics.py
+├── integrations/ # integrações externas (SEM regra de negócio)
+│ ├── mercadopago/
+│ ├── whatsapp/
+│ └── base.py
 │
-├── common/
-│   ├── logging.py
-│   ├── masks.py
-│   ├── ids.py
-│   └── exceptions.py
+├── workers/ # tarefas assíncronas / jobs
+│ ├── payments.py
+│ ├── notifications.py
+│ └── diagnostics.py
+│
+├── common/ # utilitários compartilhados
+│ ├── logging.py
+│ ├── masks.py
+│ ├── ids.py
+│ └── exceptions.py
 │
 └── requirements/
 
-⭐ REGRA CRÍTICA: DIAGNÓSTICO É UM MÓDULO
 
-Diagnóstico NÃO é um adendo.
+---
+
+## ⭐ REGRA CRÍTICA: UI NÃO É APP DE NEGÓCIO
+
+A UI fica **exclusivamente** em:
+
+- `backend/ui/`
+
+❌ É proibido:
+- colocar templates dentro de `apps/*`
+- colocar JS/CSS do sistema em lugares aleatórios
+- misturar renderização de UI com regra de negócio
+
+✅ `apps/*` = domínio e regras  
+✅ `ui/*` = interface (render/HTML/static)
+
+---
+
+## ⭐ REGRA CRÍTICA: DIAGNÓSTICO É UM MÓDULO
+
+Diagnóstico **NÃO é um adendo**.
 
 Tudo relacionado a:
 
-eventos
-
-logs
-
-SSE
-
-correlação
-
-retenção
-
-análise
+- eventos
+- logs
+- SSE
+- correlação
+- retenção
+- mascaramento
+- análise
 
 fica exclusivamente em:
 
-backend/diagnostics/
-frontend/diagnostics/
-
+- `backend/diagnostics/`
 
 🚫 Nunca espalhar lógica de diagnóstico dentro de apps de negócio.
 
-🔌 INTEGRAÇÕES (/backend/integrations)
+---
+
+## 🧩 REGRA DE NEGÓCIO: ONDE MORA
+
+✅ Regra de negócio mora em:
+- `backend/apps/<app>/services.py`
+- `backend/apps/<app>/domain.py` (se você usar)
+- `backend/apps/<app>/usecases.py` (se você preferir)
+
+❌ Proibido:
+- regra de negócio em `integrations/`
+- regra de negócio em `ui/`
+- regra de negócio em `diagnostics/`
+
+---
+
+# 🔌 INTEGRAÇÕES (/backend/integrations)
 
 Responsável apenas por:
 
-comunicação com APIs externas
+- comunicação com APIs externas
+- webhooks
+- adaptação de payloads
 
-webhooks
+Regras:
 
-adaptação de payloads
-
-Regras
-
-❌ NÃO conter regra de negócio
-
-❌ NÃO acessar models diretamente
-
-✅ Apenas mapear dados
-
+❌ NÃO conter regra de negócio  
+❌ NÃO acessar models diretamente  
+✅ Apenas mapear dados  
 ✅ Emitir eventos de diagnóstico
 
-⚙️ WORKERS (/backend/workers)
+---
+
+# ⚙️ WORKERS (/backend/workers)
 
 Responsável por:
 
-tarefas assíncronas
+- tarefas assíncronas
+- retentativas
+- jobs longos
 
-retentativas
-
-jobs longos
-
-Regras
+Regras:
 
 Todo worker DEVE emitir:
 
-worker.start
+- `worker.start`
+- `worker.success`
+- `worker.error`
 
-worker.success
+Sempre carregando `trace_id`.
 
-worker.error
+---
 
-Sempre carregando trace_id.
-
-🏗️ INFRA (/infra)
+# 🏗️ INFRA (/infra)
 
 Responsável por:
 
-Docker
-
-Nginx
-
-variáveis de ambiente
-
-deploy
+- Docker
+- Nginx
+- variáveis de ambiente
+- deploy
 
 infra/
 ├── docker/
@@ -279,72 +259,65 @@ infra/
 ├── env/
 └── deploy/
 
-📄 DOCS (/docs)
+
+---
+
+# 📄 DOCS (/docs)
 
 Documentação complementar:
 
-diagramas
+- diagramas
+- decisões técnicas
+- fluxos
 
-decisões técnicas
+---
 
-fluxos
-
-🧪 SCRIPTS (/scripts)
+# 🧪 SCRIPTS (/scripts)
 
 Scripts utilitários:
 
-manutenção
+- manutenção
+- limpeza
+- debug emergencial
+- tarefas manuais
 
-limpeza
+---
 
-debug emergencial
+# 🚫 O QUE NÃO É PERMITIDO
 
-tarefas manuais
+- código solto na raiz
+- lógica duplicada
+- diagnóstico espalhado
+- workers misturados com views
+- integrações sem pasta própria
+- pasta `frontend/`
+- qualquer stack de frontend separado
 
-🚫 O QUE NÃO É PERMITIDO
+---
 
-código solto na raiz
-
-lógica duplicada
-
-diagnóstico espalhado
-
-workers misturados com views
-
-integrações sem pasta própria
-
-estruturas monorepo JS
-
-uso de Nx sob qualquer forma
-
-🧭 Diretriz Final para o Codex
+# 🧭 Diretriz Final para o Codex
 
 Antes de criar QUALQUER arquivo:
 
-Ler este documento
+1) Ler este documento  
+2) Identificar a responsabilidade  
+3) Escolher a pasta correta  
+4) Criar o arquivo  
+5) Registrar a alteração em `HISTORICO_DE_MUDANCAS.md`
 
-Identificar a responsabilidade
+Se houver dúvida:  
+👉 **não criar arquivo novo até esclarecer.**
 
-Escolher a pasta correta
+---
 
-Criar o arquivo
-
-Registrar a alteração em HISTORICO_DE_MUDANCAS.md
-
-Se houver dúvida:
-👉 não criar arquivo novo até esclarecer.
-
-📌 Nota Final
+## 📌 Nota Final
 
 Esta arquitetura existe para:
 
-escalar com segurança
+- escalar com segurança
+- manter diagnóstico limpo
+- evitar caos estrutural
+- permitir continuidade mesmo após reset de memória
 
-manter diagnóstico limpo
-
-evitar caos estrutural
-
-permitir continuidade mesmo após reset de memória
-
-O código cresce.
+O código cresce.  
 A arquitetura mantém tudo de pé.
