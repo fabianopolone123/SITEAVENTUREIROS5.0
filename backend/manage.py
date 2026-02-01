@@ -1,8 +1,13 @@
 ﻿#!/usr/bin/env python
 import os
 import sys
+from pathlib import Path
 
 if __name__ == "__main__":
+    project_root = Path(__file__).resolve().parent.parent
+    if str(project_root) not in sys.path:
+        sys.path.append(str(project_root))
+
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
     try:
         from django.core.management import execute_from_command_line
