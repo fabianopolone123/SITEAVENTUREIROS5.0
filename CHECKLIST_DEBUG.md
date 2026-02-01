@@ -1,223 +1,386 @@
-# 🧪 CHECKLIST DE DEBUG E DIAGNÓSTICO
-## Procedimento Oficial para Investigar Qualquer Bug
+🧪 CHECKLIST DE DEBUG E DIAGNÓSTICO
+Procedimento Oficial para Investigar Qualquer Bug
 
-Este documento define o **passo a passo obrigatório** para investigar problemas no sistema.
+Este documento define o passo a passo obrigatório para investigar problemas no sistema.
 
-⚠️ **NUNCA corrigir bugs no chute**  
-⚠️ **SEMPRE seguir este checklist do começo ao fim**
+⚠️ NUNCA corrigir bugs no chute
+⚠️ SEMPRE seguir este checklist do começo ao fim
 
----
+🎯 Objetivo do Checklist
 
-## 🎯 Objetivo do Checklist
 Garantir que:
-- todo bug seja investigado com evidência
-- o diagnóstico seja rastreável
-- a causa real seja identificada
-- o sistema continue autodiagnosticável
-- o Codex consiga atuar mesmo sem memória
 
----
+todo bug seja investigado com evidência
 
-## 🧠 Antes de Começar (OBRIGATÓRIO)
+o diagnóstico seja rastreável
+
+a causa real seja identificada
+
+o sistema continue autodiagnosticável
+
+humanos e agentes (Codex) consigam atuar mesmo sem memória
+
+🧠 Antes de Começar (OBRIGATÓRIO)
 
 Antes de qualquer análise:
-- [ ] Ler `README.md`
-- [ ] Ler `DIAGNOSTICO_AUTODIAGNOSTICAVEL.md`
-- [ ] Ler `HISTORICO_DE_MUDANCAS.md`
-- [ ] Identificar a **última alteração feita**
 
-Se o bug surgiu após uma alteração recente, **suspeite primeiro dela**.
+ Ler README.md
 
----
+ Ler DIAGNOSTICO_AUTODIAGNOSTICAVEL.md
 
-## 1️⃣ Identificar o Sintoma
-Descrever o problema **sem interpretação**, apenas fatos:
+ Ler ARQUITETURA_DE_PASTAS.md
 
-- O que o usuário tentou fazer?
-- O que era esperado?
-- O que aconteceu de fato?
-- Em qual tela/rota?
-- Em qual ambiente? (dev / prod)
+ Ler HISTORICO_DE_MUDANCAS.md
 
-📌 Exemplo correto:
-> Ao clicar no botão "Salvar Cadastro", nada acontece. Nenhuma mensagem visual é exibida.
+ Identificar a última alteração feita
+
+Se o bug surgiu após uma alteração recente, suspeite primeiro dela.
+
+0️⃣ (OBRIGATÓRIO) Checkpoint e Evidência via Git
+
+Se você está no meio de um processo grande, ou percebeu que o agente perdeu contexto:
+
+ STOP: pare alterações (não continue “tentando”)
+
+ Fazer commit checkpoint (mesmo que incompleto) com mensagem clara:
+
+checkpoint: <módulo> – <estado atual>
+
+ Analisar o último commit (HEAD) e os 2 anteriores (HEAD~1 e HEAD~2)
+
+Evidências mínimas (Git)
+
+ git log -3 --oneline
+
+ git show --name-only --oneline HEAD
+
+ git diff --stat HEAD~1..HEAD
+
+📌 Se o bug apareceu “do nada”, geralmente ele nasceu em um desses commits.
+
+🧯 Se a Tela de Diagnóstico Ainda Não Existe (ou Modo OFF)
+
+Quando o autodiagnóstico ainda não está totalmente ativo, coletar evidência manual (rápido):
+
+Frontend (browser)
+
+ F12 → Console: copiar erros (vermelho) e warnings
+
+ F12 → Network (Preserve log): clicar na ação e verificar:
+
+se houve request
+
+status HTTP
+
+response/erro
+
+Servidor (se aplicável)
+
+ logs do Next/Django:
+
+pm2: pm2 logs
+
+systemd: journalctl -u <servico> -f
+
+docker: docker logs -f <container>
+
+📌 Esses dados devem ser anexados ao relato do bug.
+
+1️⃣ Identificar o Sintoma (FATOS, sem interpretação)
+
+Descrever o problema apenas com fatos:
+
+O que o usuário tentou fazer?
+
+O que era esperado?
+
+O que aconteceu de fato?
+
+Em qual tela/rota?
+
+Em qual ambiente? (dev / prod)
+
+Qual horário aproximado?
+
+✅ Exemplo correto:
+
+Ao clicar no botão "Continuar", nada acontece. Nenhuma navegação, nenhum alerta e nenhuma request visível.
 
 ❌ Exemplo incorreto:
-> O botão está quebrado.
 
----
+O botão está quebrado.
 
-## 2️⃣ Identificar Sessão e Usuário
-Na tela de Diagnóstico:
-- [ ] Localizar a **sessão do usuário**
-- [ ] Anotar `session_id`
-- [ ] Anotar `user_id` (se houver)
-- [ ] Identificar o intervalo de tempo do problema
+2️⃣ Identificar Sessão e Usuário
 
----
+Na Tela de Diagnóstico (se disponível):
 
-## 3️⃣ Verificar Eventos de UI (Frontend)
-Procurar eventos do tipo:
+ Localizar a sessão
 
-- `ui.click`
-- `ui.action.start`
+ Anotar session_id
+
+ Anotar user_id (se houver)
+
+ Identificar intervalo de tempo do problema
+
+Se não houver tela ainda:
+
+ registrar URL
+
+ registrar navegador/dispositivo
+
+ salvar Console + Network
+
+3️⃣ Verificar Eventos de UI (Frontend)
+
+Procurar eventos:
+
+ui.click
+
+ui.action.start
+
+ui.action.end
 
 Perguntas obrigatórias:
-- O clique foi registrado?
-- O botão estava desabilitado?
-- O handler foi chamado?
 
-### Resultado:
-- ❌ **Não há `ui.click`** → problema de UI / evento não disparou
-- ✅ Há `ui.click` → continuar
+O clique foi registrado?
 
----
+O botão estava disabled?
 
-## 4️⃣ Verificar Erros JavaScript
+O handler realmente executou?
+
+Resultado
+
+❌ Não há ui.click → problema de UI (evento nem disparou)
+
+✅ Há ui.click → continuar
+
+4️⃣ Verificar Erros JavaScript
+
 Procurar eventos:
 
-- `js.error`
-- `js.unhandledrejection`
-- `console.error`
-- `console.warn`
+js.error
+
+js.unhandledrejection
+
+console.error
+
+console.warn
 
 Perguntas:
-- Algum erro ocorreu logo após o clique?
-- O erro interrompeu a execução?
-- Existe stack trace?
 
-### Resultado:
-- ❌ Erro JS encontrado → corrigir frontend
-- ✅ Nenhum erro → continuar
+Algum erro ocorreu logo após o clique?
 
----
+O erro interrompeu execução?
 
-## 5️⃣ Verificar Rede (API / Fetch)
+Existe stack trace?
+
+Resultado
+
+❌ Erro JS encontrado → corrigir frontend
+
+✅ Nenhum erro → continuar
+
+5️⃣ Verificar Rede (API / Fetch)
+
 Procurar eventos:
 
-- `net.request`
-- `net.response`
-- `net.error`
+net.request
+
+net.response
+
+net.error
 
 Perguntas:
-- A requisição foi enviada?
-- Qual endpoint?
-- Qual método?
-- Houve resposta?
-- Qual status HTTP?
 
-### Resultado:
-- ❌ Nenhuma request → handler não executou
-- ❌ net.error → erro de rede / timeout / CORS
-- ❌ 401 / 403 → problema de autenticação/permissão
-- ❌ 5xx → erro no backend
-- ✅ 2xx → continuar
+A requisição foi enviada?
+
+Para qual endpoint?
+
+Qual método?
+
+Houve resposta?
+
+Qual status HTTP?
+
+Resultado
+
+❌ Nenhuma request → handler não executou / botão sem ação / componente server-side
+
+❌ net.error → rede/timeout/CORS
+
+❌ 401/403 → auth/permissão
+
+❌ 5xx → erro backend
+
+✅ 2xx → continuar
 
 Anotar:
-- `trace_id`
-- `request_id` (se houver)
 
----
+trace_id
 
-## 6️⃣ Verificar Backend (API)
-Com o `request_id`:
-- [ ] Procurar `api.request`
-- [ ] Procurar `api.response`
-- [ ] Procurar `api.exception`
+request_id (se houver)
+
+6️⃣ Verificar Backend (API)
+
+Com request_id:
+
+ api.request
+
+ api.response
+
+ api.exception
 
 Perguntas:
-- A request chegou no servidor?
-- A exceção foi registrada?
-- Em qual ponto do código?
-- O erro é reproduzível?
 
-### Resultado:
-- ❌ Exception encontrada → corrigir backend
-- ✅ Nenhuma exceção → continuar
+A request chegou no servidor?
 
----
+Houve exceção?
 
-## 7️⃣ Verificar Regras de Negócio
+Qual endpoint?
+
+Em qual ponto do código?
+
+Resultado
+
+❌ Exception encontrada → corrigir backend
+
+✅ Nenhuma exceção → continuar
+
+7️⃣ Verificar Regras de Negócio
+
 Se não houve erro técnico:
-- validação de dados
-- regras de permissão
-- estado do registro
-- flags de negócio
+
+validação de dados
+
+permissões
+
+estado do registro
+
+regras do fluxo
 
 Perguntas:
-- O sistema bloqueou a ação por regra?
-- Existe mensagem adequada para o usuário?
-- A regra está correta?
 
----
+O sistema bloqueou por regra?
 
-## 8️⃣ Verificar Processos Assíncronos
-Se a ação envolve fila, webhook ou tarefa:
-- [ ] `worker.start`
-- [ ] `worker.success`
-- [ ] `worker.error`
-- [ ] `webhook.received`
+A mensagem para usuário existe e é clara?
+
+A regra está correta?
+
+8️⃣ Verificar Processos Assíncronos (Fila/Webhooks)
+
+Se envolve fila/webhook:
+
+ webhook.received
+
+ worker.start
+
+ worker.success
+
+ worker.error
 
 Perguntas:
-- O job foi enfileirado?
-- Foi executado?
-- Falhou?
-- Vai retentar?
 
----
+Job foi enfileirado?
 
-## 9️⃣ Verificar Infraestrutura (se necessário)
-Somente se tudo acima estiver correto:
-- conexão com banco
-- Redis ativo
-- fila rodando
-- DNS
-- certificados
-- recursos (CPU, RAM, disco)
+Executou?
 
-Infra é **última hipótese**, não a primeira.
+Falhou?
 
----
+Vai retentar?
 
-## 🔁 Correção do Problema
+9️⃣ Verificar Infraestrutura (ÚLTIMA HIPÓTESE)
+
+Somente se tudo acima estiver ok:
+
+conexão com banco
+
+Redis ativo
+
+fila rodando
+
+DNS/certificados
+
+recursos (CPU/RAM/disco)
+
+Infra é última hipótese, não primeira.
+
+🔁 Correção do Problema
+
 Antes de corrigir:
-- [ ] A causa raiz foi identificada?
-- [ ] Existe evidência clara?
-- [ ] A correção não quebra o diagnóstico?
+
+ causa raiz identificada?
+
+ evidência clara coletada?
+
+ correção não quebra diagnóstico?
 
 Durante a correção:
-- manter logs
-- manter IDs
-- manter mascaramento
 
----
+manter logs
 
-## 📝 Após Corrigir (OBRIGATÓRIO)
+manter IDs
 
-- [ ] Registrar a alteração em `HISTORICO_DE_MUDANCAS.md`
-- [ ] Descrever causa raiz
-- [ ] Descrever correção
-- [ ] Listar arquivos alterados
-- [ ] Indicar impacto
+manter mascaramento
 
----
+📝 Após Corrigir (OBRIGATÓRIO)
 
-## 🚫 O QUE NÃO FAZER
-- não apagar logs para “resolver”
-- não silenciar erros sem entender
-- não corrigir sem evidência
-- não assumir causa sem prova
-- não pular etapas deste checklist
+ Registrar em HISTORICO_DE_MUDANCAS.md
 
----
+ Descrever causa raiz
 
-## 🧭 Diretriz Final
+ Descrever correção
+
+ Listar arquivos alterados
+
+ Indicar impacto
+
+🚫 O QUE NÃO FAZER
+
+não apagar logs para “resolver”
+
+não silenciar erros sem entender
+
+não corrigir sem evidência
+
+não assumir causa sem prova
+
+não pular etapas
+
+📩 Modelo de Mensagem para o Codex (copiar e colar)
+PARE. Não faça correções no chute.
+
+Bug:
+- Sintoma (fatos): <descrever>
+- URL/rota: <...>
+- Ambiente: dev/prod
+- Horário: <...>
+
+Evidências:
+- Console (F12): <colar>
+- Network (F12): <colar>
+- Git (últimos commits):
+  - git log -3 --oneline: <colar>
+  - git show --name-only HEAD: <colar>
+  - git diff --stat HEAD~1..HEAD: <colar>
+
+Tarefa:
+1) Identificar causa raiz com base nas evidências.
+2) Corrigir sem quebrar diagnóstico (IDs + logs).
+3) Dizer quais arquivos foram alterados e por quê.
+4) Atualizar HISTORICO_DE_MUDANCAS.md.
+Aguarde minha confirmação antes de mudanças grandes.
+
+🧭 Diretriz Final
+
 Se em algum momento você:
-- não souber onde está o problema
-- não entender o fluxo
-- não lembrar o que foi feito
 
-👉 Volte para o **Passo 1**.
+não souber onde está o problema
 
-O sistema foi projetado para **mostrar o caminho**.  
+não entender o fluxo
+
+não lembrar o que foi feito
+
+👉 Volte para o Passo 1.
+
+O sistema foi projetado para mostrar o caminho.
 Este checklist é o mapa.

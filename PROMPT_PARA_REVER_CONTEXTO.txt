@@ -1,0 +1,32 @@
+PARE. Você perdeu o contexto. Não faça mais alterações, não crie arquivos e não refatore nada agora.
+
+Antes de continuar, faça OBRIGATORIAMENTE:
+
+1) Ler e usar como fonte da verdade (nesta ordem):
+   - README.md
+   - ARQUITETURA_DE_PASTAS.md
+   - CONTRIBUTING.md
+   - DIAGNOSTICO_AUTODIAGNOSTICAVEL.md
+   - CHECKLIST_DEBUG.md
+   - HISTORICO_DE_MUDANCAS.md
+
+2) Recuperar o contexto via Git:
+   - Analisar o ÚLTIMO commit (HEAD)
+   - Analisar os 2 commits anteriores (HEAD~1 e HEAD~2)
+   Para cada um, identificar:
+   - quais arquivos foram alterados
+   - o que foi mudado (resumo objetivo)
+   - qual era a intenção provável da mudança
+
+3) Depois disso, responda SOMENTE com:
+   - Estado atual do projeto (o que está pronto)
+   - O que falta fazer agora (próximos passos)
+   - Riscos/pendências detectadas
+   - Qual arquivo/módulo você vai mexer a seguir e por quê
+
+REGRAS:
+- Não repetir trabalho já feito
+- Não “inventar” arquitetura
+- Se algo estiver ambíguo, pergunte antes de agir
+
+Quando terminar a análise, aguarde minha confirmação antes de continuar implementando.
