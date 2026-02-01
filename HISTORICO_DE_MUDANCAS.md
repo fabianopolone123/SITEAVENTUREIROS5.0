@@ -147,3 +147,73 @@ Se o Codex estiver perdido:
 
 Sem isso, nenhuma modificaÃ§Ã£o deve ser feita.
 
+---
+
+### ğŸ”„ AlteraÃ§Ã£o NÂº 0002
+**Data:** 2026-02-01  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### ğŸ“Œ Contexto
+> Implantar a tela de login do frontend com o estilo fornecido e garantir o logo oficial no local correto para a interface.
+
+#### ğŸ› ï¸ O que foi feito
+- Criada a base Next.js dentro de `frontend/` (`package.json`, `tsconfig.json`, `next.config.js` e `next-env.d.ts`).
+- Definido o layout global (`app/layout.tsx`) e os estilos compartilhados (`app/globals.css`).
+- Construída a página de login (`app/page.tsx`) com campos, botões e textos do mock.
+- Movido o `logo.png` para `frontend/public/` e referenciado pela tela.
+
+#### ğŸ“ Arquivos afetados
+- frontend/package.json
+- frontend/tsconfig.json
+- frontend/next.config.js
+- frontend/next-env.d.ts
+- frontend/app/layout.tsx
+- frontend/app/globals.css
+- frontend/app/page.tsx
+- frontend/public/logo.png
+
+#### ğŸ”— Relacionado a
+- feature: tela de login
+
+#### âš ï¸ Impacto / ObservaÃ§Ãµes
+- Define a estrutura inicial do frontend dentro da arquitetura backend-first.
+- A tela de login replica o visual indicado e serve como ponto de partida para autenticação futura.
+- O logo oficial já está disponível no diretório público para o Next.js.
+---
+
+### ğŸ”„ AlteraÃ§Ã£o NÂº 0003
+**Data:** 2026-02-01  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### ğŸ“Œ Contexto
+> Iniciar o backend Django conforme a arquitetura backend-first e garantir que exista um esqueleto para apps, diagnósticos, integrações e workers.
+
+#### ğŸ› ï¸ O que foi feito
+- Configurado o esqueleto Django com `manage.py`, `config/settings.py`, `config/urls.py`, `config/asgi.py` e `config/wsgi.py`.
+- Criadas as pastas de apps (`accounts`, `members`, `documents`, `store`, `payments`, `notifications`, `diagnostics`) com `AppConfig` básico.
+- Adicionados módulos de diagnóstico (`backend/diagnostics`), integrações, workers e utilitários comuns para seguir a arquitetura definida.
+- Documentadas dependências básicas em `backend/requirements/base.txt`.
+
+#### ğŸ“ Arquivos afetados
+- backend/manage.py
+- backend/config/__init__.py
+- backend/config/asgi.py
+- backend/config/settings.py
+- backend/config/urls.py
+- backend/config/wsgi.py
+- backend/apps/* (AppConfig placeholders)
+- backend/diagnostics/*
+- backend/integrations/*
+- backend/workers/*
+- backend/common/*
+- backend/requirements/base.txt
+
+#### ğŸ”— Relacionado a
+- feature: backend Django inicial
+
+#### âš ï¸ Impacto / ObservaÃ§Ãµes
+- Disponibiliza o core Django alinhado à arquitetura backend-first.
+- Fornece módulos básicos de diagnóstico, integrações e workers para serem estendidos.
+- Sistema ainda precisa de modelos reais, lógica de negócios e configuração de banco real; essa é uma base inicial.

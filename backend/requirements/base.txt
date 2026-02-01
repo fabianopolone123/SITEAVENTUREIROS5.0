@@ -1,0 +1,7 @@
+﻿Django>=4.2,<5
+psycopg2-binary
+celery
+redis
+coverage
+djangorestframework
+
