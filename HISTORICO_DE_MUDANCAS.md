@@ -609,3 +609,26 @@ Aviso: Impacto / Observações
 
 #### ⚠️ Impacto / Observações
 - Agora o progresso reflete corretamente o índice atual logo quando a página for renderizada, evitando confusões sobre qual etapa está ativa.
+-
+
+--- 
+
+### 🎯 Alteração Nº 0025
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> Diante do novo layout, a área “Pendências detectadas” desapareceu na etapa “Escolha do cadastro”, deixando o usuário sem visão da checklist inicial.
+
+#### ✅ O que foi feito
+- Passei a renderizar o bloco de pendências também durante a etapa inicial sempre que existirem alertas, mantendo o topo limpo mas ainda informativo antes mesmo de entrar nos formulários.
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/base.html
+
+#### 🔗 Relacionado a
+- feature: visibilidade de pendências
+
+#### ⚠️ Impacto / Observações
+- Agora é possível ver os alertas pendentes desde a primeira tela, o que ajuda a comunicar as obrigações antes de iniciar o fluxo.

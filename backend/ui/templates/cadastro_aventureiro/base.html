@@ -26,6 +26,16 @@
         <div class="wizard-progress compact">
           <div class="step is-current">Escolha do cadastro</div>
         </div>
+        {% if pendings %}
+          <div class="summary-stack">
+            <h3>Pendências detectadas</h3>
+            <ul>
+              {% for pending in pendings %}
+                <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
       {% else %}
         <div class="summary-stack summary-top">
           <div class="summary-states">
