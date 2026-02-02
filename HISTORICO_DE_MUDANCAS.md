@@ -676,3 +676,48 @@ Aviso: Impacto / Observações
 
 #### ⚠️ Impacto / Observações
 - O topo fica limpo na fase inicial, reaparecendo pendências a partir da etapa seguinte, sem perder o checklist quando o usuário estiver preenchendo os formulários.
+---
+
+### 🎯 Alteração Nº 0028
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> Mesmo com o bloco de pendências visível, o usuário não conseguia saber qual era o problema real quando a lista estava vazia mas o formulário bloqueava a etapa (ex.: assinatura ausente).
+
+#### ✅ O que foi feito
+- Aproveitei os erros do formulário para alimentar o bloco de pendências quando não houver pendências detectadas ainda, garantindo que mensagens como “Assine o termo” apareçam no topo mesmo antes de salvar os dados.
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/base.html
+- backend/ui/views.py
+
+#### 🔗 Relacionado a
+- feature: visibilidade de erros do wizard
+
+#### ⚠️ Impacto / Observações
+- A seção de pendências agora também mostra os erros do formulário atual, evitando que o topo reporte “nenhuma pendência” enquanto o formulário ainda exige ação.
+---
+
+### 🎯 Alteração Nº 0029
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> O responsável não via nenhum feedback visual indicando que a declaração havia sido confirmada, o que podia gerar dúvida mesmo após marcar a checkbox.
+
+#### ✅ O que foi feito
+- Adicionei um indicador “Não confirmado / Confirmado” ao lado da checkbox de declaração e atualizei o script para trocar o texto e a cor assim que o responsável marcar/desmarcar o campo.
+
+#### 📁 Arquivos afetados
+- backend/ui/static/css/cadastro.css
+- backend/ui/templates/cadastro_aventureiro/base.html
+- backend/ui/templates/cadastro_aventureiro/responsavel.html
+
+#### 🔗 Relacionado a
+- feature: feedback visual da declaração
+
+#### ⚠️ Impacto / Observações
+- O usuário agora vê imediatamente o status jurídico da declaração, reforçando que marcar a checkbox é obrigatório e visível.

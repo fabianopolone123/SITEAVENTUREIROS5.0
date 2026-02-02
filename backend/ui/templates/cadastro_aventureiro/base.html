@@ -57,6 +57,12 @@
               {% for pending in pendings %}
                 <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
               {% endfor %}
+            {% elif form_errors %}
+              {% for field, errors in form_errors.items %}
+                {% for error in errors %}
+                  <li><strong>{{ field|capfirst }}:</strong> {{ error }}</li>
+                {% endfor %}
+              {% endfor %}
             {% else %}
               <li><em>Nenhuma pendência no momento.</em></li>
             {% endif %}
@@ -184,6 +190,23 @@
         };
         useResponsible.addEventListener('change', toggleAddress);
         toggleAddress();
+      }
+
+      const declarationCheckbox = document.querySelector('#id_declaration_accepted');
+      const declarationStatus = document.querySelector('[data-declaration-status]');
+      const updateDeclarationStatus = () => {
+        if (!declarationCheckbox || !declarationStatus) return;
+        if (declarationCheckbox.checked) {
+          declarationStatus.textContent = 'Confirmado';
+          declarationStatus.classList.add('is-confirmed');
+        } else {
+          declarationStatus.textContent = 'Não confirmado';
+          declarationStatus.classList.remove('is-confirmed');
+        }
+      };
+      if (declarationCheckbox) {
+        declarationCheckbox.addEventListener('change', updateDeclarationStatus);
+        updateDeclarationStatus();
       }
 
       const legalType = document.getElementById('id_legal_type');

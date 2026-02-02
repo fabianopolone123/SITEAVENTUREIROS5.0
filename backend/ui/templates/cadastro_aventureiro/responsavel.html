@@ -53,7 +53,11 @@
       <h4>Declaração e assinatura</h4>
       <p>Atesto serem verdadeiras as informações fornecidas.</p>
       <div class="field-grid">
-        {{ form.declaration_accepted }} {{ form.declaration_accepted.label_tag }}
+        <label class="declaration-label">
+          {{ form.declaration_accepted }}
+          {{ form.declaration_accepted.label_tag }}
+          <span class="declaration-status" data-declaration-status>Não confirmado</span>
+        </label>
         {{ form.signature_data }}
       </div>
       <div class="signature-area">

@@ -193,6 +193,22 @@ body {
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
+.declaration-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.declaration-status {
+  font-size: 0.85rem;
+  color: #d64545;
+  font-weight: 600;
+}
+
+.declaration-status.is-confirmed {
+  color: #2aa867;
+}
+
 .field-grid input:focus,
 .field-grid select:focus,
 .field-grid textarea:focus {
