@@ -8,15 +8,24 @@
         <h4>Informações gerais</h4>
         <p class="card-note">Use o filtro abaixo para informar o plano de saúde, caso possua.</p>
       </div>
-      <div class="field-grid ficha-grid">
-        <div>
-          {{ form.has_health_plan.label_tag }} {{ form.has_health_plan }}
+      <div class="ficha-fields">
+        <div class="ficha-field ficha-field--checkbox">
+          <label for="{{ form.has_health_plan.id_for_label }}">{{ form.has_health_plan.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.has_health_plan }}
+          </div>
         </div>
-        <div>
-          {{ form.health_plan.label_tag }} {{ form.health_plan }}
+        <div class="ficha-field">
+          <label for="{{ form.health_plan.id_for_label }}">{{ form.health_plan.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.health_plan }}
+          </div>
         </div>
-        <div>
-          {{ form.sus_number.label_tag }} {{ form.sus_number }}
+        <div class="ficha-field">
+          <label for="{{ form.sus_number.id_for_label }}">{{ form.sus_number.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.sus_number }}
+          </div>
         </div>
       </div>
     </div>
@@ -26,8 +35,13 @@
         <h4>Doenças já tidas</h4>
         <p class="card-note">Relate qualquer enfermidade anterior importante, mesmo que já tratada.</p>
       </div>
-      <div class="field-grid">
-        {{ form.diseases.label_tag }} {{ form.diseases }}
+      <div class="ficha-fields ficha-fields--single">
+        <div class="ficha-field">
+          <label for="{{ form.diseases.id_for_label }}">{{ form.diseases.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.diseases }}
+          </div>
+        </div>
       </div>
     </div>
 
@@ -36,12 +50,18 @@
         <h4>Alergias</h4>
         <p class="card-note">Informe alergias conhecidas e o que acontece quando ocorrem.</p>
       </div>
-      <div class="field-grid ficha-grid">
-        <div>
-          {{ form.allergies.label_tag }} {{ form.allergies }}
+      <div class="ficha-fields">
+        <div class="ficha-field">
+          <label for="{{ form.allergies.id_for_label }}">{{ form.allergies.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.allergies }}
+          </div>
         </div>
-        <div>
-          {{ form.allergy_details.label_tag }} {{ form.allergy_details }}
+        <div class="ficha-field">
+          <label for="{{ form.allergy_details.id_for_label }}">{{ form.allergy_details.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.allergy_details }}
+          </div>
         </div>
       </div>
     </div>
@@ -51,12 +71,18 @@
         <h4>Condições de saúde</h4>
         <p class="card-note">Registro de condições em andamento e uso de medicamentos.</p>
       </div>
-      <div class="field-grid ficha-grid">
-        <div>
-          {{ form.conditions.label_tag }} {{ form.conditions }}
+      <div class="ficha-fields">
+        <div class="ficha-field">
+          <label for="{{ form.conditions.id_for_label }}">{{ form.conditions.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.conditions }}
+          </div>
         </div>
-        <div>
-          {{ form.uses_medication.label_tag }} {{ form.uses_medication }}
+        <div class="ficha-field">
+          <label for="{{ form.uses_medication.id_for_label }}">{{ form.uses_medication.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.uses_medication }}
+          </div>
         </div>
       </div>
     </div>
@@ -66,42 +92,78 @@
         <h4>Outras informações</h4>
         <p class="card-note">Informe ocorrências recentes, medicações e procedimentos.</p>
       </div>
-      <div class="field-grid multi-grid">
-        <div>
-          {{ form.other_problems.label_tag }} {{ form.other_problems }}
+      <div class="ficha-fields ficha-fields--grid">
+        <div class="ficha-field">
+          <label for="{{ form.other_problems.id_for_label }}">{{ form.other_problems.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.other_problems }}
+          </div>
         </div>
-        <div>
-          {{ form.other_problems_notes.label_tag }} {{ form.other_problems_notes }}
+        <div class="ficha-field">
+          <label for="{{ form.other_problems_notes.id_for_label }}">{{ form.other_problems_notes.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.other_problems_notes }}
+          </div>
         </div>
-        <div>
-          {{ form.recent_problems.label_tag }} {{ form.recent_problems }}
+        <div class="ficha-field">
+          <label for="{{ form.recent_problems.id_for_label }}">{{ form.recent_problems.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.recent_problems }}
+          </div>
         </div>
-        <div>
-          {{ form.recent_problems_notes.label_tag }} {{ form.recent_problems_notes }}
+        <div class="ficha-field">
+          <label for="{{ form.recent_problems_notes.id_for_label }}">{{ form.recent_problems_notes.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.recent_problems_notes }}
+          </div>
         </div>
-        <div>
-          {{ form.medication_year.label_tag }} {{ form.medication_year }}
+        <div class="ficha-field">
+          <label for="{{ form.medication_year.id_for_label }}">{{ form.medication_year.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.medication_year }}
+          </div>
         </div>
-        <div>
-          {{ form.medication_year_notes.label_tag }} {{ form.medication_year_notes }}
+        <div class="ficha-field">
+          <label for="{{ form.medication_year_notes.id_for_label }}">{{ form.medication_year_notes.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.medication_year_notes }}
+          </div>
         </div>
-        <div>
-          {{ form.recent_fractures.label_tag }} {{ form.recent_fractures }}
+        <div class="ficha-field">
+          <label for="{{ form.recent_fractures.id_for_label }}">{{ form.recent_fractures.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.recent_fractures }}
+          </div>
         </div>
-        <div>
-          {{ form.recent_fractures_notes.label_tag }} {{ form.recent_fractures_notes }}
+        <div class="ficha-field">
+          <label for="{{ form.recent_fractures_notes.id_for_label }}">{{ form.recent_fractures_notes.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.recent_fractures_notes }}
+          </div>
         </div>
-        <div>
-          {{ form.surgeries.label_tag }} {{ form.surgeries }}
+        <div class="ficha-field">
+          <label for="{{ form.surgeries.id_for_label }}">{{ form.surgeries.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.surgeries }}
+          </div>
         </div>
-        <div>
-          {{ form.surgeries_notes.label_tag }} {{ form.surgeries_notes }}
+        <div class="ficha-field">
+          <label for="{{ form.surgeries_notes.id_for_label }}">{{ form.surgeries_notes.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.surgeries_notes }}
+          </div>
         </div>
-        <div>
-          {{ form.hospitalizations.label_tag }} {{ form.hospitalizations }}
+        <div class="ficha-field">
+          <label for="{{ form.hospitalizations.id_for_label }}">{{ form.hospitalizations.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.hospitalizations }}
+          </div>
         </div>
-        <div>
-          {{ form.hospitalizations_reason.label_tag }} {{ form.hospitalizations_reason }}
+        <div class="ficha-field">
+          <label for="{{ form.hospitalizations_reason.id_for_label }}">{{ form.hospitalizations_reason.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.hospitalizations_reason }}
+          </div>
         </div>
       </div>
     </div>
@@ -110,9 +172,12 @@
       <div class="card-header">
         <h4>Tipo sanguíneo</h4>
       </div>
-      <div class="field-grid ficha-grid">
-        <div>
-          {{ form.blood_type.label_tag }} {{ form.blood_type }}
+      <div class="ficha-fields ficha-fields--single">
+        <div class="ficha-field">
+          <label for="{{ form.blood_type.id_for_label }}">{{ form.blood_type.label }}</label>
+          <div class="ficha-field-input">
+            {{ form.blood_type }}
+          </div>
         </div>
       </div>
     </div>

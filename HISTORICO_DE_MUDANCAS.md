@@ -797,3 +797,28 @@ Aviso: Impacto / ObservaÃ§Ãµes
 #### ?? Impacto / Observações
 - Cada campo agora parece um cartão retangular com espaçamento homogêneo e a ficha médica combina visualmente com os outros cards do wizard.
 - A leitura dos rótulos e a navegação pelos campos ficaram mais claras sem alterar a lógica funcional do formulário.
+---
+
+### ?? Alteração Nº 0033
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O usuário pediu uma reconstrução total da ficha médica: campos retangulares, melhor distribuição e grid consistente com os demais cards do wizard.
+
+#### ??? O que foi feito
+- Reescrevi `backend/ui/templates/cadastro_aventureiro/ficha.html` para encerrar cada campo em `<div class="ficha-field">` e usei variações de `.ficha-fields` (`--single`, `--grid`, `--checkbox`) para controlar a dispersão e o comportamento dos campos.
+- Criei os estilos `.ficha-fields`, `.ficha-field`, `.ficha-field-input` e `.ficha-field--checkbox` em `backend/ui/static/css/cadastro.css`, definindo cartões retangulares com bordas suaves, sombra, padding uniforme e labels em caixa alta.
+- Ajustei os inputs/selects/textarea da ficha médica para manter o mesmo padding e fundo, além de garantir que `textarea` mantenha altura fixa e que os cartões respeitem um gap consistente para preservar a estrutura retangular.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+
+#### ?? Relacionado a
+- refactor: layout completo da ficha médica
+
+#### ?? Impacto / Observações
+- A ficha médica agora se comporta como cartões retangulares alinhados, com espaçamento homogêneo e visual coerente com todo o wizard.
+- A usabilidade melhorou sem alterar os fluxos e validações existentes; basta navegar pela página para perceber o novo espaço visual.
