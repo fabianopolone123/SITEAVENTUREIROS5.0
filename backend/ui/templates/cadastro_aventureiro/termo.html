@@ -53,7 +53,10 @@
     <div class="section-card">
       <h4>Confirmação</h4>
       <div class="field-grid">
-        {{ form.agreed }} {{ form.agreed.label_tag }}
+        <label class="checkbox-pill" for="{{ form.agreed.id_for_label }}">
+          {{ form.agreed }}
+          <span>{{ form.agreed.label }}</span>
+        </label>
       </div>
       {{ form.signature_data }}
     <div class="signature-area">

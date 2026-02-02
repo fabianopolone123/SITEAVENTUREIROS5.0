@@ -192,6 +192,17 @@ class MedicalRecordForm(DraftModelForm):
             self.add_error('blood_type', 'Selecione o tipo sanguíneo.')
         if cleaned.get('hospitalizations') and not cleaned.get('hospitalizations_reason'):
             self.add_error('hospitalizations_reason', 'Informe o motivo da internação.')
+        conditional_fields = [
+            ('allergies', 'allergy_details', 'Descreva a alergia quando marcar "Sim".'),
+            ('other_problems', 'other_problems_notes', 'Explique quais outros problemas de saúde existem.'),
+            ('recent_problems', 'recent_problems_notes', 'Informe detalhes dos problemas recentes.'),
+            ('medication_year', 'medication_year_notes', 'Informe a terapia ou medicamento usado no último ano.'),
+            ('recent_fractures', 'recent_fractures_notes', 'Descreva a fratura recente.'),
+            ('surgeries', 'surgeries_notes', 'Detalhe a cirurgia realizada.'),
+        ]
+        for flag_field, detail_field, message in conditional_fields:
+            if cleaned.get(flag_field) and not cleaned.get(detail_field):
+                self.add_error(detail_field, message)
         if not cleaned.get('declaration_accepted'):
             self.add_error('declaration_accepted', 'Confirme a declaração.')
         if not cleaned.get('signature_data'):

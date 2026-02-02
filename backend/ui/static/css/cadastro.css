@@ -525,6 +525,12 @@ body {
 .secondary-btn:hover {
   transform: translateY(-2px);
 }
+.primary-btn:disabled {
+  background: linear-gradient(135deg, #e5e7ff, #c7d0ff);
+  color: #6b789f;
+  box-shadow: none;
+  cursor: not-allowed;
+}
 
 .info-pill {
   display: inline-flex;
@@ -573,6 +579,47 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 0.4rem;
+}
+
+.checkbox-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 55, 0.15);
+  background: #fff;
+  width: fit-content;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.checkbox-pill input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid rgba(15, 23, 55, 0.3);
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff;
+  position: relative;
+}
+
+.checkbox-pill input[type="checkbox"]:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkbox-pill input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 4px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .checkbox-inline {
