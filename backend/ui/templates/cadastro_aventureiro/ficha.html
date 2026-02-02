@@ -3,68 +3,127 @@
 {% block stage_content %}
   <form method="post">
     {% csrf_token %}
-    <div class="section-card">
-      <h4>Informações gerais</h4>
-      <div class="field-grid">
-        {{ form.has_health_plan.label_tag }} {{ form.has_health_plan }}
-        {{ form.health_plan.label_tag }} {{ form.health_plan }}
-        {{ form.sus_number.label_tag }} {{ form.sus_number }}
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Informações gerais</h4>
+        <p class="card-note">Use o filtro abaixo para informar o plano de saúde, caso possua.</p>
+      </div>
+      <div class="field-grid ficha-grid">
+        <div>
+          {{ form.has_health_plan.label_tag }} {{ form.has_health_plan }}
+        </div>
+        <div>
+          {{ form.health_plan.label_tag }} {{ form.health_plan }}
+        </div>
+        <div>
+          {{ form.sus_number.label_tag }} {{ form.sus_number }}
+        </div>
       </div>
     </div>
 
-    <div class="section-card">
-      <h4>Doenças já tidas</h4>
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Doenças já tidas</h4>
+        <p class="card-note">Relate qualquer enfermidade anterior importante, mesmo que já tratada.</p>
+      </div>
       <div class="field-grid">
         {{ form.diseases.label_tag }} {{ form.diseases }}
       </div>
     </div>
 
-    <div class="section-card">
-      <h4>Alergias</h4>
-      <div class="field-grid">
-        {{ form.allergies.label_tag }} {{ form.allergies }}
-        {{ form.allergy_details.label_tag }} {{ form.allergy_details }}
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Alergias</h4>
+        <p class="card-note">Informe alergias conhecidas e o que acontece quando ocorrem.</p>
+      </div>
+      <div class="field-grid ficha-grid">
+        <div>
+          {{ form.allergies.label_tag }} {{ form.allergies }}
+        </div>
+        <div>
+          {{ form.allergy_details.label_tag }} {{ form.allergy_details }}
+        </div>
       </div>
     </div>
 
-    <div class="section-card">
-      <h4>Condições de saúde</h4>
-      <div class="field-grid">
-        {{ form.conditions.label_tag }} {{ form.conditions }}
-        {{ form.uses_medication.label_tag }} {{ form.uses_medication }}
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Condições de saúde</h4>
+        <p class="card-note">Registro de condições em andamento e uso de medicamentos.</p>
+      </div>
+      <div class="field-grid ficha-grid">
+        <div>
+          {{ form.conditions.label_tag }} {{ form.conditions }}
+        </div>
+        <div>
+          {{ form.uses_medication.label_tag }} {{ form.uses_medication }}
+        </div>
       </div>
     </div>
 
-    <div class="section-card">
-      <h4>Outras informações</h4>
-      <div class="field-grid">
-        {{ form.other_problems.label_tag }} {{ form.other_problems }}
-        {{ form.other_problems_notes.label_tag }} {{ form.other_problems_notes }}
-        {{ form.recent_problems.label_tag }} {{ form.recent_problems }}
-        {{ form.recent_problems_notes.label_tag }} {{ form.recent_problems_notes }}
-        {{ form.medication_year.label_tag }} {{ form.medication_year }}
-        {{ form.medication_year_notes.label_tag }} {{ form.medication_year_notes }}
-        {{ form.recent_fractures.label_tag }} {{ form.recent_fractures }}
-        {{ form.recent_fractures_notes.label_tag }} {{ form.recent_fractures_notes }}
-        {{ form.surgeries.label_tag }} {{ form.surgeries }}
-        {{ form.surgeries_notes.label_tag }} {{ form.surgeries_notes }}
-        {{ form.hospitalizations.label_tag }} {{ form.hospitalizations }}
-        {{ form.hospitalizations_reason.label_tag }} {{ form.hospitalizations_reason }}
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Outras informações</h4>
+        <p class="card-note">Informe ocorrências recentes, medicações e procedimentos.</p>
+      </div>
+      <div class="field-grid multi-grid">
+        <div>
+          {{ form.other_problems.label_tag }} {{ form.other_problems }}
+        </div>
+        <div>
+          {{ form.other_problems_notes.label_tag }} {{ form.other_problems_notes }}
+        </div>
+        <div>
+          {{ form.recent_problems.label_tag }} {{ form.recent_problems }}
+        </div>
+        <div>
+          {{ form.recent_problems_notes.label_tag }} {{ form.recent_problems_notes }}
+        </div>
+        <div>
+          {{ form.medication_year.label_tag }} {{ form.medication_year }}
+        </div>
+        <div>
+          {{ form.medication_year_notes.label_tag }} {{ form.medication_year_notes }}
+        </div>
+        <div>
+          {{ form.recent_fractures.label_tag }} {{ form.recent_fractures }}
+        </div>
+        <div>
+          {{ form.recent_fractures_notes.label_tag }} {{ form.recent_fractures_notes }}
+        </div>
+        <div>
+          {{ form.surgeries.label_tag }} {{ form.surgeries }}
+        </div>
+        <div>
+          {{ form.surgeries_notes.label_tag }} {{ form.surgeries_notes }}
+        </div>
+        <div>
+          {{ form.hospitalizations.label_tag }} {{ form.hospitalizations }}
+        </div>
+        <div>
+          {{ form.hospitalizations_reason.label_tag }} {{ form.hospitalizations_reason }}
+        </div>
       </div>
     </div>
 
-    <div class="section-card">
-      <h4>Tipo sanguíneo</h4>
-      <div class="field-grid">
-        {{ form.blood_type.label_tag }} {{ form.blood_type }}
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Tipo sanguíneo</h4>
+      </div>
+      <div class="field-grid ficha-grid">
+        <div>
+          {{ form.blood_type.label_tag }} {{ form.blood_type }}
+        </div>
       </div>
     </div>
 
-    <div class="section-card">
-      <h4>Declaração e assinatura</h4>
-      <p class="declaration-note">
-        Atesto serem <strong>verdadeiras</strong> todas as informações médicas preenchidas e me responsabilizo por quaisquer acidentes que venham a ocorrer em decorrência do não informe de problemas médicos de qualquer natureza.
-      </p>
+    <div class="section-card ficha-card">
+      <div class="card-header">
+        <h4>Declaração e assinatura</h4>
+        <p class="card-note large">
+          Atesto serem <strong>verdadeiras</strong> todas as informações médicas preenchidas e me responsabilizo por quaisquer acidentes que venham a ocorrer em decorrência do não informe de problemas médicos de qualquer natureza.
+        </p>
+      </div>
       <div class="field-grid">
         <label class="declaration-label">
           {{ form.declaration_accepted }}

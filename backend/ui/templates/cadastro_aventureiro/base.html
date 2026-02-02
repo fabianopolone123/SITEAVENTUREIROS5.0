@@ -66,8 +66,30 @@
             {% else %}
               <li><em>Nenhuma pendência no momento.</em></li>
             {% endif %}
-          </ul>
+        </ul>
+      </div>
+
+      {% if current_step == 'termo' or current_step == 'revisao' %}
+        <div class="context-feedback">
+          <h4>Feedback contextual</h4>
+          {% if current_step == 'termo' %}
+            <p>
+              Depois de salvar o termo, você poderá voltar para a Lista de Aventureiros e registrar outro membro antes de seguir para a Revisão Final.
+            </p>
+            <div class="feedback-actions">
+              <a class="secondary-btn" href="{% url 'cadastro-aventureiro-lista' %}">Voltar para adicionar aventureiros</a>
+            </div>
+          {% else %}
+            <p>
+              Esta é a etapa final: confirme as pendências, finalize o cadastro ou retorne à Lista para incluir novos aventureiros sem perder o andamento.
+            </p>
+            <div class="feedback-actions">
+              <a class="secondary-btn" href="{% url 'cadastro-aventureiro-lista' %}">Adicionar mais aventureiros</a>
+            <span class="feedback-hint">Quando tudo estiver verde, clique em “Finalizar cadastro” abaixo.</span>
+          </div>
+          {% endif %}
         </div>
+      {% endif %}
       {% endif %}
 
       <div class="stage-content">

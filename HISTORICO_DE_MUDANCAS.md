@@ -750,3 +750,26 @@ Aviso: Impacto / Observações
 
 #### ⚠️ Impacto / Observações
 - A tela agora aceita datas com o picker do navegador, permite 0+ classes investidas e mantém os campos mais legíveis; a nova migração atualiza o schema para armazenar múltiplas classes.
+---
+
+### 🎯 Alteração Nº 0031
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** bugfix  
+
+#### 📌 Contexto
+> Os campos de texto da ficha m�dica permitiam redimensionamento livre via cantos do textarea, o que desorganizava o grid e deixava o layout inst�vel quando o usu�rio passava o cursor pela borda.
+
+#### 🛠ï¸ O que foi feito
+- Padronizei os grids dos blocos da ficha m�dica para manter `display: grid` com `gap` uniforme, igualando o alinhamento � outras se��es.
+- Ajustei os textarea para altura m�nima consistente e limitei o redimensionamento ao eixo vertical, impedindo altera��es horizontais.
+
+#### 📁 Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### 🔗 Relacionado a
+- bug: campos da ficha m�dica mudavam de tamanho ao arrastar o canto do textarea
+
+#### â ï¸ Impacto / Observações
+- Layout permanece est�vel com colunas regulares.
+- Usu�rio perde o comportamento estranho de redimensionar horizontalmente ao passar o mouse pela borda.
