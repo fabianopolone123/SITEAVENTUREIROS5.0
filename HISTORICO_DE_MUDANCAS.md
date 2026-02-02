@@ -762,7 +762,7 @@ Aviso: Impacto / ObservaÃ§Ãµes
 
 #### ðŸ› Ã¯Â¸Â O que foi feito
 - Padronizei os grids dos blocos da ficha médica para manter `display: grid` com `gap` uniforme, igualando o alinhamento à outras seções.
-- Ajustei os textarea para altura mínima consistente e limitei o redimensionamento ao eixo vertical, impedindo alterações horizontais.
+- Ajustei os textarea para altura mínima consistente e desativei o redimensionamento, mantendo o layout intacto mesmo com o cursor próximo à borda.
 
 #### ðŸ“ Arquivos afetados
 - backend/ui/static/css/cadastro.css
@@ -771,5 +771,29 @@ Aviso: Impacto / ObservaÃ§Ãµes
 - bug: campos da ficha médica mudavam de tamanho ao arrastar o canto do textarea
 
 #### Ã¢ÂšÂ Ã¯Â¸Â Impacto / ObservaÃ§Ãµes
-- Layout permanece estável com colunas regulares.
-- Usuário perde o comportamento estranho de redimensionar horizontalmente ao passar o mouse pela borda.
+- Layout permanece estável com colunas regulares e os blocos não saltam quando o textarea recebe foco.
+- O formulário agora impede qualquer redimensionamento (horizontal ou vertical), eliminando o comportamento estranho de aumentar o campo ao arrastar o canto.
+---
+
+### ?? Alteração Nº 0032
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O layout da ficha médica ainda parecia “quadrado demais” e os campos não estavam alinhados com a proposta retangular moderna das demais seções, então o usuário pediu redistribuição e posicionamento mais limpo.
+
+#### ??? O que foi feito
+- Refinei `.ficha-card` para que cada bloco de campos use `display: grid` com `gap` consistente e cada item receba um cartão retangular leve com bordas suaves, sombra e padding uniforme.
+- Apliquei estilos específicos aos `label` e aos inputs dentro da ficha médica, deixando-os maiúsculos, mais estreitos e com fundo uniforme escuro-claro para reforçar o formato retangular e o foco visual.
+- Padronizei os campos (`input`, `select`, `textarea`) dentro da ficha médica para que mantenham o mesmo preenchimento e sombra, fortalecendo o alinhamento e a sensação de estrutura.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: layout do fluxo de cadastro
+
+#### ?? Impacto / Observações
+- Cada campo agora parece um cartão retangular com espaçamento homogêneo e a ficha médica combina visualmente com os outros cards do wizard.
+- A leitura dos rótulos e a navegação pelos campos ficaram mais claras sem alterar a lógica funcional do formulário.
