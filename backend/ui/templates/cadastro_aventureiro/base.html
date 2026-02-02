@@ -8,55 +8,84 @@
   <link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
 </head>
 <body>
-  <div class="cadastro-shell">
-    {% if current_step == 'tipo' %}
-      <div class="wizard-progress">
-        <div class="step is-current">Escolha do cadastro</div>
+  <div class="cadastro-page">
+    <div class="floating-glow"></div>
+    <div class="cadastro-card">
+      <div class="cadastro-head">
+        <div class="logo-shell small">
+          <div class="logo-glow">
+            <img src="{% static 'images/logo.png' %}" alt="Logo do Clube de Aventureiros">
+          </div>
+        </div>
+        <p class="tagline">ESPAÇO DO CLUBE</p>
+        <h1>Cadastro de Aventureiros</h1>
+        <p class="subtitle">Fluxo guiado para registrar responsável, aventureiros, fichas médicas e autorizações.</p>
       </div>
-    {% else %}
-      <div class="summary-stack">
-        <div class="summary-states">
-          <span>Responsável: <span class="status-badge">{{ status.responsible }}</span></span>
-          {% for adv in status.adventurers %}
-            <span>{{ adv.name }} → Dados {{ adv.data }}, Ficha {{ adv.medical }}, Termo {{ adv.term }}</span>
-          {% empty %}
-            <span class="info-pill">Nenhum aventureiro cadastrado ainda</span>
+
+      {% if current_step == 'tipo' %}
+        <div class="wizard-progress compact">
+          <div class="step is-current">Escolha do cadastro</div>
+        </div>
+      {% else %}
+        <div class="summary-stack summary-top">
+          <div class="summary-states">
+            <span>Responsável: <span class="status-badge">{{ status.responsible }}</span></span>
+            {% for adv in status.adventurers %}
+              <span>{{ adv.name }} → Dados {{ adv.data }}, Ficha {{ adv.medical }}, Termo {{ adv.term }}</span>
+            {% empty %}
+              <span class="info-pill">Nenhum aventureiro cadastrado ainda</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="wizard-progress">
+          {% for step_id, step_label in steps %}
+            {% if forloop.counter0 < current_index %}
+              <div class="step is-complete">{{ step_label }}</div>
+            {% elif forloop.counter0 == current_index %}
+              <div class="step is-current">{{ step_label }}</div>
+            {% else %}
+              <div class="step">{{ step_label }}</div>
+            {% endif %}
           {% endfor %}
         </div>
-      </div>
 
-      <div class="wizard-progress">
-        {% for step_id, step_label in steps %}
-          {% with classes='step' %}
-            {% if forloop.counter0 < current_index %}
-              {% with classes=classes|add:' is-complete' %}{% endwith %}
-            {% elif forloop.counter0 == current_index %}
-              {% with classes=classes|add:' is-current' %}{% endwith %}
-            {% endif %}
-            <div class="{{ classes }}">{{ step_label }}</div>
-          {% endwith %}
-        {% endfor %}
-      </div>
-
-      {% if pendings %}
-        <div class="summary-stack">
-          <h3>Pendências detectadas</h3>
-          <ul>
-            {% for pending in pendings %}
-              <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
-            {% endfor %}
-          </ul>
-        </div>
+        {% if pendings %}
+          <div class="summary-stack">
+            <h3>Pendências detectadas</h3>
+            <ul>
+              {% for pending in pendings %}
+                <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
       {% endif %}
-    {% endif %}
 
-    <div class="stage-content">
-      {% block stage_content %}{% endblock %}
+      <div class="stage-content">
+        {% block stage_content %}{% endblock %}
+      </div>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      const labelFor = (input) => {
+        if (!input) return null;
+        return document.querySelector(`[for="${input.id}"]`);
+      };
+
+      const setAutofillLabel = (input, active) => {
+        const label = labelFor(input);
+        if (!label) return;
+        if (!label.dataset.originalText) {
+          label.dataset.originalText = label.textContent.trim();
+        }
+        label.textContent = active
+          ? `${label.dataset.originalText} (Preenchido automaticamente)`
+          : label.dataset.originalText;
+      };
+
       const signatureCanvases = document.querySelectorAll('[data-signature-target]');
       signatureCanvases.forEach((canvas) => {
         const target = document.getElementById(canvas.dataset.signatureTarget);
@@ -81,7 +110,9 @@
         const pointerUp = () => {
           if (!drawing) return;
           drawing = false;
-          target.value = canvas.toDataURL();
+          if (target) {
+            target.value = canvas.toDataURL();
+          }
         };
 
         canvas.addEventListener('pointerdown', pointerDown);
@@ -89,7 +120,8 @@
         canvas.addEventListener('pointerup', pointerUp);
         canvas.addEventListener('pointerout', pointerUp);
 
-        const clearBtn = canvas.parentElement.querySelector('[data-clear-target]');
+        const parentElement = canvas.parentElement;
+        const clearBtn = parentElement ? parentElement.querySelector('[data-clear-target]') : null;
         if (clearBtn) {
           clearBtn.addEventListener('click', () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -128,6 +160,7 @@
         state: "{{ responsible.state|default:''|escapejs }}",
         cep: "{{ responsible.cep|default:''|escapejs }}",
       };
+
       if (useResponsible) {
         const toggleAddress = () => {
           const checked = useResponsible.checked;
@@ -135,20 +168,107 @@
             const input = document.getElementById('id_' + field);
             if (!input) return;
             if (checked) {
-              input.value = responsibleAddress[field];
+              input.value = responsibleAddress[field] || '';
               input.readOnly = true;
-              input.previousElementSibling &&
-                (input.previousElementSibling.textContent = input.previousElementSibling.textContent.replace(/\\(.*\\)/, '') + ' (Preenchido automaticamente)');
+              setAutofillLabel(input, true);
             } else {
-              if (input.readOnly) {
+              if (input.dataset.autofill === 'true') {
                 input.value = '';
               }
               input.readOnly = false;
+              setAutofillLabel(input, false);
             }
           });
         };
         useResponsible.addEventListener('change', toggleAddress);
         toggleAddress();
+      }
+
+      const legalType = document.getElementById('id_legal_type');
+      const legalFields = [
+        { id: 'id_legal_name', key: 'name' },
+        { id: 'id_legal_cpf', key: 'cpf' },
+        { id: 'id_legal_email', key: 'email' },
+        { id: 'id_legal_phone', key: 'phone' },
+        { id: 'id_legal_relationship', key: 'relationship' },
+      ];
+
+      const parentSources = {
+        pai: {
+          name: '#id_father_name',
+          cpf: '#id_father_cpf',
+          email: '#id_father_email',
+          phone: '#id_father_phone',
+          relationship: 'Pai',
+        },
+        mae: {
+          name: '#id_mother_name',
+          cpf: '#id_mother_cpf',
+          email: '#id_mother_email',
+          phone: '#id_mother_phone',
+          relationship: 'Mãe',
+        },
+      };
+
+      const getSourceValue = (type, key) => {
+        const selectors = parentSources[type];
+        if (!selectors) return '';
+        const reference = selectors[key];
+        if (!reference) return '';
+        if (reference.startsWith('#')) {
+          const element = document.querySelector(reference);
+          return element ? element.value : '';
+        }
+        return reference;
+      };
+
+      const tryAutofillField = (input, value) => {
+        if (!input || input.dataset.manual === 'true') {
+          return;
+        }
+        if (value) {
+          input.dataset.autofill = 'true';
+          input.value = value;
+          setAutofillLabel(input, true);
+        } else if (input.dataset.autofill === 'true') {
+          input.dataset.autofill = 'false';
+          input.value = '';
+          setAutofillLabel(input, false);
+        }
+      };
+
+      const updateLegalFields = () => {
+        if (!legalType) return;
+        const type = legalType.value;
+        const hasParent = Boolean(parentSources[type]);
+        legalFields.forEach(({ id, key }) => {
+          const input = document.getElementById(id);
+          if (!input) return;
+          if (!hasParent) {
+            if (input.dataset.autofill === 'true') {
+              input.dataset.autofill = 'false';
+            }
+            setAutofillLabel(input, false);
+            return;
+          }
+          input.dataset.manual = 'false';
+          const value = getSourceValue(type, key);
+          tryAutofillField(input, value);
+        });
+      };
+
+      legalFields.forEach(({ id }) => {
+        const input = document.getElementById(id);
+        if (!input) return;
+        input.addEventListener('input', () => {
+          input.dataset.manual = 'true';
+          setAutofillLabel(input, false);
+        });
+      });
+
+      if (legalType) {
+        legalType.addEventListener('change', updateLegalFields);
+        updateLegalFields();
       }
     });
   </script>

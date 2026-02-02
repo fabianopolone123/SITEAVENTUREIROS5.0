@@ -494,3 +494,118 @@ Aviso: Impacto / Observações
 - Novo fluxo guiado completo acessível da tela de login; mantém rastreabilidade das pendências e impede finalizar sem preencher tudo.
 - O app `members` agora centraliza o domínio dos registros e pode alimentar APIs e diagnósticos futuros.
 - O wizard persiste assinaturas e fotos (base64), garantindo rascunhos e revisões antes da finalização.
+
+---
+
+### 🎯 Alteração Nº 0020
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> Cliente pediu adaptar o layout do wizard ao padrão da tela de login, incluir tamanhos infantis de camiseta (2 a 12) e reforçar que o passo do responsável exige preenchimento completo e preenchimento automático para o responsável legal.
+
+#### ✅ O que foi feito
+- Estilizei a tela de cadastro para espelhar o cartão moderno da tela de login e garantir responsividade mobile.
+- Inserimos script que copia dados do pai/mãe para o responsável legal, marca campos preenchidos automaticamente e evita que o formulário avance sem os campos obrigatórios.
+- Adicionei as opções de tamanho 02 a 12 e tonifiquei o estilo das mensagens de erro do formulário.
+
+#### 📁 Arquivos afetados
+- backend/apps/members/models.py
+- backend/ui/forms/cadastro.py
+- backend/ui/static/css/cadastro.css
+- backend/ui/templates/cadastro_aventureiro/base.html
+
+#### 🔗 Relacionado a
+- feature: usabilidade e responsividade do cadastro guiado
+
+#### ⚠️ Impacto / Observações
+- O wizard agora exige os campos obrigatórios do responsável, exibe indicadores claros de preenchimento automático e permanece utilizável em telas pequenas.
+- As novas opções de camiseta cobrem o público infantil e facilitam futuras integrações com relatórios de uniformes.
+
+---
+
+### 🎯 Alteração Nº 0021
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> O responsável estava liberado para avançar sem aceitar a declaração ou registrar a assinatura digital da tela, o que viola a obrigatoriedade jurídica do cadastro.
+
+#### ✅ O que foi feito
+- Ajustado o `ResponsibleForm` para bloquear o avanço quando a declaração não for confirmada ou a assinatura digital estiver vazia, mantendo permissão para salvar rascunho.
+
+#### 📁 Arquivos afetados
+- backend/ui/forms/cadastro.py
+
+#### 🔗 Relacionado a
+- feature: validação do cadastro guiado
+
+#### ⚠️ Impacto / Observações
+- Agora é impossível salvar/continuar sem o obrigado aceite legal e sem o trace da assinatura, alinhando o fluxo com a exigência jurídica do termo.
+
+---
+
+### 🎯 Alteração Nº 0022
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> O usuário ainda conseguia avançar nas etapas seguintes sem preencher foto, camiseta, declaração médica ou termo, o que compromete o checklist completo.
+
+#### ✅ O que foi feito
+- Ajustei os formulários do aventureiro (foto, camiseta, assinatura), da ficha médica (campos obrigatórios, declaração, assinatura, tipo sanguíneo e motivo de internação) e do termo (deve marcar e assinar) para falhar a validação quando usados com “Salvar e continuar”.
+
+#### 📁 Arquivos afetados
+- backend/ui/forms/cadastro.py
+
+#### 🔗 Relacionado a
+- feature: validações do fluxo guiado
+
+#### ⚠️ Impacto / Observações
+- As etapas agora bloqueiam o avanço até que todos os campos críticos estejam preenchidos, mantendo o checklist organizado e juridicamente válido.
+
+---
+
+### 🎯 Alteração Nº 0023
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> A barra de progresso visual permanecia igual ao avançar pelas etapas, confundindo o usuário sobre qual fase estava ativa.
+
+#### ✅ O que foi feito
+- Ajustei o CSS dos passos do wizard para que os anteriores geometrizados fiquem verdes e os passos atuais ganhem fundo em gradient e sombra, dando feedback claro de progresso.
+
+#### 📁 Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### 🔗 Relacionado a
+- feature: indicativo visual do wizard
+
+#### ⚠️ Impacto / Observações
+- Agora o topo muda claramente de aparência conforme o usuário avança, deixando mais evidente qual etapa está ativa.
+---
+
+### 🎯 Alteração Nº 0024
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> O progresso no topo não atualizava visualmente porque a classe dos passos era recalculada de forma incorreta, então todos continuavam com o mesmo estilo mesmo mudando de etapa.
+
+#### ✅ O que foi feito
+- Simplifiquei o bloco do wizard para renderizar explicitamente `step`, `is-current` e `is-complete` conforme o índice atual, garantindo que cada etapa herde o estilo esperado sem dependência de `with` encadeados.
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/base.html
+
+#### 🔗 Relacionado a
+- feature: indicador visual do wizard
+
+#### ⚠️ Impacto / Observações
+- Agora o progresso reflete corretamente o índice atual logo quando a página for renderizada, evitando confusões sobre qual etapa está ativa.
