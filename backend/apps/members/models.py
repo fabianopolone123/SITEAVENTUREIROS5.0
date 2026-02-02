@@ -1,4 +1,6 @@
-﻿from django.db import models
+import json
+
+from django.db import models
 from django.utils import timezone
 
 
@@ -83,6 +85,12 @@ class Responsible(models.Model):
             pending.append('Assinatura do responsável legal pendente')
         return pending
 
+    def get_invested_classes(self):
+        try:
+            return json.loads(self.invested_class or '[]')
+        except Exception:
+            return []
+
 
 class Adventurer(models.Model):
     SEX_CHOICES = [
@@ -131,7 +139,7 @@ class Adventurer(models.Model):
     grade_year = models.CharField('Série', max_length=50)
     school = models.CharField('Colégio', max_length=200)
     bolsa_familia = models.BooleanField('Beneficiário do Bolsa Família', default=False)
-    invested_class = models.CharField('Classe investida', max_length=30, choices=CLASS_CHOICES)
+    invested_class = models.TextField('Classes investidas', blank=True, default='[]')
     document_type = models.CharField('Documento principal', max_length=20, choices=DOCUMENT_CHOICES)
     certificate_number = models.CharField('Número da certidão', max_length=80, blank=True)
     rg_number = models.CharField('Número do RG', max_length=80, blank=True)

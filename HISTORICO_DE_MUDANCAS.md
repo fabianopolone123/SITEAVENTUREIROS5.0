@@ -721,3 +721,32 @@ Aviso: Impacto / Observações
 
 #### ⚠️ Impacto / Observações
 - O usuário agora vê imediatamente o status jurídico da declaração, reforçando que marcar a checkbox é obrigatório e visível.
+---
+
+### 🎯 Alteração Nº 0030
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> O formulário do aventureiro ainda exigia input manual para a data, não permitia selecionar mais de uma classe e os rótulos eram pequenos demais para uso em telas grandes.
+
+#### ✅ O que foi feito
+- Troquei o campo de data para um `DateInput`, permitindo usar o seletor nativo.  
+- Transformei “Classes investidas” em múltipla escolha (checkboxes) com suporte para várias classes e armazeno o resultado em JSON no modelo.  
+- Ampliei a tipografia dos labels para `1.05rem` e criei um grupo visual para os checkboxes.  
+- Adicionei migração (`0002_alter_adventurer_invested_class_and_more.py`) para refletir a mudança no campo `invested_class`.
+
+#### 📁 Arquivos afetados
+- backend/apps/members/models.py  
+- backend/apps/members/migrations/0002_alter_adventurer_invested_class_and_more.py  
+- backend/ui/forms/cadastro.py  
+- backend/ui/static/css/cadastro.css  
+- backend/ui/templates/cadastro_aventureiro/responsavel.html  
+- backend/ui/templates/cadastro_aventureiro/base.html
+
+#### 🔗 Relacionado a
+- feature: usabilidade do cadastro
+
+#### ⚠️ Impacto / Observações
+- A tela agora aceita datas com o picker do navegador, permite 0+ classes investidas e mantém os campos mais legíveis; a nova migração atualiza o schema para armazenar múltiplas classes.

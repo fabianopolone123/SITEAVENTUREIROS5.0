@@ -177,8 +177,9 @@ body {
 .field-grid label {
   display: block;
   margin-bottom: 6px;
-  font-size: 0.85rem;
-  color: #556182;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #22375f;
 }
 
 .field-grid input,
@@ -244,6 +245,12 @@ body {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(55, 82, 255, 0.35);
   color: #203d82;
+}
+
+.invested-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .status-badge {

@@ -1,4 +1,6 @@
 from django import forms
+from django.utils import timezone
+import json
 
 from backend.apps.members.models import Adventurer, ImageReleaseTerm, MedicalRecord, Responsible
 
@@ -114,6 +116,20 @@ class AdventurerForm(DraftModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['birth_date'].widget = forms.DateInput(attrs={'type': 'date'})
+        self.fields['invested_class'] = forms.MultipleChoiceField(
+            choices=Adventurer.CLASS_CHOICES,
+            required=False,
+            widget=forms.CheckboxSelectMultiple(attrs={'class': 'invested-checkboxes'}),
+            label='Classes investidas',
+        )
+        invested = []
+        if self.instance and self.instance.invested_class:
+            try:
+                invested = json.loads(self.instance.invested_class)
+            except Exception:
+                invested = []
+        self.fields['invested_class'].initial = invested
         self.fields['use_responsible_address'].widget.attrs['data-use-responsible'] = 'true'
         self.fields['photo_data'].widget.attrs['data-photo-target'] = 'true'
         self.fields['photo'].widget.attrs['data-photo-input'] = 'true'
@@ -140,6 +156,8 @@ class AdventurerForm(DraftModelForm):
             self.add_error('photo_data', 'Envie a foto do aventureiro.')
         if not cleaned.get('signature_data'):
             self.add_error('signature_data', 'Assine no quadro para continuar.')
+        invested = cleaned.get('invested_class') or []
+        cleaned['invested_class'] = json.dumps(invested)
         return cleaned
 
 
