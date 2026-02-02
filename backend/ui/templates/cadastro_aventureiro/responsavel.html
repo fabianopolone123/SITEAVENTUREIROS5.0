@@ -5,48 +5,62 @@
     {% csrf_token %}
     <div class="section-card">
       <h4>Dados do pai</h4>
-      <div class="field-grid">
-        {{ form.father_name.label_tag }} {{ form.father_name }}
-        {{ form.father_cpf.label_tag }} {{ form.father_cpf }}
-        {{ form.father_email.label_tag }} {{ form.father_email }}
-        {{ form.father_phone.label_tag }} {{ form.father_phone }}
+      <p class="section-note">Preencha os dados principais do responsável paterno.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.father_name label=form.father_name.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.father_cpf label=form.father_cpf.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.father_email label=form.father_email.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.father_phone label=form.father_phone.label %}
       </div>
     </div>
 
     <div class="section-card">
       <h4>Dados da mãe</h4>
-      <div class="field-grid">
-        {{ form.mother_name.label_tag }} {{ form.mother_name }}
-        {{ form.mother_cpf.label_tag }} {{ form.mother_cpf }}
-        {{ form.mother_email.label_tag }} {{ form.mother_email }}
-        {{ form.mother_phone.label_tag }} {{ form.mother_phone }}
+      <p class="section-note">Informe os contatos do responsável materno.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.mother_name label=form.mother_name.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.mother_cpf label=form.mother_cpf.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.mother_email label=form.mother_email.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.mother_phone label=form.mother_phone.label %}
       </div>
     </div>
 
     <div class="section-card">
       <h4>Responsável legal</h4>
-      <div class="field-grid">
-        {{ form.legal_type.label_tag }} {{ form.legal_type }}
-        {{ form.legal_name.label_tag }} {{ form.legal_name }}
-        {{ form.legal_relationship.label_tag }} {{ form.legal_relationship }}
-        {{ form.legal_cpf.label_tag }} {{ form.legal_cpf }}
-        {{ form.legal_email.label_tag }} {{ form.legal_email }}
-        {{ form.legal_phone.label_tag }} {{ form.legal_phone }}
-        {{ form.nationality.label_tag }} {{ form.nationality }}
-        {{ form.marital_status.label_tag }} {{ form.marital_status }}
-        {{ form.rg_or_cin.label_tag }} {{ form.rg_or_cin }}
+      <p class="section-note">Defina quem responde legalmente pelo cadastro e mantenha os contatos atualizados.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.legal_type label=form.legal_type.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.legal_name label=form.legal_name.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.legal_relationship label=form.legal_relationship.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.legal_cpf label=form.legal_cpf.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.legal_email label=form.legal_email.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.legal_phone label=form.legal_phone.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.nationality label=form.nationality.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.marital_status label=form.marital_status.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.rg_or_cin label=form.rg_or_cin.label %}
       </div>
     </div>
 
     <div class="section-card">
       <h4>Endereço do responsável</h4>
-      <div class="field-grid">
-        {{ form.address_line.label_tag }} {{ form.address_line }}
-        {{ form.neighborhood.label_tag }} {{ form.neighborhood }}
-        {{ form.city.label_tag }} {{ form.city }}
-        {{ form.state.label_tag }} {{ form.state }}
-        {{ form.cep.label_tag }} {{ form.cep }}
-        {{ form.address_number.label_tag }} {{ form.address_number }}
+      <p class="section-note">O endereço será usado para correspondências oficiais e documentos.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.address_line label=form.address_line.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.neighborhood label=form.neighborhood.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.city label=form.city.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.state label=form.state.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.cep label=form.cep.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.address_number label=form.address_number.label %}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Conta de acesso</h4>
+      <p class="section-note">Defina um usuário e senha para entrar novamente na plataforma.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.username label=form.username.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.password label=form.password.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.password_confirm label=form.password_confirm.label %}
       </div>
     </div>
 

@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -12,6 +13,13 @@ class Responsible(models.Model):
     ]
 
     session_key = models.CharField(max_length=64, db_index=True)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='responsible_profile',
+    )
 
     father_name = models.CharField('Nome do pai', max_length=150, blank=True)
     father_cpf = models.CharField('CPF do pai', max_length=20, blank=True)

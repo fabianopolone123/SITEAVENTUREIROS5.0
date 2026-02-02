@@ -18,7 +18,18 @@ def get_session_key(session) -> str:
     return session.session_key
 
 
-def get_or_create_responsible(session) -> Responsible:
+def get_or_create_responsible(request) -> Responsible:
+    session = request.session
+    user = getattr(request, 'user', None)
+    if user and user.is_authenticated:
+        responsible = (
+            Responsible.objects.filter(user=user)
+            .order_by('-created_at')
+            .first()
+        )
+        if responsible:
+            session['responsible_id'] = responsible.pk
+            return responsible
     key = get_session_key(session)
     responsible = (
         Responsible.objects.filter(session_key=key, finalized=False)

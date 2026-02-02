@@ -92,6 +92,16 @@
       {% endif %}
       {% endif %}
 
+      {% if messages %}
+        <div class="global-messages">
+          {% for message in messages %}
+            <div class="message message--{{ message.tags|default:'info' }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <div class="stage-content">
         {% block stage_content %}{% endblock %}
       </div>

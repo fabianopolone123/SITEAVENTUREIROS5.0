@@ -1,18 +1,26 @@
 {% extends "cadastro_aventureiro/base.html" %}
 
 {% block stage_content %}
-  <div class="section-card">
+  <div class="section-card section-card--compact">
     <h4>Escolha de cadastro</h4>
     <div class="cards-grid">
       <div class="card">
-        <h5>Cadastrar Aventureiro</h5>
-        <p>Fluxo guiado para registrar responsável, aventureiros, fichas médicas e autorizações.</p>
-        <a class="primary-btn" href="{% url 'cadastro-aventureiro-responsavel' %}">Iniciar cadastro</a>
+        <div class="card-body">
+          <h5>Cadastrar Aventureiro</h5>
+          <p class="card-description">Fluxo guiado para registrar responsável, aventureiros, fichas médicas e autorizações.</p>
+        </div>
+        <div class="card-actions">
+          <a class="primary-btn" href="{% url 'cadastro-aventureiro-responsavel' %}">Iniciar cadastro</a>
+        </div>
       </div>
       <div class="card">
-        <h5>Cadastrar Diretoria</h5>
-        <p>Em breve.</p>
-        <span class="secondary-btn" style="opacity:.6; cursor:not-allowed;">Em breve</span>
+        <div class="card-body">
+          <h5>Cadastrar Diretoria</h5>
+          <p class="card-description">Em breve.</p>
+        </div>
+        <div class="card-actions">
+          <span class="secondary-btn secondary-btn--disabled">Em breve</span>
+        </div>
       </div>
     </div>
   </div>

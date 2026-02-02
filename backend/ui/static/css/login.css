@@ -20,6 +20,37 @@ body {
   padding: 2.5rem 1rem;
 }
 
+.login-messages {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-messages .message {
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.login-messages .message--success {
+  border: 1px solid #28a34e;
+  background: rgba(40, 163, 78, 0.15);
+  color: #154e26;
+}
+
+.login-messages .message--error {
+  border: 1px solid #c1441d;
+  background: rgba(193, 68, 29, 0.15);
+  color: #5f2011;
+}
+
+.login-messages .message--info {
+  border: 1px solid #4167ff;
+  background: rgba(65, 103, 255, 0.1);
+  color: #0d1d7e;
+}
 .page-wrapper {
   position: relative;
   width: 100%;

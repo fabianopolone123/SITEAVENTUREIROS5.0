@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404, redirect, render
 
 from backend.apps.members.models import Adventurer, ImageReleaseTerm, MedicalRecord
@@ -27,6 +29,15 @@ WIZARD_STEPS = [
 
 
 def login_page(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            messages.success(request, 'Bem-vindo de volta! Agora você pode continuar a gestão dos cadastros.')
+            return redirect('cadastro-aventureiro-lista')
+        messages.error(request, 'Credenciais inválidas. Verifique usuário e senha.')
     return render(request, 'login.html')
 
 
@@ -52,7 +63,7 @@ def wizard_context(request, responsible, current_step, extra=None):
 
 
 def cadastro_tipo(request):
-    responsible = get_or_create_responsible(request.session)
+    responsible = get_or_create_responsible(request)
     return render(
         request,
         'cadastro_aventureiro/tipo.html',
@@ -61,7 +72,7 @@ def cadastro_tipo(request):
 
 
 def cadastro_responsavel(request):
-    responsible = get_or_create_responsible(request.session)
+    responsible = get_or_create_responsible(request)
     action = request.POST.get('action')
     save_draft = action == 'save_draft'
     form = ResponsibleForm(
@@ -91,7 +102,7 @@ def cadastro_responsavel(request):
 
 
 def cadastro_lista_aventureiros(request):
-    responsible = get_or_create_responsible(request.session)
+    responsible = get_or_create_responsible(request)
     context = wizard_context(request, responsible, 'lista')
     status_map = context.get('adventurer_status', {})
     adventurers_data = []
@@ -103,7 +114,7 @@ def cadastro_lista_aventureiros(request):
 
 
 def cadastro_dados_aventureiro(request, pk=None):
-    responsible = get_or_create_responsible(request.session)
+    responsible = get_or_create_responsible(request)
     if pk:
         adventurer = get_object_or_404(Adventurer, pk=pk, responsible=responsible)
     else:
@@ -146,7 +157,7 @@ def cadastro_dados_aventureiro(request, pk=None):
 
 
 def cadastro_ficha_medica(request, pk):
-    responsible = get_or_create_responsible(request.session)
+    responsible = get_or_create_responsible(request)
     adventurer = get_object_or_404(Adventurer, pk=pk, responsible=responsible)
     medical, _ = MedicalRecord.objects.get_or_create(adventurer=adventurer)
     action = request.POST.get('action')
@@ -213,7 +224,7 @@ def cadastro_ficha_medica(request, pk):
 
 
 def cadastro_termo_imagem(request, pk):
-    responsible = get_or_create_responsible(request.session)
+    responsible = get_or_create_responsible(request)
     adventurer = get_object_or_404(Adventurer, pk=pk, responsible=responsible)
     term, _ = ImageReleaseTerm.objects.get_or_create(
         adventurer=adventurer,
@@ -251,20 +262,22 @@ def cadastro_termo_imagem(request, pk):
 
 
 def cadastro_revisao(request):
-    responsible = get_or_create_responsible(request.session)
-    message = None
+    responsible = get_or_create_responsible(request)
     if request.method == 'POST' and request.POST.get('action') == 'finalizar':
         if can_finalize(responsible):
             responsible.finalized = True
             responsible.save()
-            message = 'Cadastro finalizado com sucesso.'
             request.session.pop('responsible_id', None)
+            messages.success(
+                request,
+                'Cadastro concluído com sucesso! Faça login para continuar.',
+            )
+            return redirect('login')
     context = wizard_context(
         request,
         responsible,
         'revisao',
         {
-            'message': message,
             'can_finalize': can_finalize(responsible),
         },
     )

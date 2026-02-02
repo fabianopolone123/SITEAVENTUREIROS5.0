@@ -26,6 +26,15 @@
 
   <form method="post">
     {% csrf_token %}
+    {% if not can_finalize %}
+      <div class="context-feedback context-feedback--warning">
+        <p>Há pendências ainda em aberto. Marque como preenchido nos formulários para liberar o botão Finalizar.</p>
+        <div class="review-actions">
+          <a class="secondary-btn" href="{% url 'cadastro-aventureiro-responsavel' %}">Revisar responsável</a>
+          <a class="secondary-btn" href="{% url 'cadastro-aventureiro-lista' %}">Editar aventureiros</a>
+        </div>
+      </div>
+    {% endif %}
     <div class="actions">
       <button class="primary-btn" name="action" value="finalizar" type="submit" {% if not can_finalize %}disabled{% endif %}>Finalizar cadastro</button>
     </div>

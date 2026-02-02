@@ -8,54 +8,66 @@
 
     <div class="section-card">
       <h4>Dados pessoais</h4>
-      <div class="field-grid">
-        {{ form.name.label_tag }} {{ form.name }}
-        {{ form.sex.label_tag }} {{ form.sex }}
-        {{ form.birth_date.label_tag }} {{ form.birth_date }}
-        {{ form.grade_year.label_tag }} {{ form.grade_year }}
-        {{ form.school.label_tag }} {{ form.school }}
-        {{ form.bolsa_familia.label_tag }} {{ form.bolsa_familia }}
+      <p class="section-note">Renda cada campo com o rótulo e o controle em linha.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.name label=form.name.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.sex label=form.sex.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.birth_date label=form.birth_date.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.grade_year label=form.grade_year.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.school label=form.school.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.bolsa_familia label=form.bolsa_familia.label %}
       </div>
     </div>
 
     <div class="section-card">
       <h4>Classe investida</h4>
-      <div class="field-grid">
-        {{ form.invested_class.label_tag }} {{ form.invested_class }}
+      <p class="section-note">Selecione todas as classes já investidas. “Nenhum” deve ser a única opção marcada se for o caso.</p>
+      <div class="field-rows invested-wrapper" data-invested-wrapper>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.invested_class.label }}</span>
+          <div class="field-row__control invested-checkboxes">
+            {{ form.invested_class }}
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="section-card">
-      <h4>Documento do aventureiro</h4>
-      <div class="field-grid">
-        {{ form.document_type.label_tag }} {{ form.document_type }}
-        {{ form.certificate_number.label_tag }} {{ form.certificate_number }}
-        {{ form.rg_number.label_tag }} {{ form.rg_number }}
-        {{ form.rg_issuer.label_tag }} {{ form.rg_issuer }}
-        {{ form.cin_number.label_tag }} {{ form.cin_number }}
-        {{ form.cpf_number.label_tag }} {{ form.cpf_number }}
-        {{ form.religion.label_tag }} {{ form.religion }}
+      <h4>Documentos</h4>
+      <p class="section-note">Preencha apenas os campos referentes ao documento escolhido.</p>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.document_type label=form.document_type.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.certificate_number label=form.certificate_number.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.rg_number label=form.rg_number.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.rg_issuer label=form.rg_issuer.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.cin_number label=form.cin_number.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.cpf_number label=form.cpf_number.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.religion label=form.religion.label %}
       </div>
     </div>
 
-    <div class="section-card">
+    <div class="section-card section-card--stacked">
       <h4>Endereço</h4>
-      <div class="field-grid">
-        <label>
-          {{ form.use_responsible_address }} Usar endereço do responsável
-        </label>
-        {{ form.address_line.label_tag }} {{ form.address_line }}
-        {{ form.neighborhood.label_tag }} {{ form.neighborhood }}
-        {{ form.city.label_tag }} {{ form.city }}
-        {{ form.state.label_tag }} {{ form.state }}
-        {{ form.cep.label_tag }} {{ form.cep }}
+      <p class="section-note">Use o endereço do responsável sempre que possível.</p>
+      <div class="field-row">
+        <span class="field-row__label">Usar endereço do responsável</span>
+        <div class="field-row__control">
+          {{ form.use_responsible_address }}
+        </div>
+      </div>
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.address_line label=form.address_line.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.neighborhood label=form.neighborhood.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.city label=form.city.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.state label=form.state.label %}
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.cep label=form.cep.label %}
       </div>
     </div>
 
     <div class="section-card">
       <h4>Informações gerais</h4>
-      <div class="field-grid">
-        {{ form.tshirt_size.label_tag }} {{ form.tshirt_size }}
+      <div class="field-rows">
+        {% include 'cadastro_aventureiro/field_row.html' with field=form.tshirt_size label=form.tshirt_size.label %}
       </div>
     </div>
 
@@ -83,5 +95,30 @@
       <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
       <button class="primary-btn" name="action" value="continue" type="submit">Salvar aventureiro</button>
     </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const investedWrapper = document.querySelector('[data-invested-wrapper]');
+        if (!investedWrapper) return;
+        const checkboxes = Array.from(investedWrapper.querySelectorAll('input[type="checkbox"]'));
+        const noneOption = checkboxes.find((input) => input.value === 'nenhum');
+
+        const syncInvested = (source) => {
+          if (!noneOption) return;
+          if (source === noneOption && noneOption.checked) {
+            checkboxes.forEach((input) => {
+              if (input !== noneOption) {
+                input.checked = false;
+              }
+            });
+          } else if (noneOption.checked) {
+            noneOption.checked = false;
+          }
+        };
+
+        checkboxes.forEach((input) => {
+          input.addEventListener('change', () => syncInvested(input));
+        });
+      });
+    </script>
   </form>
 {% endblock %}

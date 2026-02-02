@@ -1,0 +1,7 @@
+<div class="field-row{% if field.errors %} error{% endif %}">
+  <span class="field-row__label">{{ label }}</span>
+  <div class="field-row__control">
+    {{ field }}
+  </div>
+  {% include 'cadastro_aventureiro/field_error.html' with field=field %}
+</div>

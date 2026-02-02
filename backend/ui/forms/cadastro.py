@@ -1,6 +1,8 @@
-from django import forms
-from django.utils import timezone
 import json
+
+from django import forms
+from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from backend.apps.members.models import Adventurer, ImageReleaseTerm, MedicalRecord, Responsible
 
@@ -15,6 +17,22 @@ class DraftModelForm(forms.ModelForm):
 
 
 class ResponsibleForm(DraftModelForm):
+    username = forms.CharField(
+        label='Nome de usuário',
+        max_length=150,
+        required=False,
+        help_text='Será usado como login para acessar a plataforma.',
+    )
+    password = forms.CharField(
+        label='Senha',
+        widget=forms.PasswordInput(),
+        required=False,
+    )
+    password_confirm = forms.CharField(
+        label='Confirmação da senha',
+        widget=forms.PasswordInput(),
+        required=False,
+    )
     signature_data = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     REQUIRED_FIELDS = [
@@ -69,6 +87,12 @@ class ResponsibleForm(DraftModelForm):
         ]
         widgets = {'declaration_accepted': forms.CheckboxInput()}
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.user:
+            self.fields['username'].initial = self.instance.user.username
+        self.fields['username'].required = not self.save_draft
+
     def clean(self):
         cleaned = super().clean()
         if self.save_draft:
@@ -81,7 +105,61 @@ class ResponsibleForm(DraftModelForm):
         signature = cleaned.get('signature_data')
         if not signature:
             self.add_error('signature_data', 'Assine acima para validar o responsável.')
+        username = cleaned.get('username')
+        password = cleaned.get('password')
+        password_confirm = cleaned.get('password_confirm')
+        if not username:
+            self.add_error('username', 'Informe um nome de usuário para acessar o sistema.')
+        else:
+            User = get_user_model()
+            users = User.objects.filter(username__iexact=username)
+            if self.instance and self.instance.user:
+                users = users.exclude(pk=self.instance.user.pk)
+            if users.exists():
+                self.add_error('username', 'Este nome de usuário já está em uso.')
+        requires_password = not self.instance.user
+        if password or requires_password:
+            if not password:
+                self.add_error('password', 'Informe a senha do usuário.')
+            if not password_confirm:
+                self.add_error('password_confirm', 'Confirme a senha digitada.')
+            if password and password_confirm and password != password_confirm:
+                self.add_error('password_confirm', 'As senhas precisam coincidir.')
+        self._check_duplicate_cpf(cleaned, 'father_cpf', 'CPF do pai')
+        self._check_duplicate_cpf(cleaned, 'mother_cpf', 'CPF da mãe')
+        self._check_duplicate_cpf(cleaned, 'legal_cpf', 'CPF do responsável legal')
         return cleaned
+
+    def save(self, commit=True):
+        responsible = super().save(commit=False)
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        if username:
+            responsible.user = self._ensure_user(username, password)
+        if commit:
+            responsible.save()
+        return responsible
+
+    def _check_duplicate_cpf(self, cleaned, field_name, label):
+        value = cleaned.get(field_name)
+        if not value:
+            return
+        duplicates = Responsible.objects.filter(**{field_name: value})
+        if self.instance and self.instance.pk:
+            duplicates = duplicates.exclude(pk=self.instance.pk)
+        if duplicates.exists():
+            self.add_error(field_name, f'Já existe um cadastro com este {label}.')
+
+    def _ensure_user(self, username, password):
+        User = get_user_model()
+        user = self.instance.user
+        if user:
+            user.username = username
+            if password:
+                user.set_password(password)
+            user.save()
+            return user
+        return User.objects.create_user(username=username, password=password)
 
 
 class AdventurerForm(DraftModelForm):
@@ -160,7 +238,24 @@ class AdventurerForm(DraftModelForm):
             self.add_error('signature_data', 'Assine no quadro para continuar.')
         invested = cleaned.get('invested_class') or []
         cleaned['invested_class'] = json.dumps(invested)
+        self._check_duplicate_name(cleaned)
         return cleaned
+
+    def _check_duplicate_name(self, cleaned):
+        responsible = self.instance.responsible
+        name = cleaned.get('name')
+        birth_date = cleaned.get('birth_date')
+        if not (responsible and name and birth_date):
+            return
+        duplicates = Adventurer.objects.filter(
+            responsible=responsible,
+            name__iexact=name.strip(),
+            birth_date=birth_date,
+        )
+        if self.instance and self.instance.pk:
+            duplicates = duplicates.exclude(pk=self.instance.pk)
+        if duplicates.exists():
+            self.add_error('name', 'Já existe um aventureiro com o mesmo nome e data de nascimento.')
 
 
 class MedicalRecordForm(DraftModelForm):

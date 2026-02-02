@@ -19,7 +19,17 @@
       </div>
       <p class="tagline">ESPAÇO DO CLUBE</p>
       <h1>Clube de Aventureiros<br>Pinhal Junior</h1>
+      {% if messages %}
+        <div class="login-messages">
+          {% for message in messages %}
+            <div class="message message--{{ message.tags|default:'info' }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
       <form method="post" action="" autocomplete="off">
+        {% csrf_token %}
         <div class="form-group">
           <label for="username">Nome de usuário</label>
           <input id="username" name="username" type="text" placeholder="Digite o seu nome" autocomplete="username">
