@@ -1,0 +1,73 @@
+{% extends "cadastro_aventureiro/base.html" %}
+
+{% block stage_content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="section-card">
+      <h4>Dados do pai</h4>
+      <div class="field-grid">
+        {{ form.father_name.label_tag }} {{ form.father_name }}
+        {{ form.father_cpf.label_tag }} {{ form.father_cpf }}
+        {{ form.father_email.label_tag }} {{ form.father_email }}
+        {{ form.father_phone.label_tag }} {{ form.father_phone }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Dados da mãe</h4>
+      <div class="field-grid">
+        {{ form.mother_name.label_tag }} {{ form.mother_name }}
+        {{ form.mother_cpf.label_tag }} {{ form.mother_cpf }}
+        {{ form.mother_email.label_tag }} {{ form.mother_email }}
+        {{ form.mother_phone.label_tag }} {{ form.mother_phone }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Responsável legal</h4>
+      <div class="field-grid">
+        {{ form.legal_type.label_tag }} {{ form.legal_type }}
+        {{ form.legal_name.label_tag }} {{ form.legal_name }}
+        {{ form.legal_relationship.label_tag }} {{ form.legal_relationship }}
+        {{ form.legal_cpf.label_tag }} {{ form.legal_cpf }}
+        {{ form.legal_email.label_tag }} {{ form.legal_email }}
+        {{ form.legal_phone.label_tag }} {{ form.legal_phone }}
+        {{ form.nationality.label_tag }} {{ form.nationality }}
+        {{ form.marital_status.label_tag }} {{ form.marital_status }}
+        {{ form.rg_or_cin.label_tag }} {{ form.rg_or_cin }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Endereço do responsável</h4>
+      <div class="field-grid">
+        {{ form.address_line.label_tag }} {{ form.address_line }}
+        {{ form.neighborhood.label_tag }} {{ form.neighborhood }}
+        {{ form.city.label_tag }} {{ form.city }}
+        {{ form.state.label_tag }} {{ form.state }}
+        {{ form.cep.label_tag }} {{ form.cep }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Declaração e assinatura</h4>
+      <p>Atesto serem verdadeiras as informações fornecidas.</p>
+      <div class="field-grid">
+        {{ form.declaration_accepted }} {{ form.declaration_accepted.label_tag }}
+        {{ form.signature_data }}
+      </div>
+      <div class="signature-area">
+        <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
+        <div class="signature-tools">
+          <span>Assine acima</span>
+          <button type="button" data-clear-target>Limpar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
+      <button class="primary-btn" name="action" value="continue" type="submit">Salvar responsável e continuar</button>
+    </div>
+  </form>
+{% endblock %}

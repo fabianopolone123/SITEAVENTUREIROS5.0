@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de Aventureiros</title>
+  <link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
+</head>
+<body>
+  <div class="cadastro-shell">
+    <div class="summary-stack">
+      <div class="summary-states">
+        <span>Responsável: <span class="status-badge">{{ status.responsible }}</span></span>
+        {% for adv in status.adventurers %}
+          <span>{{ adv.name }} → Dados {{ adv.data }}, Ficha {{ adv.medical }}, Termo {{ adv.term }}</span>
+        {% empty %}
+          <span class="info-pill">Nenhum aventureiro cadastrado ainda</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="wizard-progress">
+      {% for step_id, step_label in steps %}
+        {% with classes='step' %}
+          {% if forloop.counter0 < current_index %}
+            {% with classes=classes|add:' is-complete' %}{% endwith %}
+          {% elif forloop.counter0 == current_index %}
+            {% with classes=classes|add:' is-current' %}{% endwith %}
+          {% endif %}
+          <div class="{{ classes }}">{{ step_label }}</div>
+        {% endwith %}
+      {% endfor %}
+    </div>
+
+    {% if pendings %}
+      <div class="summary-stack">
+        <h3>Pendências detectadas</h3>
+        <ul>
+          {% for pending in pendings %}
+            <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    <div class="stage-content">
+      {% block stage_content %}{% endblock %}
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const signatureCanvases = document.querySelectorAll('[data-signature-target]');
+      signatureCanvases.forEach((canvas) => {
+        const target = document.getElementById(canvas.dataset.signatureTarget);
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        ctx.strokeStyle = '#202020';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        let drawing = false;
+
+        const pointerDown = (event) => {
+          drawing = true;
+          ctx.beginPath();
+          ctx.moveTo(event.offsetX, event.offsetY);
+        };
+        const pointerMove = (event) => {
+          if (!drawing) return;
+          ctx.lineTo(event.offsetX, event.offsetY);
+          ctx.stroke();
+        };
+        const pointerUp = () => {
+          if (!drawing) return;
+          drawing = false;
+          target.value = canvas.toDataURL();
+        };
+
+        canvas.addEventListener('pointerdown', pointerDown);
+        canvas.addEventListener('pointermove', pointerMove);
+        canvas.addEventListener('pointerup', pointerUp);
+        canvas.addEventListener('pointerout', pointerUp);
+
+        const clearBtn = canvas.parentElement.querySelector('[data-clear-target]');
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (target) {
+              target.value = '';
+            }
+          });
+        }
+      });
+
+      const photoInput = document.querySelector('[data-photo-input]');
+      const photoPreview = document.querySelector('[data-photo-preview]');
+      const photoTarget = document.querySelector('[data-photo-target]');
+      if (photoInput && photoTarget) {
+        photoInput.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          if (!file) {
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = () => {
+            photoTarget.value = reader.result;
+            if (photoPreview) {
+              photoPreview.src = reader.result;
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      const useResponsible = document.querySelector('[data-use-responsible]');
+      const responsibleAddress = {
+        address_line: "{{ responsible.address_line|default:''|escapejs }}",
+        neighborhood: "{{ responsible.neighborhood|default:''|escapejs }}",
+        city: "{{ responsible.city|default:''|escapejs }}",
+        state: "{{ responsible.state|default:''|escapejs }}",
+        cep: "{{ responsible.cep|default:''|escapejs }}",
+      };
+      if (useResponsible) {
+        const toggleAddress = () => {
+          const checked = useResponsible.checked;
+          ['address_line', 'neighborhood', 'city', 'state', 'cep'].forEach((field) => {
+            const input = document.getElementById('id_' + field);
+            if (!input) return;
+            if (checked) {
+              input.value = responsibleAddress[field];
+              input.readOnly = true;
+              input.previousElementSibling &&
+                (input.previousElementSibling.textContent = input.previousElementSibling.textContent.replace(/\\(.*\\)/, '') + ' (Preenchido automaticamente)');
+            } else {
+              if (input.readOnly) {
+                input.value = '';
+              }
+              input.readOnly = false;
+            }
+          });
+        };
+        useResponsible.addEventListener('change', toggleAddress);
+        toggleAddress();
+      }
+    });
+  </script>
+</body>
+</html>

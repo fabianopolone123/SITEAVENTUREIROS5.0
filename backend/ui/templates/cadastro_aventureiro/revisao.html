@@ -1,0 +1,33 @@
+{% extends "cadastro_aventureiro/base.html" %}
+
+{% block stage_content %}
+  <div class="section-card">
+    <h4>Checklist final</h4>
+    {% if message %}
+      <p style="color:#27ae60">{{ message }}</p>
+    {% endif %}
+    <div class="cards-grid">
+      <div class="card">
+        <h5>Responsável</h5>
+        <p>Status atual: {{ status.responsible }}</p>
+      </div>
+      {% for adventurer in status.adventurers %}
+        <div class="card">
+          <h5>{{ adventurer.name }}</h5>
+          <div class="status-row">
+            <span>Dados: {{ adventurer.data }}</span>
+            <span>Ficha médica: {{ adventurer.medical }}</span>
+            <span>Termo de imagem: {{ adventurer.term }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="actions">
+      <button class="primary-btn" name="action" value="finalizar" type="submit" {% if not can_finalize %}disabled{% endif %}>Finalizar cadastro</button>
+    </div>
+  </form>
+{% endblock %}

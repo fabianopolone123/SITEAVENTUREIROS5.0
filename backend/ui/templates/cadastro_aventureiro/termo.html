@@ -1,0 +1,48 @@
+{% extends "cadastro_aventureiro/base.html" %}
+
+{% block stage_content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="section-card">
+      <h4>Texto do termo</h4>
+      <div class="field-grid">
+        <textarea readonly>{{ term_text }}</textarea>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Campos preenchidos automaticamente</h4>
+      <ul>
+        <li>Nome da criança: {{ adventurer.name }}</li>
+        <li>Nome do responsável legal: {{ responsible.legal_name }}</li>
+        <li>CPF do responsável legal: {{ responsible.legal_cpf }}</li>
+        <li>RG/CIN: {{ responsible.rg_or_cin }}</li>
+        <li>Endereço: {{ responsible.address_line }}, {{ responsible.neighborhood }}, {{ responsible.city }} - {{ responsible.state }} | CEP {{ responsible.cep }}</li>
+        <li>Município: {{ responsible.city }}</li>
+        <li>Nacionalidade: {{ responsible.nationality }}</li>
+        <li>Estado civil: {{ responsible.marital_status }}</li>
+        <li>Telefone: {{ responsible.legal_phone }}</li>
+      </ul>
+    </div>
+
+    <div class="section-card">
+      <h4>Confirmação</h4>
+      <div class="field-grid">
+        {{ form.agreed }} {{ form.agreed.label_tag }}
+      </div>
+      {{ form.signature_data }}
+    <div class="signature-area">
+      <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
+      <div class="signature-tools">
+        <span>Assine para autorizar o uso de imagem</span>
+        <button type="button" data-clear-target>Limpar</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="actions">
+      <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
+      <button class="primary-btn" name="action" value="continue" type="submit">Salvar termo e continuar</button>
+    </div>
+  </form>
+{% endblock %}

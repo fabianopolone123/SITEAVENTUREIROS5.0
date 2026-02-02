@@ -1,0 +1,87 @@
+{% extends "cadastro_aventureiro/base.html" %}
+
+{% block stage_content %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.photo_data }}
+    {{ form.signature_data }}
+
+    <div class="section-card">
+      <h4>Dados pessoais</h4>
+      <div class="field-grid">
+        {{ form.name.label_tag }} {{ form.name }}
+        {{ form.sex.label_tag }} {{ form.sex }}
+        {{ form.birth_date.label_tag }} {{ form.birth_date }}
+        {{ form.grade_year.label_tag }} {{ form.grade_year }}
+        {{ form.school.label_tag }} {{ form.school }}
+        {{ form.bolsa_familia.label_tag }} {{ form.bolsa_familia }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Classe investida</h4>
+      <div class="field-grid">
+        {{ form.invested_class.label_tag }} {{ form.invested_class }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Documento do aventureiro</h4>
+      <div class="field-grid">
+        {{ form.document_type.label_tag }} {{ form.document_type }}
+        {{ form.certificate_number.label_tag }} {{ form.certificate_number }}
+        {{ form.rg_number.label_tag }} {{ form.rg_number }}
+        {{ form.rg_issuer.label_tag }} {{ form.rg_issuer }}
+        {{ form.cin_number.label_tag }} {{ form.cin_number }}
+        {{ form.cpf_number.label_tag }} {{ form.cpf_number }}
+        {{ form.religion.label_tag }} {{ form.religion }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Endereço</h4>
+      <div class="field-grid">
+        <label>
+          {{ form.use_responsible_address }} Usar endereço do responsável
+        </label>
+        {{ form.address_line.label_tag }} {{ form.address_line }}
+        {{ form.neighborhood.label_tag }} {{ form.neighborhood }}
+        {{ form.city.label_tag }} {{ form.city }}
+        {{ form.state.label_tag }} {{ form.state }}
+        {{ form.cep.label_tag }} {{ form.cep }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Informações gerais</h4>
+      <div class="field-grid">
+        {{ form.tshirt_size.label_tag }} {{ form.tshirt_size }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Foto do aventureiro</h4>
+      <p>Upload de imagem (qualquer formato). Não bloqueamos por tamanho.</p>
+      {{ form.photo.label_tag }} {{ form.photo }}
+      <div class="preview-grid">
+        <img data-photo-preview src="{{ form.photo_data.value }}" alt="Preview da foto" />
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Assinatura do responsável</h4>
+      <div class="signature-area">
+        <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
+        <div class="signature-tools">
+          <span>Assine utilizando mouse ou dedo</span>
+          <button type="button" data-clear-target>Limpar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
+      <button class="primary-btn" name="action" value="continue" type="submit">Salvar aventureiro</button>
+    </div>
+  </form>
+{% endblock %}

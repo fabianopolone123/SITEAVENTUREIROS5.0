@@ -1,0 +1,34 @@
+{% extends "cadastro_aventureiro/base.html" %}
+
+{% block stage_content %}
+  <div class="section-card">
+    <h4>Você pode cadastrar um ou mais aventureiros.</h4>
+    <div class="actions">
+      <a class="primary-btn" href="{% url 'cadastro-aventureiro-dados-novo' %}">+ Adicionar aventureiro</a>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    {% for entry in adventurers %}
+      <div class="card">
+        <h5>{{ entry.instance.name|default:"Aventureiro sem nome" }}</h5>
+        <p>Série {{ entry.instance.grade_year|default:"-" }} • Classe {{ entry.instance.get_invested_class_display }}</p>
+        <div class="status-row">
+          <span>Dados: {{ entry.status.data }}</span>
+          <span>Ficha médica: {{ entry.status.medical }}</span>
+          <span>Termo: {{ entry.status.term }}</span>
+        </div>
+        <div class="actions" style="margin-top:12px;">
+          <a class="secondary-btn" href="{% url 'cadastro-aventureiro-dados' pk=entry.instance.pk %}">Editar dados</a>
+          <a class="secondary-btn" href="{% url 'cadastro-aventureiro-ficha' pk=entry.instance.pk %}">Ficha médica</a>
+          <a class="secondary-btn" href="{% url 'cadastro-aventureiro-termo' pk=entry.instance.pk %}">Termo imagem</a>
+        </div>
+      </div>
+    {% empty %}
+      <div class="card">
+        <h5>Nenhum aventureiro cadastrado</h5>
+        <p>Comece adicionando o primeiro aventureiro.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

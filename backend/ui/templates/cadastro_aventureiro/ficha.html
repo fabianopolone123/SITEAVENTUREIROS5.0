@@ -1,0 +1,83 @@
+{% extends "cadastro_aventureiro/base.html" %}
+
+{% block stage_content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="section-card">
+      <h4>Informações gerais</h4>
+      <div class="field-grid">
+        {{ form.has_health_plan.label_tag }} {{ form.has_health_plan }}
+        {{ form.health_plan.label_tag }} {{ form.health_plan }}
+        {{ form.sus_number.label_tag }} {{ form.sus_number }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Doenças já tidas</h4>
+      <div class="field-grid">
+        {{ form.diseases.label_tag }} {{ form.diseases }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Alergias</h4>
+      <div class="field-grid">
+        {{ form.allergies.label_tag }} {{ form.allergies }}
+        {{ form.allergy_details.label_tag }} {{ form.allergy_details }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Condições de saúde</h4>
+      <div class="field-grid">
+        {{ form.conditions.label_tag }} {{ form.conditions }}
+        {{ form.uses_medication.label_tag }} {{ form.uses_medication }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Outras informações</h4>
+      <div class="field-grid">
+        {{ form.other_problems.label_tag }} {{ form.other_problems }}
+        {{ form.other_problems_notes.label_tag }} {{ form.other_problems_notes }}
+        {{ form.recent_problems.label_tag }} {{ form.recent_problems }}
+        {{ form.recent_problems_notes.label_tag }} {{ form.recent_problems_notes }}
+        {{ form.medication_year.label_tag }} {{ form.medication_year }}
+        {{ form.medication_year_notes.label_tag }} {{ form.medication_year_notes }}
+        {{ form.recent_fractures.label_tag }} {{ form.recent_fractures }}
+        {{ form.recent_fractures_notes.label_tag }} {{ form.recent_fractures_notes }}
+        {{ form.surgeries.label_tag }} {{ form.surgeries }}
+        {{ form.surgeries_notes.label_tag }} {{ form.surgeries_notes }}
+        {{ form.hospitalizations.label_tag }} {{ form.hospitalizations }}
+        {{ form.hospitalizations_reason.label_tag }} {{ form.hospitalizations_reason }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Tipo sanguíneo</h4>
+      <div class="field-grid">
+        {{ form.blood_type.label_tag }} {{ form.blood_type }}
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h4>Declaração e assinatura</h4>
+      <div class="field-grid">
+        {{ form.declaration_accepted }} {{ form.declaration_accepted.label_tag }}
+      </div>
+      {{ form.signature_data }}
+    <div class="signature-area">
+      <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
+      <div class="signature-tools">
+        <span>Assine para validar a ficha médica</span>
+        <button type="button" data-clear-target>Limpar</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="actions">
+      <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
+      <button class="primary-btn" name="action" value="continue" type="submit">Salvar ficha médica e continuar</button>
+    </div>
+  </form>
+{% endblock %}
