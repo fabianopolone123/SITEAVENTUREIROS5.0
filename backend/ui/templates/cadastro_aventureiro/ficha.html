@@ -3,107 +3,252 @@
 {% block stage_content %}
   <form method="post">
     {% csrf_token %}
-    <div class="section-card term-panel">
-      <div class="term-header">
-        <span class="term-label">CLUBE DE AVENTUREIROS</span>
-        <h4>Ficha Médica</h4>
-        <p class="term-paragraph">IGREJA ADVENTISTA DO SÉTIMO DIA</p>
-      </div>
 
-      <div class="term-text">
-        <h5>DADOS MÉDICOS DO AVENTUREIRO</h5>
-        <p>Se possui plano de saúde?</p>
-        <div class="radio-group">
-          {{ form.has_health_plan }}
+    <section class="form-section form-section--guide">
+      <div class="form-section__header">
+        <div>
+          <h4>Guia rápido da ficha médica</h4>
+          <p class="form-section__note">
+            A ordem é do plano de saúde até a assinatura. Use os campos de texto para contextualizar os itens marcados como “Sim”
+            e mantenha o checklist claro antes de salvar ou avançar.
+          </p>
         </div>
       </div>
+    </section>
 
-      <div class="field-grid">
-        {{ form.health_plan.label_tag }}
-        {{ form.health_plan }}
-      </div>
-
-      <div class="field-grid">
-        {{ form.sus_number.label_tag }}
-        {{ form.sus_number }}
-      </div>
-
-      <div class="term-text">
-        <h5>Já teve ou tem:</h5>
-        <p>(Marque X apenas nas opções positivas)</p>
-      </div>
-
-      <div class="field-grid checkbox-grid">
-        {% for field in disease_fields %}
-          <label class="checkbox-inline">
-            {{ field }}
-            {{ field.label_tag }}
-          </label>
-        {% endfor %}
-      </div>
-
-      <div class="term-text">
-        <p>Possui alergia cutânea (pele)?</p>
-        <div class="radio-group">
-          {{ form.allergies }}
+    <section class="form-section">
+      <div class="form-section__header">
+        <div>
+          <h4>Dados médicos básicos</h4>
+          <p class="form-section__note">
+            Informe o plano de saúde e o número do SUS sempre que houver cobertura.
+          </p>
         </div>
+        <span class="section-pill section-pill--info">Plano de saúde</span>
       </div>
-      <div class="field-grid">
-        {{ form.allergy_details.label_tag }}
-        {{ form.allergy_details }}
-      </div>
-
-      <div class="term-text">
-        <p>Possui alergia alimentar?</p>
-        <div class="radio-group">
-          {{ form.other_problems }}
-        </div>
-      </div>
-      <div class="field-grid">
-        {{ form.other_problems_notes.label_tag }}
-        {{ form.other_problems_notes }}
-      </div>
-
-      <div class="term-text">
-        <p>Possui alergia a medicamentos?</p>
-        <div class="radio-group">
-          {{ form.medication_year }}
-        </div>
-      </div>
-      <div class="field-grid">
-        {{ form.medication_year_notes.label_tag }}
-        {{ form.medication_year_notes }}
-      </div>
-
-      <div class="term-text">
-        <h5>CONDIÇÕES DE SAÚDE ATUAIS</h5>
-      </div>
-      <div class="field-grid">
-        {{ form.conditions.label_tag }}
-        {{ form.conditions }}
-      </div>
-      <div class="field-grid">
-        {{ form.uses_medication.label_tag }}
-        {{ form.uses_medication }}
-      </div>
-
-      <div class="field-grid">
-        {% for field in history_fields %}
-          <div class="question-line">
-            {{ field.label_tag }}
-            {{ field }}
+      <div class="form-section__body">
+        <div class="field-grid grid-3">
+          <div class="field-card field-card--radio">
+            <div class="field-card__label">{{ form.has_health_plan.label_tag }}</div>
+            <div class="field-card__control radio-flow">
+              {{ form.has_health_plan }}
+            </div>
           </div>
-        {% endfor %}
+          <div class="field-card field-card--stacked">
+            <div class="field-card__label">{{ form.health_plan.label_tag }}</div>
+            <div class="field-card__control">
+              {{ form.health_plan }}
+            </div>
+          </div>
+          <div class="field-card field-card--stacked">
+            <div class="field-card__label">{{ form.sus_number.label_tag }}</div>
+            <div class="field-card__control">
+              {{ form.sus_number }}
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="term-text">
-        <h5>Tipo de Sangue</h5>
+    <section class="form-section">
+      <div class="form-section__header">
+        <div>
+          <h4>Histórico de doenças</h4>
+          <p class="form-section__note">
+            Marque apenas os itens confirmados e use o campo acima para explicar outros diagnósticos.
+          </p>
+        </div>
+        <span class="section-pill section-pill--alert">Confirmado</span>
       </div>
-      <div class="field-grid">
-        {{ form.blood_type.label_tag }}
-        {{ form.blood_type }}
+      <div class="form-section__body">
+        <div class="field-card field-card--stacked">
+          <div class="field-card__label">{{ form.diseases.label_tag }}</div>
+          <div class="field-card__control">
+            {{ form.diseases }}
+          </div>
+        </div>
+        <div class="chips-grid">
+          {% for field in disease_fields %}
+            <label class="chip">
+              {{ field }}
+              <span>{{ field.label }}</span>
+            </label>
+          {% endfor %}
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="form-section form-section--stacked">
+      <div class="form-section__header">
+        <div>
+          <h4>Alergias e observações</h4>
+          <p class="form-section__note">
+            Responda “Sim” apenas quando houver alergia e registre o agente, o tipo de reação e a frequência logo abaixo.
+          </p>
+        </div>
+      </div>
+      <div class="form-section__body">
+        <div class="field-row">
+          <span class="field-row__label">{{ form.allergies.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.allergies }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.allergy_details.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.allergy_details }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.other_problems.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.other_problems }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.other_problems_notes.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.other_problems_notes }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.recent_problems.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.recent_problems }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.recent_problems_notes.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.recent_problems_notes }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section form-section--stacked">
+      <div class="form-section__header">
+        <div>
+          <h4>Medicamentos e condições crônicas</h4>
+          <p class="form-section__note">
+            Detalhe tratamentos contínuos e indique dosagem/frequência sempre que ainda estiverem ativos.
+          </p>
+        </div>
+      </div>
+      <div class="form-section__body">
+        <div class="field-row">
+          <span class="field-row__label">{{ form.medication_year.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.medication_year }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.medication_year_notes.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.medication_year_notes }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.uses_medication.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.uses_medication }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.conditions.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.conditions }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section form-section--stacked">
+      <div class="form-section__header">
+        <div>
+          <h4>Procedimentos recentes</h4>
+          <p class="form-section__note">
+            Liste fraturas, cirurgias e internações dos últimos 12 meses e explique sempre que marcar “Sim”.
+          </p>
+        </div>
+      </div>
+      <div class="form-section__body">
+        <div class="field-row">
+          <span class="field-row__label">{{ form.recent_fractures.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.recent_fractures }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.recent_fractures_notes.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.recent_fractures_notes }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.surgeries.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.surgeries }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.surgeries_notes.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.surgeries_notes }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.hospitalizations.label_tag }}</span>
+          <div class="field-row__control radio-flow">
+            {{ form.hospitalizations }}
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-row__label">{{ form.hospitalizations_reason.label_tag }}</span>
+          <div class="field-row__control">
+            {{ form.hospitalizations_reason }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section form-section--final">
+      <div class="form-section__header">
+        <div>
+          <h4>Tipo sanguíneo e confirmação</h4>
+          <p class="form-section__note">
+            Confirme o tipo sanguíneo oficial e revise todas as respostas antes de assinar.
+          </p>
+        </div>
+      </div>
+      <div class="form-section__body">
+        <div class="field-grid grid-2">
+          <div class="field-card field-card--stacked">
+            <div class="field-card__label">{{ form.blood_type.label_tag }}</div>
+            <div class="field-card__control">
+              {{ form.blood_type }}
+            </div>
+          </div>
+          <div class="field-card declaration-card">
+            <div class="field-card__label declaration-card__label">
+              {{ form.declaration_accepted }}
+              <span>confirme as informações antes de assinar</span>
+            </div>
+          </div>
+        </div>
+        {{ form.signature_data }}
+        <div class="signature-panel">
+          <div class="signature-area">
+            <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
+          </div>
+          <div class="signature-tools">
+            <span>Assine para validar a ficha médica</span>
+            <button type="button" data-clear-target>Limpar</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <div class="actions">
       <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
