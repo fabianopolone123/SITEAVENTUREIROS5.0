@@ -822,3 +822,451 @@ Aviso: Impacto / ObservaÃ§Ãµes
 #### ?? Impacto / Observações
 - A ficha médica agora se comporta como cartões retangulares alinhados, com espaçamento homogêneo e visual coerente com todo o wizard.
 - A usabilidade melhorou sem alterar os fluxos e validações existentes; basta navegar pela página para perceber o novo espaço visual.
+---
+
+### ?? Alteração Nº 0034
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Requisitaram um alinhamento mais fiel ao mock (cartões retangulares com efeitos e linhas preenchidas) e uma distribuição mais harmônica dos campos médicos.
+
+#### ??? O que foi feito
+- Ajustei os cartões `.ficha-field` para aplicar gradiente sutil, borda iluminada e sombra suave, além de um hover que eleva o cartão e reforça o contorno.
+- Reestilizei `.ficha-field-input` para parecer um bloco retangular preenchido (padding interno, fundo claro, borda suave) enquanto os inputs/selects/textarea ficam transparentes, mantendo o texto alinhado.
+- Aproveitei as variações `ficha-fields--grid/--single/--checkbox` para garantir distribuição e alinhamento coerente dos radio buttons verticalmente, como no mock.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+
+#### ?? Relacionado a
+- refactor: aspecto visual da ficha médica
+
+#### ?? Impacto / Observações
+- A ficha médica agora reproduz o layout retangular do exemplo, com linhas preenchidas e um destaque suave ao passar o mouse.
+- A visualização dos campos fica mais clara e alinhada, preservando as regras funcionais do formulário.
+---
+
+### ?? Alteração Nº 0035
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> A solicitação atual pediu remover todo o CSS adicional aplicado à ficha médica para ver como o layout se comporta sem os efeitos personalizados.
+
+#### ??? O que foi feito
+- Apaguei as regras de `.ficha-fields`, `.ficha-field`, `.ficha-field-input` e `.ficha-field--checkbox` do CSS, devolvendo o controle visual ao grid original da página.
+- Mantive a marcação do template, mas agora os campos são renderizados com o CSS base (sem efeitos extras), permitindo inspecionar o comportamento padrão.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: ficha médica (experimento visual)
+
+#### ?? Impacto / Observações
+- O formulário volta a usar estilos básicos e o mock original fica “desligado” do bloco atual; se precisar restabelecer o visual avançado, basta reintroduzir as classes depois.
+---
+
+### ?? Alteração Nº 0036
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O pedido foi tornar a ficha médica responsiva com `display:flex`, removendo caixas internas feias e mantendo caixas retangulares alinhadas às bordas laterais (condições de saúde, alergias, doenças, detalhes dos campos de texto).
+
+#### ??? O que foi feito
+- Reestruturei `.ficha-fields` como flex container com flex-wrap e `align-items: stretch`, garantindo que cada `.ficha-field` ocupe metade da largura em desktops e full width em telas menores.
+- Apliquei bordas retangulares simples nas caixas, com padding, sombra leve e label com caixa alta para destacar e acompanhei os inputs em blocos transparentes dentro do cartão.
+- Mantive o layout dos campos críticos (Condições de saúde, Doenças já tidas, Alergias, Detalhes de outros problemas, detalhes de fraturas/cirurgias/internações) e deixei as caixas alinhadas às bordas direita e esquerda do cartão principal.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: responsividade da ficha médica
+
+#### ?? Impacto / Observações
+- A ficha médica agora se adapta a diferentes larguras e as caixas retangulares permanecem coladas às laterais, sem o visual quadrado interno anterior.
+- O estilo segue leve e legível, mantendo a lógica sem sobrecarregar a interface.
+---
+
+### ?? Alteração Nº 0037
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O usuário pediu remover qualquer ênfase visual e diminuir o tamanho dos campos da ficha médica para um visual mais compacto.
+
+#### ??? O que foi feito
+- Reduzi a largura base de `.ficha-field` e o padding interno, fazendo com que cada cartão ocupe cerca de 35% da largura e fique menor em altura.
+- Ajustei `.ficha-field-input` para um padding mais enxuto (8px x 10px) e altura mínima menor, preservando a borda retangular sem aumentar o espaço.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: ficha médica compacta
+
+#### ?? Impacto / Observações
+- O conjunto de campos ficou mais discreto e compacto, sem alterar o conteúdo ou comportamento.
+---
+
+### ?? Alteração Nº 0038
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O cliente quer trocar as caixas por opções “Sim/Não” em texto para a ficha médica e mostrar esses valores como blocos retangulares simples.
+
+#### ??? O que foi feito
+- Adicionei regras CSS para `.radio-group` (uso das classes geradas pelo `RadioSelect`) com itens inline, escondendo o controle padrão e desenhando rótulos retangulares com fundo claro e sombra sutil.
+- Garanti que o estado ativo (Sim/Não) fique destacado com fundo escuro e texto branco, mantendo o comportamento acessível sem novos widgets JS.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: interação Sim/Não da ficha médica
+
+#### ?? Impacto / Observações
+- O formulário agora exibe “Sim” e “Não” como botões textuais retangulares, preservando a lógica do backend e eliminando checkboxes visuais.
+---
+
+### ?? Alteração Nº 0039
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Para testar o comportamento puro, foi solicitado retirar qualquer estilo específico da ficha médica enquanto mantemos o restante do formulário intacto.
+
+#### ??? O que foi feito
+- Apaguei as regras relacionadas a `.ficha-fields`, `.ficha-field`, `.ficha-field-input`, `.ficha-field--checkbox`, `.radio-group` e variantes para que a ficha médica volte a usar o CSS base do formulário.
+- Mantive os demais estilos globais do `cadastro.css` (responsável, aventureiro, etc.) para que apenas a ficha “perca” o visual customizado.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: ficha médica sem estilo
+
+#### ?? Impacto / Observações
+- A ficha médica agora depende exclusivamente do estilo comum do wizard; se quiser reativar os cartões, basta restaurar as regras removidas.
+---
+
+### ?? Alteração Nº 0040
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O pedido agora é reduzir os campos de texto da ficha médica sem reativar todo o visual customizado anterior, apenas deixando as caixas menores e mais discretas.
+
+#### ??? O que foi feito
+- Acrescentei regras leves para `.ficha-field` e `.ficha-field-input`, definindo margens pequenas, bordas arredondadas e preenchimento enxuto para que os campos fiquem menores e alinhados.
+- Limitei o `textarea` a 70px de altura mínima e permiti redimensionamento vertical somente quando necessário, evitando blocos altos demais.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: ficha médica enxuta
+
+#### ?? Impacto / Observações
+- Os campos da ficha médica agora usam caixas menores sem reintroduzir todo o estilo pesado anterior, mantendo o restante do formulário intacto.
+---
+
+### ?? Alteração Nº 0041
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O textarea corta o espaço interno mas a cor do card continua muito maior; preciso limitar somente o campo de resposta e manter o tom claro ao redor.
+
+#### ??? O que foi feito
+- Ajustei `.ficha-field-input` para ter `max-width: 420px` e `align-self: flex-start`, mantendo o cartão claro com base porém limitando o bloco de resposta ao tamanho desejado.\n- Garantir que os próprios inputs/textarea usem `width: 100%` para preencher apenas a área do bloco reduzido.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: campos compactos da ficha médica
+
+#### ?? Impacto / Observações
+- Os campos de texto agora ficam inspirados na cor de fundo mas não preenchem o card inteiro; só a própria caixa reduzida fica visível.
+---
+
+### ?? Alteração Nº 0042
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Para alinhar visualmente a ficha médica com as demais seções, foi pedido novamente retornar aos grids base e remover os blocos customizados para que o comportamento fique idêntico ao restante do formulário.
+
+#### ??? O que foi feito
+- Atualizei `ficha.html` para usar apenas `field-grid` e `section-card`, eliminando os wrappers `.ficha-field` e mantendo cada label/componente juntos como nas outras etapas.
+- O CSS agora não contém regras específicas de `ficha-fields`/`.ficha-field` e os `textarea`/inputs usam os estilos globais da seção padrão, igualando a aparência das caixas de texto.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+
+#### ?? Relacionado a
+- refactor: ficha médica igual ao restante do formulário
+
+#### ?? Impacto / Observações
+- A ficha médica voltou a ter a mesma aparência de linha e caixas que o resto do cadastro, garantindo consistência visual completa.
+---
+
+### ?? Alteração Nº 0043
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O textarea da ficha médica ainda ocupava todo o cartão; o objetivo agora é reduzir a caixa de resposta para parecer com as demais linhas.
+
+#### ??? O que foi feito
+- Defini regras globais para `textarea` dentro de `.field-grid` (max-width de 420px, altura mínima 60px e largura 100%) para limitar a área de digitação e deixá-la mais compacta.
+- Mantive o estilo geral do formulário para que os campos não voltem a ter caixas extras.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: textarea compacto
+
+#### ?? Impacto / Observações
+- Os campos agora exibem “linhas” menores e mais alinhadas com as outras seções, mantendo o resto do formulário inalterado.
+---
+
+### ?? Alteração Nº 0044
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### ?? Contexto
+> A ficha médica precisa abranger o histórico completo de doenças solicitado pelo briefing de captação.
+
+#### ??? O que foi feito
+- Acrescentei campos booleanos no modelo `MedicalRecord` para cada doença listada, permitindo marcar os casos positivos diretamente.
+- Atualizei o template `ficha.html` para renderizar essas opções dentro de um novo bloco de “Histórico de doenças”, mantendo os demais campos dentro dos mesmos `field-grid` usados no resto do cadastro.
+
+#### ?? Arquivos afetados
+- backend/apps/members/models.py
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+
+#### ?? Relacionado a
+- feature: histórico médico detalhado
+
+#### ?? Impacto / Observações
+- Agora é possível coletar e exibir todas as doenças do checklist e manter a consistência visual com as demais etapas do formulário.
+• Migration members.0003 aplicada para adicionar booleanos do histórico de doenças.
+---
+
+### ?? Alteração Nº 0045
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O cliente deseja rever o visual da ficha médica para torná-la mais elegante, com efeitos de gradiente, bordas luminosas e tipografia refinada.
+
+#### ??? O que foi feito
+- Reestilizei `.ficha-card` com gradiente radial, borda iluminada, sombras internas e externo, além de cabeçalho maior e texto descritivo refinado.
+- Adicionei máscaras com gradiente na borda usando pseudo-elemento para dar o efeito de contorno brilhante sem comprometer o conteúdo.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: visual da ficha médica
+
+#### ?? Impacto / Observações
+- A ficha médica agora se destaca como um painel elegante, mantendo o restante do formulário inalterado e preservando o fluxo backend-first.
+---
+
+### ?? Alteração Nº 0046
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Queremos destacar as perguntas da seção “Outras informações”, deixando os textos maiores e as caixas de resposta mais discretas, como no restante do formulário.
+
+#### ??? O que foi feito
+- Criei estruturas `question-line` no template `ficha.html` para separar o label do input, colocando o texto em um lado e o campo pequeno no outro, mantendo o mesmo grid geral.
+- Adicionei estilos `.question-line`, `.question-label` e `.answer-field` no CSS para engrossar os rótulos, aplicar divisórias suaves e limitar a largura dos inputs/areas.
+
+#### ?? Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: questionamento visual da ficha médica
+
+#### ?? Impacto / Observações
+- As perguntas agora ocupam mais espaço com fonte maior e o espaço de respostas ficou estreito; o layout segue consistente com o restante da ficha.
+---
+
+### ?? Alteração Nº 0047
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O termo de autorização de imagem precisava sair da caixa e ficar centralizado com o texto completo solicitado, com os dados preenchidos automaticamente e visual mais premium.
+
+#### ??? O que foi feito
+- Substituí o textarea por um painel customizado (`term-panel`) que inclui o conteúdo do termo completo, preenchendo automaticamente nome, nacionalidade, RG, CPF e endereço do responsável e do aventureiro.
+- Estilizei o painel com máscara gradiente, bordas iluminadas, títulos maiores e campos preenchidos destacados, mantendo o restante da página intacto.
+
+#### ?? Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/termo.html
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: termo de autorização
+
+#### ?? Impacto / Observações
+- O termo agora aparece como um painel centralizado bonito e completo, com o texto exigido disposto diretamente na página e as confirmações mantendo a assinatura e o checkbox como antes.
+---
+
+### ?? Alteração Nº 0048
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Solicitaram remover o parágrafo inicial redundante do termo e pré-preencher nacionalidade como “Brasileiro”, além de garantir que o campo “nº” (nº da casa) seja o espaço padrão no termo.
+
+#### ??? O que foi feito
+- Deletei o parágrafo introdutório sobre a autorização institucional e mantive apenas o título + texto obrigatório do termo.
+- Ajustei os campos preenchidos para usar `responsible.nationality` com fallback “Brasileiro” e mantive linha do número da casa associado ao texto (deixando o placeholder como `responsible.address_number`).
+
+#### ?? Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/termo.html
+
+#### ?? Relacionado a
+- refactor: termo de autorização minimalista
+
+#### ?? Impacto / Observações
+- O termo agora mostra apenas o texto necessário, e os placeholders continuam visíveis quando o dado não estiver preenchido, mas sem reescrever o parágrafo inicial.
+- Migration `members.0004_responsible_address_number` criada/aplicada para armazenar o número do endereço do responsável e nada mais.
+---
+
+• Campo `address_number` agora aparece no formulário do responsável e na declaração do termo para preencher o número da casa.
+- Ajustei o termo para deixar claro a “qualidade de responsável legal” e preencher as nacionalidades com “Brasileiro” quando os campos estiverem vazios.
+---
+
+### ?? Alteração Nº 0049
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Os cards de “Dados do aventureiro” perderam os estilos de grid depois das últimas alterações na ficha médica; precisamos restaurar o visual padrão sem mexer nas partes já ajustadas.
+
+#### ??? O que foi feito
+- Reintroduzi a definição completa de `.field-grid` (grid responsivo, gap, margens) e normalizei os estilos básicos de label/input/select/textarea com cores suaves, borda arredondada e foco iluminado.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: grid geral do formulário
+
+#### ?? Impacto / Observações
+- Todos os blocos de `field-grid`, inclusive Dados do aventureiro e os campos de termo, voltaram ao layout original e agora exibem a borda/linha consistente com o restante do cadastro.
+---
+
+### ?? Alteração Nº 0050
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O campo “Beneficiário do Bolsa Família” precisava ficar mais legível, com os botões “Sim” e “Não” alinhados ao lado do rótulo, como no mock original.
+
+#### ??? O que foi feito
+- Ajustei o CSS das `radio-group` dentro de `.field-grid` para que os botões ocupem o mesmo nível do rótulo, com bordas arredondadas, fundo claro e estado ativo escuro, reproduzindo o layout “Não   Sim”.
+- Escondi os inputs nativos e estilizei os labels para parecerem botões, mantendo a arrumação em linha uniforme com as demais perguntas.
+
+#### ?? Arquivos afetados
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: controles de resposta da ficha médica
+
+#### ?? Impacto / Observações
+- O campo agora mostra claramente as opções “Não” e “Sim” com destaque e alinhamento, e o resto do formulário continua igual.
+---
+
+### ?? Alteração Nº 0051
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> O radio “Possui plano de saúde?” não mostrava qual opção estava marcada porque o widget estava dentro do grid padrão; precisamos uma estrutura onde o Sim/Não apareça junto do label e destaque a escolha.
+
+#### ??? O que foi feito
+- Substituí a renderização padrão de `form.has_health_plan` por um bloco `radio-question` com label do campo e cada opção de rádio seguida do próprio label, para que o estilo escuro funcione corretamente.
+- Atualizei o CSS para ajustar o alinhamento `.radio-question` (label + botões) sem quebrar o estilo geral e garantir que o clique apareça como esperado.
+
+#### ?? Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: interação Sim/Não do plano de saúde
+
+#### ?? Impacto / Observações
+- Agora é visível qual opção está marcada (“Sim” ou “Não”) e o campo fica alinhado como nos outros blocos de perguntas.
+---
+
+### ?? Alteração Nº 0052
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### ?? Contexto
+> Valorizar todo o formulário da ficha médica exigiu reescrever o template com seção limpa e novas seções de doenças, alergias, condições e histórico breve.
+
+#### ??? O que foi feito
+- Substituí o template `ficha.html` por uma versão nova que organiza o conteúdo em `section-card` por área, usa `field-grid` para inputs e radio buttons e adiciona grid próprio de checkboxes para o histórico de doenças.
+- Atualizei o CSS para estilizar esses grids adicionais e manter botões “Sim/Não” e checkboxes aparentes dentro do mesmo layout bonito já aplicado no restante do cadastro.
+
+#### ?? Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/ficha.html
+- backend/ui/static/css/cadastro.css
+
+#### ?? Relacionado a
+- refactor: ficha médica reescrita
+
+#### ?? Impacto / Observações
+- O formulário inteiro agora segue o mesmo padrão visual, com as perguntas e respostas ordenadas por bloco e os checkboxes de doenças alinhados em grade, eliminando o estilo legado anterior.
+---
+
+• Ajustei o template para usar os contextos `disease_fields` e `history_fields`, evitando listas literais no HTML e permitindo iterar conforme o view controla os campos.
+---
+
+• Corrigi o template para iterar sobre listas de campos já ligados (`disease_fields` e `history_fields`) desde a view, evitando o acesso via `form[fieldname]` no template e eliminando o erro de sintaxe.
+---
+
+• Simplifiquei os blocos de radio (“plano de saúde”, “alergias”, “condições”, “usa medicamento”) para renderizar diretamente `{{ form.field }}` dentro de `.radio-group`, evitando loops personalizados e resolvendo o erro de `choice_label`, além de manter o layout alinhado.
+---
+
+• Reconstruí integralmente `ficha.html` com o layout textual pedido (título, seções, listas e checkboxes) e mantive o CSS refinado para o painel, garantindo que o formulário fique parecido com o termo.
+---
+
+• Reforcei a legenda “(Marque X apenas nas opções positivas)” dentro da seção de doenças para garantir que o texto apareça mesmo após a refatoração do template.

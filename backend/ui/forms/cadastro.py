@@ -36,6 +36,7 @@ class ResponsibleForm(DraftModelForm):
         'city',
         'state',
         'cep',
+        'address_number',
     ]
 
     class Meta:
@@ -63,6 +64,7 @@ class ResponsibleForm(DraftModelForm):
             'city',
             'state',
             'cep',
+            'address_number',
             'declaration_accepted',
         ]
         widgets = {'declaration_accepted': forms.CheckboxInput()}

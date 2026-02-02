@@ -3,212 +3,111 @@
 {% block stage_content %}
   <form method="post">
     {% csrf_token %}
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Informações gerais</h4>
-        <p class="card-note">Use o filtro abaixo para informar o plano de saúde, caso possua.</p>
+    <div class="section-card term-panel">
+      <div class="term-header">
+        <span class="term-label">CLUBE DE AVENTUREIROS</span>
+        <h4>Ficha Médica</h4>
+        <p class="term-paragraph">IGREJA ADVENTISTA DO SÉTIMO DIA</p>
       </div>
-      <div class="ficha-fields">
-        <div class="ficha-field ficha-field--checkbox">
-          <label for="{{ form.has_health_plan.id_for_label }}">{{ form.has_health_plan.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.has_health_plan }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.health_plan.id_for_label }}">{{ form.health_plan.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.health_plan }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.sus_number.id_for_label }}">{{ form.sus_number.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.sus_number }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Doenças já tidas</h4>
-        <p class="card-note">Relate qualquer enfermidade anterior importante, mesmo que já tratada.</p>
-      </div>
-      <div class="ficha-fields ficha-fields--single">
-        <div class="ficha-field">
-          <label for="{{ form.diseases.id_for_label }}">{{ form.diseases.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.diseases }}
-          </div>
+      <div class="term-text">
+        <h5>DADOS MÉDICOS DO AVENTUREIRO</h5>
+        <p>Se possui plano de saúde?</p>
+        <div class="radio-group">
+          {{ form.has_health_plan }}
         </div>
       </div>
-    </div>
 
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Alergias</h4>
-        <p class="card-note">Informe alergias conhecidas e o que acontece quando ocorrem.</p>
+      <div class="field-grid">
+        {{ form.health_plan.label_tag }}
+        {{ form.health_plan }}
       </div>
-      <div class="ficha-fields">
-        <div class="ficha-field">
-          <label for="{{ form.allergies.id_for_label }}">{{ form.allergies.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.allergies }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.allergy_details.id_for_label }}">{{ form.allergy_details.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.allergy_details }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Condições de saúde</h4>
-        <p class="card-note">Registro de condições em andamento e uso de medicamentos.</p>
+      <div class="field-grid">
+        {{ form.sus_number.label_tag }}
+        {{ form.sus_number }}
       </div>
-      <div class="ficha-fields">
-        <div class="ficha-field">
-          <label for="{{ form.conditions.id_for_label }}">{{ form.conditions.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.conditions }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.uses_medication.id_for_label }}">{{ form.uses_medication.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.uses_medication }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Outras informações</h4>
-        <p class="card-note">Informe ocorrências recentes, medicações e procedimentos.</p>
+      <div class="term-text">
+        <h5>Já teve ou tem:</h5>
+        <p>(Marque X apenas nas opções positivas)</p>
       </div>
-      <div class="ficha-fields ficha-fields--grid">
-        <div class="ficha-field">
-          <label for="{{ form.other_problems.id_for_label }}">{{ form.other_problems.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.other_problems }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.other_problems_notes.id_for_label }}">{{ form.other_problems_notes.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.other_problems_notes }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.recent_problems.id_for_label }}">{{ form.recent_problems.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.recent_problems }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.recent_problems_notes.id_for_label }}">{{ form.recent_problems_notes.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.recent_problems_notes }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.medication_year.id_for_label }}">{{ form.medication_year.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.medication_year }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.medication_year_notes.id_for_label }}">{{ form.medication_year_notes.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.medication_year_notes }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.recent_fractures.id_for_label }}">{{ form.recent_fractures.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.recent_fractures }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.recent_fractures_notes.id_for_label }}">{{ form.recent_fractures_notes.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.recent_fractures_notes }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.surgeries.id_for_label }}">{{ form.surgeries.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.surgeries }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.surgeries_notes.id_for_label }}">{{ form.surgeries_notes.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.surgeries_notes }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.hospitalizations.id_for_label }}">{{ form.hospitalizations.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.hospitalizations }}
-          </div>
-        </div>
-        <div class="ficha-field">
-          <label for="{{ form.hospitalizations_reason.id_for_label }}">{{ form.hospitalizations_reason.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.hospitalizations_reason }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Tipo sanguíneo</h4>
+      <div class="field-grid checkbox-grid">
+        {% for field in disease_fields %}
+          <label class="checkbox-inline">
+            {{ field }}
+            {{ field.label_tag }}
+          </label>
+        {% endfor %}
       </div>
-      <div class="ficha-fields ficha-fields--single">
-        <div class="ficha-field">
-          <label for="{{ form.blood_type.id_for_label }}">{{ form.blood_type.label }}</label>
-          <div class="ficha-field-input">
-            {{ form.blood_type }}
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="section-card ficha-card">
-      <div class="card-header">
-        <h4>Declaração e assinatura</h4>
-        <p class="card-note large">
-          Atesto serem <strong>verdadeiras</strong> todas as informações médicas preenchidas e me responsabilizo por quaisquer acidentes que venham a ocorrer em decorrência do não informe de problemas médicos de qualquer natureza.
-        </p>
+      <div class="term-text">
+        <p>Possui alergia cutânea (pele)?</p>
+        <div class="radio-group">
+          {{ form.allergies }}
+        </div>
       </div>
       <div class="field-grid">
-        <label class="declaration-label">
-          {{ form.declaration_accepted }}
-          {{ form.declaration_accepted.label_tag }}
-          <span class="declaration-status" data-declaration-status>Não confirmado</span>
-        </label>
+        {{ form.allergy_details.label_tag }}
+        {{ form.allergy_details }}
       </div>
-      {{ form.signature_data }}
-      <div class="signature-area">
-        <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
-        <div class="signature-tools">
-          <span>Assine para validar a ficha médica</span>
-          <button type="button" data-clear-target>Limpar</button>
+
+      <div class="term-text">
+        <p>Possui alergia alimentar?</p>
+        <div class="radio-group">
+          {{ form.other_problems }}
         </div>
+      </div>
+      <div class="field-grid">
+        {{ form.other_problems_notes.label_tag }}
+        {{ form.other_problems_notes }}
+      </div>
+
+      <div class="term-text">
+        <p>Possui alergia a medicamentos?</p>
+        <div class="radio-group">
+          {{ form.medication_year }}
+        </div>
+      </div>
+      <div class="field-grid">
+        {{ form.medication_year_notes.label_tag }}
+        {{ form.medication_year_notes }}
+      </div>
+
+      <div class="term-text">
+        <h5>CONDIÇÕES DE SAÚDE ATUAIS</h5>
+      </div>
+      <div class="field-grid">
+        {{ form.conditions.label_tag }}
+        {{ form.conditions }}
+      </div>
+      <div class="field-grid">
+        {{ form.uses_medication.label_tag }}
+        {{ form.uses_medication }}
+      </div>
+
+      <div class="field-grid">
+        {% for field in history_fields %}
+          <div class="question-line">
+            {{ field.label_tag }}
+            {{ field }}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="term-text">
+        <h5>Tipo de Sangue</h5>
+      </div>
+      <div class="field-grid">
+        {{ form.blood_type.label_tag }}
+        {{ form.blood_type }}
       </div>
     </div>
 
     <div class="actions">
       <button class="secondary-btn" name="action" value="save_draft" type="submit">Salvar rascunho</button>
-      <button class="primary-btn" name="action" value="continue" type="submit">Salvar ficha médica e continuar</button>
+      <button class="primary-btn" name="action" value="continue" type="submit">Salvar ficha médica</button>
     </div>
   </form>
 {% endblock %}

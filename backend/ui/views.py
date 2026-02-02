@@ -163,6 +163,40 @@ def cadastro_ficha_medica(request, pk):
             medical.save()
         if action != 'save_draft':
             return redirect('cadastro-aventureiro-termo', pk=adventurer.pk)
+    disease_fields = [form[field] for field in [
+        'pneumonia',
+        'sarampo',
+        'tetano',
+        'catapora',
+        'meningite',
+        'hepatite',
+        'dengue',
+        'febre_amarela',
+        'h1n1',
+        'colera',
+        'rubelola',
+        'coqueluche',
+        'difteria',
+        'caxumba',
+        'rinite',
+        'bronquite',
+        'malaria',
+        'variola',
+    ]]
+    history_fields = [form[field] for field in [
+        'other_problems',
+        'other_problems_notes',
+        'recent_problems',
+        'recent_problems_notes',
+        'medication_year',
+        'medication_year_notes',
+        'recent_fractures',
+        'recent_fractures_notes',
+        'surgeries',
+        'surgeries_notes',
+        'hospitalizations',
+        'hospitalizations_reason',
+    ]]
     context = wizard_context(
         request,
         responsible,
@@ -171,6 +205,8 @@ def cadastro_ficha_medica(request, pk):
             'form': form,
             'adventurer': adventurer,
             'form_errors': form.errors,
+            'disease_fields': disease_fields,
+            'history_fields': history_fields,
         },
     )
     return render(request, 'cadastro_aventureiro/ficha.html', context)

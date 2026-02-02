@@ -3,26 +3,51 @@
 {% block stage_content %}
   <form method="post">
     {% csrf_token %}
-    <div class="section-card">
-      <h4>Texto do termo</h4>
-      <div class="field-grid">
-        <textarea readonly>{{ term_text }}</textarea>
+    <div class="section-card term-panel">
+      <div class="term-header">
+        <span class="term-label">AUTORIZAÇÃO DE USO DE IMAGEM</span>
+        <h4>Termo de Autorização</h4>
       </div>
-    </div>
-
-    <div class="section-card">
-      <h4>Campos preenchidos automaticamente</h4>
-      <ul>
-        <li>Nome da criança: {{ adventurer.name }}</li>
-        <li>Nome do responsável legal: {{ responsible.legal_name }}</li>
-        <li>CPF do responsável legal: {{ responsible.legal_cpf }}</li>
-        <li>RG/CIN: {{ responsible.rg_or_cin }}</li>
-        <li>Endereço: {{ responsible.address_line }}, {{ responsible.neighborhood }}, {{ responsible.city }} - {{ responsible.state }} | CEP {{ responsible.cep }}</li>
-        <li>Município: {{ responsible.city }}</li>
-        <li>Nacionalidade: {{ responsible.nationality }}</li>
-        <li>Estado civil: {{ responsible.marital_status }}</li>
-        <li>Telefone: {{ responsible.legal_phone }}</li>
-      </ul>
+      <div class="term-text">
+        <p>TERMO DE AUTORIZAÇÃO DE USO DE IMAGEM</p>
+        <p>
+          Eu, <span class="term-fill">{{ responsible.legal_name|default:"________________________________________" }}</span>,
+          nacionalidade <span class="term-fill">{{ responsible.nationality|default:"Brasileiro" }}</span>,
+          estado civil <span class="term-fill">{{ responsible.marital_status|default:"________________________" }}</span>,
+          portador(a) da Cédula de Identidade (RG) nº <span class="term-fill">{{ responsible.rg_or_cin|default:"________________________" }}</span>,
+          inscrito(a) no CPF sob nº <span class="term-fill">{{ responsible.legal_cpf|default:"________________________" }}</span>,
+          residente à Av./Rua <span class="term-fill">{{ responsible.address_line|default:"________________________________________" }}</span>,
+          nº <span class="term-fill">{{ responsible.address_number|default:"__________" }}</span>, município de <span class="term-fill">{{ responsible.city|default:"________________________" }}</span>,
+        </p>
+        <p>
+          na qualidade de responsável legal pelo(a) menor:
+        </p>
+        <p>
+          Nome do(a) Aventureiro(a): <span class="term-fill">{{ adventurer.name|default:"_____________________________________" }}</span> — Nacionalidade:
+          <span class="term-fill">{{ adventurer.nationality|default:"Brasileiro" }}</span>
+        </p>
+        <p class="term-body">
+          AUTORIZO, de forma livre, expressa e gratuita, o uso da imagem do(a) menor acima identificado(a), em todo e qualquer material institucional ou promocional do CLUBE DE AVENTUREIROS, vinculado à Igreja Adventista do Sétimo Dia, incluindo fotos, vídeos e documentos, destinados à divulgação ao público em geral.
+        </p>
+        <p>      
+          A presente autorização abrange o uso da imagem em todo o território nacional, nas seguintes modalidades, exemplificativamente:
+        </p>
+        <ol class="term-list">
+          <li>Outdoor;</li>
+          <li>Folhetos em geral (encartes, mala direta, catálogos, entre outros);</li>
+          <li>Folder de apresentação;</li>
+          <li>Anúncios em revistas e jornais em geral;</li>
+          <li>Páginas na internet e redes sociais (site, Facebook, entre outros);</li>
+          <li>Cartazes;</li>
+          <li>Mídia eletrônica (painéis, vídeos, televisão, programas de rádio, entre outros).</li>
+        </ol>
+        <p>
+          Declaro que esta autorização é concedida sem qualquer ônus, nada havendo a reclamar, a qualquer tempo, a título de direitos de imagem ou quaisquer outros direitos conexos.
+        </p>
+        <p class="term-footer">
+          Por ser esta a expressão da minha vontade, firmo o presente termo.
+        </p>
+      </div>
     </div>
 
     <div class="section-card">
