@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from backend.apps.members.models import Adventurer, ImageReleaseTerm, MedicalRecord
+from backend.apps.members.models import Adventurer, ImageReleaseTerm, MedicalRecord, Responsible
 from backend.apps.members.services import (
     TERM_TEXT,
     can_finalize,
@@ -28,6 +29,12 @@ WIZARD_STEPS = [
 ]
 
 
+def get_responsible_for_user(user):
+    if not user or not user.is_authenticated:
+        return None
+    return Responsible.objects.filter(user=user).order_by('-created_at').first()
+
+
 def login_page(request):
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
@@ -36,9 +43,68 @@ def login_page(request):
         if user:
             login(request, user)
             messages.success(request, 'Bem-vindo de volta! Agora você pode continuar a gestão dos cadastros.')
-            return redirect('cadastro-aventureiro-lista')
+            responsible = get_responsible_for_user(user)
+            if responsible:
+                return redirect('dashboard-responsavel')
+            return redirect('dashboard-gen')
         messages.error(request, 'Credenciais inválidas. Verifique usuário e senha.')
     return render(request, 'login.html')
+
+
+@login_required
+def dashboard_responsavel(request):
+    responsible = get_responsible_for_user(request.user)
+    if not responsible:
+        messages.info(request, 'Ainda não há dados de responsável vinculados a este usuário.')
+        return redirect('dashboard-gen')
+
+    selected = request.GET.get('selected', 'responsavel')
+    adventurer_id = request.GET.get('adventurer_id')
+    selected_person = 'responsavel'
+    if selected == 'adventurer' and adventurer_id:
+        exists = responsible.adventurers.filter(pk=adventurer_id).exists()
+        if exists:
+            selected_person = f'adventurer-{adventurer_id}'
+
+    adventurer_profiles = []
+    for adventurer in responsible.adventurers.all():
+        try:
+            medical = adventurer.medical_record
+        except MedicalRecord.DoesNotExist:
+            medical = None
+        try:
+            term = adventurer.image_term
+        except ImageReleaseTerm.DoesNotExist:
+            term = None
+        adventurer_profiles.append({
+            'adventurer': adventurer,
+            'key': f'adventurer-{adventurer.pk}',
+            'medical_status': 'Completa' if medical and medical.is_complete() else 'Incompleta' if medical else 'Pendente',
+            'medical_class': 'success' if medical and medical.is_complete() else 'warning',
+            'medical_pending': medical.pending_fields() if medical else [],
+            'term_status': 'Assinado' if term and term.is_complete() else 'Pendente',
+            'term_class': 'success' if term and term.is_complete() else 'warning',
+            'term_pending': term.pending_fields() if term else [],
+        })
+
+    status_payload = get_status_payload(responsible)
+    pendings = get_pending_items(responsible)
+    welcome_name = responsible.legal_name or responsible.legal_type.title() or 'Responsável'
+
+    context = {
+        'responsible': responsible,
+        'adventurer_profiles': adventurer_profiles,
+        'status': status_payload,
+        'pendings': pendings,
+        'selected_person': selected_person,
+        'welcome_name': welcome_name,
+    }
+    return render(request, 'dashboard/responsavel.html', context)
+
+
+@login_required
+def dashboard_generic(request):
+    return render(request, 'dashboard/generic.html', {'user': request.user})
 
 
 def wizard_context(request, responsible, current_step, extra=None):

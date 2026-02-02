@@ -8,6 +8,8 @@ from .views import (
     cadastro_responsavel,
     cadastro_termo_imagem,
     cadastro_tipo,
+    dashboard_generic,
+    dashboard_responsavel,
     login_page,
 )
 
@@ -22,4 +24,6 @@ urlpatterns = [
     path('cadastro-aventureiro/aventureiro/<int:pk>/ficha/', cadastro_ficha_medica, name='cadastro-aventureiro-ficha'),
     path('cadastro-aventureiro/aventureiro/<int:pk>/termo/', cadastro_termo_imagem, name='cadastro-aventureiro-termo'),
     path('cadastro-aventureiro/revisao/', cadastro_revisao, name='cadastro-aventureiro-revisao'),
+    path('dashboard/', dashboard_responsavel, name='dashboard-responsavel'),
+    path('dashboard/generic/', dashboard_generic, name='dashboard-gen'),
 ]

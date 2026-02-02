@@ -558,6 +558,13 @@ body {
   font-size: 0.95rem;
   color: #0f1a3c;
 }
+.declaration-note {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  color: #1b243f;
+  line-height: 1.4;
+  font-weight: 500;
+}
 
 .signature-panel {
   margin-top: 1rem;
