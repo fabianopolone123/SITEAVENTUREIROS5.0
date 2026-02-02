@@ -182,6 +182,13 @@ body {
   color: #22375f;
 }
 
+.declaration-note {
+  font-size: 0.9rem;
+  color: #22375f;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
 .field-grid input,
 .field-grid select,
 .field-grid textarea {

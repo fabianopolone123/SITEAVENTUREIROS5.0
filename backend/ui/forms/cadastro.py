@@ -162,6 +162,12 @@ class AdventurerForm(DraftModelForm):
 
 
 class MedicalRecordForm(DraftModelForm):
+    YES_NO_CHOICES = (
+        ('true', 'Sim'),
+        ('false', 'Não'),
+    )
+    signature_data = forms.CharField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = MedicalRecord
         exclude = ['adventurer', 'created_at', 'updated_at']
@@ -170,6 +176,10 @@ class MedicalRecordForm(DraftModelForm):
         cleaned = super().clean()
         if self.save_draft:
             return cleaned
+        for field_name in ('has_health_plan', 'allergies', 'uses_medication'):
+            value = cleaned.get(field_name)
+            if value not in (True, False):
+                self.add_error(field_name, 'Informe sim ou não.')
         if cleaned.get('has_health_plan') not in (True, False):
             self.add_error('has_health_plan', 'Informe se possui plano de saúde.')
         if cleaned.get('allergies') not in (True, False):
@@ -185,6 +195,17 @@ class MedicalRecordForm(DraftModelForm):
         if not cleaned.get('signature_data'):
             self.add_error('signature_data', 'Assine a ficha médica.')
         return cleaned
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name in ('has_health_plan', 'allergies', 'uses_medication'):
+            self.fields[field_name] = forms.TypedChoiceField(
+                choices=self.YES_NO_CHOICES,
+                coerce=lambda value: None if value in (None, '') else value == 'true',
+                required=not self.save_draft,
+                widget=forms.RadioSelect(attrs={'class': 'radio-group'}),
+                label=self.fields[field_name].label,
+            )
 
 
 class ImageTermForm(DraftModelForm):

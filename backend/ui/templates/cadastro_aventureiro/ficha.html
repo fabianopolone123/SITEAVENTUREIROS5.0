@@ -62,17 +62,24 @@
 
     <div class="section-card">
       <h4>Declaração e assinatura</h4>
+      <p class="declaration-note">
+        Atesto serem <strong>verdadeiras</strong> todas as informações médicas preenchidas e me responsabilizo por quaisquer acidentes que venham a ocorrer em decorrência do não informe de problemas médicos de qualquer natureza.
+      </p>
       <div class="field-grid">
-        {{ form.declaration_accepted }} {{ form.declaration_accepted.label_tag }}
+        <label class="declaration-label">
+          {{ form.declaration_accepted }}
+          {{ form.declaration_accepted.label_tag }}
+          <span class="declaration-status" data-declaration-status>Não confirmado</span>
+        </label>
       </div>
       {{ form.signature_data }}
-    <div class="signature-area">
-      <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
-      <div class="signature-tools">
-        <span>Assine para validar a ficha médica</span>
-        <button type="button" data-clear-target>Limpar</button>
+      <div class="signature-area">
+        <canvas class="signature-layer" data-signature-target="id_signature_data"></canvas>
+        <div class="signature-tools">
+          <span>Assine para validar a ficha médica</span>
+          <button type="button" data-clear-target>Limpar</button>
+        </div>
       </div>
-    </div>
     </div>
 
     <div class="actions">
