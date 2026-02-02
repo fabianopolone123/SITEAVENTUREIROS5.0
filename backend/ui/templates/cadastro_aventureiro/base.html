@@ -9,39 +9,45 @@
 </head>
 <body>
   <div class="cadastro-shell">
-    <div class="summary-stack">
-      <div class="summary-states">
-        <span>Responsável: <span class="status-badge">{{ status.responsible }}</span></span>
-        {% for adv in status.adventurers %}
-          <span>{{ adv.name }} → Dados {{ adv.data }}, Ficha {{ adv.medical }}, Termo {{ adv.term }}</span>
-        {% empty %}
-          <span class="info-pill">Nenhum aventureiro cadastrado ainda</span>
+    {% if current_step == 'tipo' %}
+      <div class="wizard-progress">
+        <div class="step is-current">Escolha do cadastro</div>
+      </div>
+    {% else %}
+      <div class="summary-stack">
+        <div class="summary-states">
+          <span>Responsável: <span class="status-badge">{{ status.responsible }}</span></span>
+          {% for adv in status.adventurers %}
+            <span>{{ adv.name }} → Dados {{ adv.data }}, Ficha {{ adv.medical }}, Termo {{ adv.term }}</span>
+          {% empty %}
+            <span class="info-pill">Nenhum aventureiro cadastrado ainda</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="wizard-progress">
+        {% for step_id, step_label in steps %}
+          {% with classes='step' %}
+            {% if forloop.counter0 < current_index %}
+              {% with classes=classes|add:' is-complete' %}{% endwith %}
+            {% elif forloop.counter0 == current_index %}
+              {% with classes=classes|add:' is-current' %}{% endwith %}
+            {% endif %}
+            <div class="{{ classes }}">{{ step_label }}</div>
+          {% endwith %}
         {% endfor %}
       </div>
-    </div>
 
-    <div class="wizard-progress">
-      {% for step_id, step_label in steps %}
-        {% with classes='step' %}
-          {% if forloop.counter0 < current_index %}
-            {% with classes=classes|add:' is-complete' %}{% endwith %}
-          {% elif forloop.counter0 == current_index %}
-            {% with classes=classes|add:' is-current' %}{% endwith %}
-          {% endif %}
-          <div class="{{ classes }}">{{ step_label }}</div>
-        {% endwith %}
-      {% endfor %}
-    </div>
-
-    {% if pendings %}
-      <div class="summary-stack">
-        <h3>Pendências detectadas</h3>
-        <ul>
-          {% for pending in pendings %}
-            <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
-          {% endfor %}
-        </ul>
-      </div>
+      {% if pendings %}
+        <div class="summary-stack">
+          <h3>Pendências detectadas</h3>
+          <ul>
+            {% for pending in pendings %}
+              <li><strong>{{ pending.section }}:</strong> {{ pending.items|join:', ' }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
     {% endif %}
 
     <div class="stage-content">
