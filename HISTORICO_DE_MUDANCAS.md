@@ -302,3 +302,146 @@ ield-error e o novo layout dos card/responsÃ¡vel com destaque vermelho suave q
 #### ☑️ Impacto / Observações
 - Usuários responsáveis agora chegam a um painel completo com menu “Meus Dados”, cards de status e atalhos para editar cadastros e acessar fichas médicas/termos; demais perfis observam mensagem de aguardando liberação.
 
+
+---
+
+### 🐞 Alteração Nº 0068
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** bugfix  
+
+#### 🐞 Contexto
+> O dashboard do responsável quebrava por usar operadores `or` diretamente no template, o que o Django não aceita.
+
+#### ⚙️ O que foi feito
+- Substituí as expressões que tentavam usar `or` para mostrar o nome do responsável e os números de documento por blocos `if/elif/else`, garantindo que o parser consiga renderizar mesmo sem dados opcionais.
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/dashboard/responsavel.html
+
+#### ⚠️ Relacionado a
+- bugfix: dashboard responsavel
+
+#### ☑️ Impacto / Observações
+- O painel carrega com segurança, exibindo mensagens padrão quando campos ainda não foram preenchidos.
+
+
+---
+
+### 🎯 Alteração Nº 0069
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### 🎯 Contexto
+> O painel do responsável precisava manter o mesmo visual da tela de login, ganhar um layout base reutilizável, sidebar enxuta e rotas separadas para Dashboard e Meus Dados.
+
+#### ⚙️ O que foi feito
+- Criei `painel/base.html` e o CSS `panel.css` para replicar o gradiente, tipografia, cards e botões do login em todo o painel.
+- Substituí o antigo fluxo único por duas views (`painel_dashboard` e `painel_meus_dados`) com rotas `/painel/` e `/painel/meus-dados/`, garantindo que o login redirecione inicialmente ao Dashboard.
+- Reescrevi os templates `painel/dashboard.html` e `painel/meus_dados.html` para mostrar os cards, o seletor de pessoas e as chamadas para edição/documentos, mantendo sidebar fixa apenas com Dashboard e Meus Dados.
+
+#### 📁 Arquivos afetados
+- HISTORICO_DE_MUDANCAS.md
+- backend/ui/views.py
+- backend/ui/urls.py
+- backend/ui/templates/painel/base.html
+- backend/ui/templates/painel/dashboard.html
+- backend/ui/templates/painel/meus_dados.html
+- backend/ui/static/css/panel.css
+
+#### ⚠️ Relacionado a
+- refactor: painel responsavel
+
+#### ☑️ Impacto / Observações
+- O painel agora usa o mesmo design do login, rotas distintas e um layout reutilizável com sidebar fixa e conteúdo atualizado.
+
+
+---
+
+### 🎨 Alteração Nº 0070
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### 🎨 Contexto
+> Refaça completamente a UI do painel para torná-lo um layout de aplicação com sidebar fixa, base reutilizável e visual moderno, mantendo apenas duas rotas (Dashboard e Meus Dados).
+
+#### ⚙️ O que foi feito
+- Criei `painel/base.html` com sidebar fixa, bloco “Perfil” e conteúdo em destaque, usando apenas o novo tema `panel.css` (gradientes escuros, cards volumosos e botões modernos).
+- Reescrevi os templates `painel/dashboard.html` e `painel/meus_dados.html` para separar as páginas, simplificar o dashboard a uma saudação e manter Meus Dados com seletor, cards e acessos a documentos.
+- Atualizei as views para direcionar o login a `/painel/`, manter `painel_dashboard`/`painel_meus_dados`, e entregar o novo contexto com dados de aventureiros e documentos.
+
+#### 📁 Arquivos afetados
+- HISTORICO_DE_MUDANCAS.md
+- backend/ui/views.py
+- backend/ui/urls.py
+- backend/ui/templates/painel/base.html
+- backend/ui/templates/painel/dashboard.html
+- backend/ui/templates/painel/meus_dados.html
+- backend/ui/static/css/panel.css
+
+#### ⚠️ Relacionado a
+- refactor: painel responsavel
+
+#### ☑️ Impacto / Observações
+- O painel agora é um app layout fixo com sidebar e perfil, o dashboard é minimalista, Meus Dados exibe os dados organizados e o tema reforça a identidade visual moderna do sistema.
+
+
+---
+
+### 🎨 Alteração Nº 0071
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### 🎨 Contexto
+> O painel precisava seguir o padrão visual do login com palette azul claro, sidebar branca fixa e interface mais leve/infantil, simplificando o dashboard e mantendo Meus Dados funcional.
+
+#### ⚙️ O que foi feito
+- Redefini `panel.css` com variáveis como `--brand-50`, `--brand-500` e botões suaves, sombras leves e cards arredondados, criando um novo tema infantil do painel.
+- Atualizei `painel/base.html` para mostrar o logo no topo da sidebar, o bloco “Perfil/Responsável”, menu branco fixo e remover quaisquer estilos antigos que centralizavam o layout.
+- Garanti que as páginas `painel/dashboard.html` e `painel/meus_dados.html` reutilizem o template base e exibam o conteúdo reduzido (saudação mínima) e os cards organizados, mantendo links de edição e documentos.
+
+#### 📁 Arquivos afetados
+- HISTORICO_DE_MUDANCAS.md
+- backend/ui/templates/painel/base.html
+- backend/ui/templates/painel/dashboard.html
+- backend/ui/templates/painel/meus_dados.html
+- backend/ui/static/css/panel.css
+
+#### ⚠️ Relacionado a
+- refactor: painel responsavel
+
+#### ☑️ Impacto / Observações
+- O painel agora parece parte do mesmo site (mesma paleta azul clara), a sidebar fica branca e fixa com bloco de perfil e os botões/documentos seguem o novo tema suave.
+
+
+---
+
+### 🛠️ Alteração Nº 0072
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🛠️ Contexto
+> “Meus Dados” precisa ser um único fluxo inline, com blocos expansíveis de responsável e aventureiros que mostram os campos por linha e permitem editar tudo no mesmo painel.
+
+#### ⚙️ O que foi feito
+- Incluí `PanelResponsibleForm` e `PanelAdventurerForm`, tratei submissões via POST dentro de `painel_meus_dados` e mantive a validação já existente dos formulários de cadastro.
+- Refatorei `painel/meus_dados.html` para manter somente os botões de pessoa, mostrar as linhas de dados e permitir que o botão “Editar” habilite inputs inline, com “Salvar/Cancelar” e placeholders para ficha médica/termo.
+- Atualizei `panel.css` com as classes `.line`, `.line-input`, `.panel-message` e o estado `.is-editing` para que o painel azul claro exiba os campos num layout leve, organizado e pronto para edição inline.
+
+#### 📁 Arquivos afetados
+- HISTORICO_DE_MUDANCAS.md
+- backend/ui/forms/panel.py
+- backend/ui/views.py
+- backend/ui/templates/painel/meus_dados.html
+- backend/ui/static/css/panel.css
+
+#### ⚠️ Relacionado a
+- feature: painel responsavel
+
+#### ☑️ Impacto / Observações
+- Agora o responsável e cada aventureiro expandem as informações na mesma tela, permitem edição de todos os campos simultaneamente via POST e mantêm os botões de documentos prontos para receber o comportamento futuro.
+

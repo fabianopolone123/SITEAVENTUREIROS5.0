@@ -1,0 +1,275 @@
+{% extends 'painel/base.html' %}
+
+{% block title %}Painel do Responsável | Meus Dados{% endblock %}
+
+{% block content %}
+  {% if messages %}
+    <div class="panel-card panel-message">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <section class="panel-section">
+    <h3>Meus Dados</h3>
+    <div class="panel-selector">
+      <button class="selector-btn {% if selected_person == 'responsavel' %}is-active{% endif %}" data-person-trigger="responsavel">
+        Responsável
+      </button>
+      {% for profile in adventurer_profiles %}
+        <button class="selector-btn {% if selected_person == profile.key %}is-active{% endif %}" data-person-trigger="{{ profile.key }}">
+          {{ profile.adventurer.name }}
+        </button>
+      {% endfor %}
+    </div>
+  </section>
+
+  <form method="post" class="panel-card person-panel {% if selected_person == 'responsavel' %}is-visible{% endif %}" data-person-detail="responsavel">
+    {% csrf_token %}
+    <input type="hidden" name="actor" value="responsavel">
+    <h4>Responsável</h4>
+    <div class="line">
+      <span class="line-label">Pai</span>
+      <span class="line-display">{{ responsible.father_name }}</span>
+      <input class="line-input" name="father_name" value="{{ responsible.father_name|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">CPF do pai</span>
+      <span class="line-display">{{ responsible.father_cpf }}</span>
+      <input class="line-input" name="father_cpf" value="{{ responsible.father_cpf|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">E-mail do pai</span>
+      <span class="line-display">{{ responsible.father_email }}</span>
+      <input class="line-input" name="father_email" value="{{ responsible.father_email|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Celular do pai</span>
+      <span class="line-display">{{ responsible.father_phone }}</span>
+      <input class="line-input" name="father_phone" value="{{ responsible.father_phone|default:'' }}">
+    </div>
+
+    <div class="line">
+      <span class="line-label">Mãe</span>
+      <span class="line-display">{{ responsible.mother_name }}</span>
+      <input class="line-input" name="mother_name" value="{{ responsible.mother_name|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">CPF da mãe</span>
+      <span class="line-display">{{ responsible.mother_cpf }}</span>
+      <input class="line-input" name="mother_cpf" value="{{ responsible.mother_cpf|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">E-mail da mãe</span>
+      <span class="line-display">{{ responsible.mother_email }}</span>
+      <input class="line-input" name="mother_email" value="{{ responsible.mother_email|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Celular da mãe</span>
+      <span class="line-display">{{ responsible.mother_phone }}</span>
+      <input class="line-input" name="mother_phone" value="{{ responsible.mother_phone|default:'' }}">
+    </div>
+
+    <div class="line">
+      <span class="line-label">Responsável legal</span>
+      <span class="line-display">{{ responsible.legal_name }}</span>
+      <input class="line-input" name="legal_name" value="{{ responsible.legal_name|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Parentesco</span>
+      <span class="line-display">{{ responsible.legal_relationship }}</span>
+      <input class="line-input" name="legal_relationship" value="{{ responsible.legal_relationship|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">CPF do responsável</span>
+      <span class="line-display">{{ responsible.legal_cpf }}</span>
+      <input class="line-input" name="legal_cpf" value="{{ responsible.legal_cpf|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">E-mail do responsável</span>
+      <span class="line-display">{{ responsible.legal_email }}</span>
+      <input class="line-input" name="legal_email" value="{{ responsible.legal_email|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Celular do responsável</span>
+      <span class="line-display">{{ responsible.legal_phone }}</span>
+      <input class="line-input" name="legal_phone" value="{{ responsible.legal_phone|default:'' }}">
+    </div>
+
+    <div class="line">
+      <span class="line-label">RG/CIN</span>
+      <span class="line-display">{{ responsible.rg_or_cin }}</span>
+      <input class="line-input" name="rg_or_cin" value="{{ responsible.rg_or_cin|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Nacionalidade</span>
+      <span class="line-display">{{ responsible.nationality }}</span>
+      <input class="line-input" name="nationality" value="{{ responsible.nationality|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Estado civil</span>
+      <span class="line-display">{{ responsible.marital_status }}</span>
+      <input class="line-input" name="marital_status" value="{{ responsible.marital_status|default:'' }}">
+    </div>
+
+    <div class="line">
+      <span class="line-label">Endereço</span>
+      <span class="line-display">{{ responsible.address_line }}, {{ responsible.address_number }}</span>
+      <input class="line-input" name="address_line" value="{{ responsible.address_line|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Número</span>
+      <span class="line-display">{{ responsible.address_number }}</span>
+      <input class="line-input" name="address_number" value="{{ responsible.address_number|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Bairro/Cidade</span>
+      <span class="line-display">{{ responsible.neighborhood }} • {{ responsible.city }}</span>
+      <input class="line-input" name="neighborhood" value="{{ responsible.neighborhood|default:'' }}">
+      <input class="line-input" name="city" value="{{ responsible.city|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Estado/CEP</span>
+      <span class="line-display">{{ responsible.state }} • {{ responsible.cep }}</span>
+      <input class="line-input" name="state" value="{{ responsible.state|default:'' }}">
+      <input class="line-input" name="cep" value="{{ responsible.cep|default:'' }}">
+    </div>
+    <div class="line">
+      <span class="line-label">Declaração assinada?</span>
+      <span class="line-display">{% if responsible.declaration_accepted %}Sim{% else %}Não{% endif %}</span>
+      <select class="line-input" name="declaration_accepted">
+        <option value="True" {% if responsible.declaration_accepted %}selected{% endif %}>Sim</option>
+        <option value="False" {% if not responsible.declaration_accepted %}selected{% endif %}>Não</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="secondary-btn edit-toggle">Editar</button>
+      <button type="submit" class="primary-btn save-btn">Salvar</button>
+      <button type="button" class="secondary-btn cancel-btn">Cancelar</button>
+    </div>
+  </form>
+
+  {% for profile in adventurer_profiles %}
+    <form method="post" class="panel-card person-panel {% if selected_person == profile.key %}is-visible{% endif %}" data-person-detail="{{ profile.key }}">
+      {% csrf_token %}
+      <input type="hidden" name="actor" value="{{ profile.key }}">
+      <h4>{{ profile.adventurer.name }}</h4>
+      <div class="line">
+        <span class="line-label">Sexo</span>
+        <span class="line-display">{{ profile.adventurer.get_sex_display }}</span>
+        <input class="line-input" name="sex" value="{{ profile.adventurer.sex|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Nome completo</span>
+        <span class="line-display">{{ profile.adventurer.name }}</span>
+        <input class="line-input" name="name" value="{{ profile.adventurer.name|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Data de nascimento</span>
+        <span class="line-display">{{ profile.adventurer.birth_date }}</span>
+        <input class="line-input" name="birth_date" value="{{ profile.adventurer.birth_date|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Série / Ano</span>
+        <span class="line-display">{{ profile.adventurer.grade_year }}</span>
+        <input class="line-input" name="grade_year" value="{{ profile.adventurer.grade_year|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Colégio</span>
+        <span class="line-display">{{ profile.adventurer.school }}</span>
+        <input class="line-input" name="school" value="{{ profile.adventurer.school|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Documento principal</span>
+        <span class="line-display">{{ profile.adventurer.get_document_type_display }}</span>
+        <input class="line-input" name="document_type" value="{{ profile.adventurer.document_type|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Número do documento</span>
+        <span class="line-display">{{ profile.document_number }}</span>
+        <input class="line-input" name="certificate_number" value="{{ profile.adventurer.certificate_number|default:'' }}">
+        <input class="line-input" name="rg_number" value="{{ profile.adventurer.rg_number|default:'' }}">
+        <input class="line-input" name="rg_issuer" value="{{ profile.adventurer.rg_issuer|default:'' }}">
+        <input class="line-input" name="cin_number" value="{{ profile.adventurer.cin_number|default:'' }}">
+        <input class="line-input" name="cpf_number" value="{{ profile.adventurer.cpf_number|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Religião</span>
+        <span class="line-display">{{ profile.adventurer.religion }}</span>
+        <input class="line-input" name="religion" value="{{ profile.adventurer.religion|default:'' }}">
+      </div>
+      <div class="line">
+        <span class="line-label">Endereço</span>
+        <span class="line-display">
+          {% if profile.adventurer.use_responsible_address %}
+            Usa endereço do responsável
+          {% else %}
+            {{ profile.adventurer.address_line }} • {{ profile.adventurer.city }}
+          {% endif %}
+        </span>
+        <select class="line-input" name="use_responsible_address">
+          <option value="True" {% if profile.adventurer.use_responsible_address %}selected{% endif %}>Usar endereço do responsável</option>
+          <option value="False" {% if not profile.adventurer.use_responsible_address %}selected{% endif %}>Usar endereço próprio</option>
+        </select>
+        <input class="line-input" name="address_line" value="{{ profile.adventurer.address_line|default:'' }}">
+        <input class="line-input" name="neighborhood" value="{{ profile.adventurer.neighborhood|default:'' }}">
+        <input class="line-input" name="city" value="{{ profile.adventurer.city|default:'' }}">
+        <input class="line-input" name="state" value="{{ profile.adventurer.state|default:'' }}">
+        <input class="line-input" name="cep" value="{{ profile.adventurer.cep|default:'' }}">
+      </div>
+      <div class="documents-section">
+        <div class="document-actions">
+          <a class="secondary-btn" href="#">Ficha Médica</a>
+          <a class="secondary-btn" href="#">Termo de Imagem</a>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="secondary-btn edit-toggle">Editar</button>
+        <button type="submit" class="primary-btn save-btn">Salvar</button>
+        <button type="button" class="secondary-btn cancel-btn">Cancelar</button>
+      </div>
+    </form>
+  {% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleEdit = (form, editing) => {
+        if (editing) {
+          form.classList.add('is-editing');
+        } else {
+          form.classList.remove('is-editing');
+          form.reset();
+        }
+      };
+
+      document.querySelectorAll('.edit-toggle').forEach(button => {
+        button.addEventListener('click', () => {
+          const form = button.closest('form');
+          toggleEdit(form, true);
+        });
+      });
+
+      document.querySelectorAll('.cancel-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const form = button.closest('form');
+          toggleEdit(form, false);
+        });
+      });
+
+      document.querySelectorAll('.selector-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const key = button.dataset.personTrigger;
+          document.querySelectorAll('[data-person-detail]').forEach(panel => {
+            panel.classList.toggle('is-visible', panel.dataset.personDetail === key);
+          });
+          document.querySelectorAll('.selector-btn').forEach(btn => btn.classList.toggle('is-active', btn === button));
+        });
+      });
+    });
+  </script>
+{% endblock %}

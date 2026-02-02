@@ -17,6 +17,7 @@ from backend.ui.forms.cadastro import (
     MedicalRecordForm,
     ResponsibleForm,
 )
+from backend.ui.forms.panel import PanelAdventurerForm, PanelResponsibleForm
 
 WIZARD_STEPS = [
     ('tipo', 'Escolha do cadastro'),
@@ -45,27 +46,13 @@ def login_page(request):
             messages.success(request, 'Bem-vindo de volta! Agora você pode continuar a gestão dos cadastros.')
             responsible = get_responsible_for_user(user)
             if responsible:
-                return redirect('dashboard-responsavel')
-            return redirect('dashboard-gen')
+                return redirect('painel-dashboard')
+            return redirect('cadastro-aventureiro-tipo')
         messages.error(request, 'Credenciais inválidas. Verifique usuário e senha.')
     return render(request, 'login.html')
 
 
-@login_required
-def dashboard_responsavel(request):
-    responsible = get_responsible_for_user(request.user)
-    if not responsible:
-        messages.info(request, 'Ainda não há dados de responsável vinculados a este usuário.')
-        return redirect('dashboard-gen')
-
-    selected = request.GET.get('selected', 'responsavel')
-    adventurer_id = request.GET.get('adventurer_id')
-    selected_person = 'responsavel'
-    if selected == 'adventurer' and adventurer_id:
-        exists = responsible.adventurers.filter(pk=adventurer_id).exists()
-        if exists:
-            selected_person = f'adventurer-{adventurer_id}'
-
+def build_panel_context(responsible):
     adventurer_profiles = []
     for adventurer in responsible.adventurers.all():
         try:
@@ -76,6 +63,12 @@ def dashboard_responsavel(request):
             term = adventurer.image_term
         except ImageReleaseTerm.DoesNotExist:
             term = None
+        doc_number = (
+            adventurer.certificate_number
+            or adventurer.rg_number
+            or adventurer.cin_number
+            or adventurer.cpf_number
+        )
         adventurer_profiles.append({
             'adventurer': adventurer,
             'key': f'adventurer-{adventurer.pk}',
@@ -85,26 +78,64 @@ def dashboard_responsavel(request):
             'term_status': 'Assinado' if term and term.is_complete() else 'Pendente',
             'term_class': 'success' if term and term.is_complete() else 'warning',
             'term_pending': term.pending_fields() if term else [],
+            'document_number': doc_number,
         })
-
     status_payload = get_status_payload(responsible)
     pendings = get_pending_items(responsible)
     welcome_name = responsible.legal_name or responsible.legal_type.title() or 'Responsável'
-
-    context = {
+    return {
         'responsible': responsible,
         'adventurer_profiles': adventurer_profiles,
         'status': status_payload,
         'pendings': pendings,
-        'selected_person': selected_person,
         'welcome_name': welcome_name,
+        'responsible_complete': responsible.is_complete(),
     }
-    return render(request, 'dashboard/responsavel.html', context)
 
 
 @login_required
-def dashboard_generic(request):
-    return render(request, 'dashboard/generic.html', {'user': request.user})
+def painel_dashboard(request):
+    responsible = get_responsible_for_user(request.user)
+    if not responsible:
+        messages.info(request, 'Ainda não há dados de responsável vinculados a este usuário.')
+        return redirect('cadastro-aventureiro-tipo')
+    context = build_panel_context(responsible)
+    context['active_page'] = 'dashboard'
+    return render(request, 'painel/dashboard.html', context)
+
+
+@login_required
+def painel_meus_dados(request):
+    responsible = get_responsible_for_user(request.user)
+    if not responsible:
+        messages.info(request, 'Ainda não há dados de responsável vinculados a este usuário.')
+        return redirect('cadastro-aventureiro-tipo')
+    selected = request.GET.get('selected', 'responsavel')
+    selected_person = 'responsavel'
+    if selected.startswith('adventurer-'):
+        exists = responsible.adventurers.filter(pk=selected.split('-')[-1]).exists()
+        if exists:
+            selected_person = selected
+    context = build_panel_context(responsible)
+    if request.method == 'POST':
+        actor = request.POST.get('actor')
+        if actor == 'responsavel':
+            form = PanelResponsibleForm(request.POST, instance=responsible)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Dados do responsável atualizados.')
+                return redirect('painel-meus-dados')
+        elif actor and actor.startswith('adventurer-'):
+            pk = actor.split('-')[-1]
+            adventurer = get_object_or_404(Adventurer, pk=pk, responsible=responsible)
+            form = PanelAdventurerForm(request.POST, instance=adventurer)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f'Dados de {adventurer.name} atualizados.')
+                return redirect('painel-meus-dados')
+    context['active_page'] = 'meus_dados'
+    context['selected_person'] = selected_person
+    return render(request, 'painel/meus_dados.html', context)
 
 
 def wizard_context(request, responsible, current_step, extra=None):

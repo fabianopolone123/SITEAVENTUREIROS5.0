@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Painel do Responsável{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/panel.css' %}">
+</head>
+<body>
+  <div class="panel-shell">
+    <aside class="panel-sidebar">
+      <div class="sidebar-logo">
+        <img src="{% static 'images/logo.png' %}" alt="Logo Clube">
+        <span class="logo-text">Clube Aventureiros</span>
+      </div>
+      <div class="profile-block">
+        <span class="profile-title">Perfil</span>
+        <span class="profile-role">Responsável</span>
+        <span class="profile-name">{{ request.user.username }}</span>
+      </div>
+      <nav class="sidebar-menu">
+        <a class="menu-item {% if active_page == 'dashboard' %}is-active{% endif %}" href="{% url 'painel-dashboard' %}">
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-item {% if active_page == 'meus_dados' %}is-active{% endif %}" href="{% url 'painel-meus-dados' %}">
+          <span>Meus Dados</span>
+        </a>
+      </nav>
+    </aside>
+    <section class="panel-content">
+      <main class="panel-main">
+        {% block content %}{% endblock %}
+      </main>
+    </section>
+  </div>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
