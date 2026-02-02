@@ -357,7 +357,33 @@ ield-error e o novo layout dos card/responsÃ¡vel com destaque vermelho suave q
 - O painel agora usa o mesmo design do login, rotas distintas e um layout reutilizável com sidebar fixa e conteúdo atualizado.
 
 
----
+--- 
+
+### 🐳 Alteração Nº 0073
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** infra  
+
+#### 🐳 Contexto
+> O próximo passo é empacotar o Django em Docker para subir no VPS e manter deploys contínuos sem perder dados de produção.
+
+#### ⚙️ O que foi feito
+- Criei `Dockerfile` (dependências, collectstatic, gunicorn) e `.dockerignore`, além de `requirements.txt` consolidado com Django, gunicorn e suporte a Postgres/env.
+- Adicionei `docker-compose.prod.yml` com serviços `web` e `db`, mais volume persistente; `scripts/deploy.sh` automatiza rebuild+run em qualquer servidor.
+
+#### 📁 Arquivos afetados
+- HISTORICO_DE_MUDANCAS.md
+- Dockerfile
+- .dockerignore
+- requirements.txt
+- docker-compose.prod.yml
+- scripts/deploy.sh
+
+#### ⚠️ Relacionado a
+- infra: containerização
+
+#### ☑️ Impacto / Observações
+- Agora você tem toda a base para construir a imagem, subir no VPS com Postgres e continuar fazendo deploys incrementais sem apagar os dados que ficam num volume externo.
 
 ### 🎨 Alteração Nº 0070
 **Data:** 2026-02-02  
