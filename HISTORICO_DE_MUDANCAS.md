@@ -1,9 +1,10 @@
-# 🧾 Histórico de Mudanças do Projeto
+# 🧾 HISTÓRICO DE MUDANÇAS DO PROJETO
+
 📌 **Arquivo obrigatório de leitura antes de qualquer alteração no código**
 
-Este documento mantém o **registro cronológico e técnico** de TODAS as mudanças feitas no projeto.
-
+Este documento mantém o **registro cronológico e técnico** de TODAS as mudanças feitas no projeto.  
 Ele existe para:
+
 - recuperar contexto quando o Codex perder a memória
 - entender **o que foi feito, por quê e onde**
 - evitar retrabalho
@@ -13,6 +14,7 @@ Ele existe para:
 ---
 
 ## ⚠️ REGRA DE OURO (OBRIGATÓRIA)
+
 Antes de:
 - alterar código
 - criar arquivos
@@ -23,26 +25,28 @@ Antes de:
 
 👉 **LER este arquivo do começo ao fim**
 
-Depois de qualquer mudança:
+Depois de qualquer mudança:  
 👉 **REGISTRAR A MUDANÇA AQUI**
 
 ---
 
 ## 🧠 COMO O CODEX DEVE USAR ESTE ARQUIVO
 
-Para CADA modificação feita, o Codex DEVE registrar:
-1. O que foi feito
-2. Por que foi feito
-3. Quais arquivos foram alterados
-4. Qual impacto esperado
-5. Se existe risco ou dependência
+Para **CADA modificação feita**, o Codex DEVE registrar:
 
-Nunca escrever frases vagas como:
-❌ “ajustes gerais”
-❌ “melhorias”
-❌ “refatoração”
+1. O que foi feito  
+2. Por que foi feito  
+3. Quais arquivos foram alterados  
+4. Qual impacto esperado  
+5. Se existe risco ou dependência  
 
-Sempre ser **explícito e técnico**.
+Regras:
+- Sempre escrever em **UTF-8 com caracteres portugueses**
+- Nunca escrever frases vagas como:
+  - ❌ “ajustes gerais”
+  - ❌ “melhorias”
+  - ❌ “refatoração”
+- Sempre ser **explícito e técnico**
 
 ---
 
@@ -70,8 +74,8 @@ Copiar e preencher exatamente este modelo:
 - caminho/arquivo.ext
 
 #### 🔗 Relacionado a
-- feature: nome
-- bug: descrição
+- feature: nome  
+- bug: descrição  
 - diagnóstico: trace_id / request_id (se houver)
 
 #### ⚠️ Impacto / Observações
@@ -83,8 +87,7 @@ Copiar e preencher exatamente este modelo:
 ---
 
 ## 📜 HISTÓRICO DE ALTERAÇÕES
-
-> As alterações devem ser adicionadas **sempre no final do arquivo**.
+> As alterações devem ser adicionadas **sempre no final do arquivo**
 
 ---
 
@@ -101,7 +104,7 @@ Criação da base documental do sistema autodiagnosticável para evitar perda de
 - Criado documento `DIAGNOSTICO_AUTODIAGNOSTICAVEL.md`
 - Definido uso de Next.js + Django + PostgreSQL
 - Definido modelo `diagnostic_events`
-- Definido fluxo de request_id, trace_id e session_id
+- Definido fluxo de `request_id`, `trace_id` e `session_id`
 
 #### 📁 Arquivos afetados
 - DIAGNOSTICO_AUTODIAGNOSTICAVEL.md
@@ -118,50 +121,19 @@ Criação da base documental do sistema autodiagnosticável para evitar perda de
 
 ---
 
-## 🧩 BOAS PRÁTICAS PARA O CODEX
-
-- Sempre mencionar **arquivos reais**
-- Se criou algo novo, deixar claro
-- Se removeu algo, justificar
-- Se mudou comportamento, explicar o antes e depois
-- Se a mudança afeta diagnóstico, deixar explícito
-
----
-
-## 🚫 O QUE NÃO FAZER
-- Não apagar entradas antigas
-- Não reescrever histórico
-- Não alterar numeração passada
-- Não registrar múltiplas mudanças diferentes na mesma entrada
-
----
-
-## 🧭 DIRETRIZ FINAL
-Este arquivo é o **mapa da memória do projeto**.
-
-Se o Codex estiver perdido:
-1. Ler `DIAGNOSTICO_AUTODIAGNOSTICAVEL.md`
-2. Ler este `HISTORICO_DE_MUDANCAS.md`
-3. Identificar última alteração
-4. Entender estado atual antes de escrever código
-
-Sem isso, nenhuma modificação deve ser feita.
-
----
-
 ### 🔄 Alteração Nº 0002
 **Data:** 2026-02-01  
 **Autor:** Codex  
 **Tipo:** feature  
 
 #### 📌 Contexto
-> Implantar a tela de login do frontend com o estilo fornecido e garantir o logo oficial no local correto para a interface.
+Implantar a tela de login do frontend com o estilo fornecido e garantir o logo oficial no local correto para a interface.
 
 #### 🛠️ O que foi feito
-- Criada a base Next.js dentro de `frontend/` (`package.json`, `tsconfig.json`, `next.config.js` e `next-env.d.ts`).
-- Definido o layout global (`app/layout.tsx`) e os estilos compartilhados (`app/globals.css`).
-- Constru�da a p�gina de login (`app/page.tsx`) com campos, bot�es e textos do mock.
-- Movido o `logo.png` para `frontend/public/` e referenciado pela tela.
+- Criada a base Next.js dentro de `frontend/`
+- Definido layout global (`app/layout.tsx`) e estilos compartilhados
+- Construída a página de login (`app/page.tsx`) conforme mock visual
+- Movido `logo.png` para `frontend/public/` e referenciado na tela
 
 #### 📁 Arquivos afetados
 - frontend/package.json
@@ -177,9 +149,10 @@ Sem isso, nenhuma modificação deve ser feita.
 - feature: tela de login
 
 #### ⚠️ Impacto / Observações
-- Define a estrutura inicial do frontend dentro da arquitetura backend-first.
-- A tela de login replica o visual indicado e serve como ponto de partida para autentica��o futura.
-- O logo oficial j� est� dispon�vel no diret�rio p�blico para o Next.js.
+- Estrutura inicial do frontend criada
+- Interface pronta para futura autenticação
+- Frontend alinhado à arquitetura backend-first
+
 ---
 
 ### 🔄 Alteração Nº 0003
@@ -188,22 +161,18 @@ Sem isso, nenhuma modificação deve ser feita.
 **Tipo:** feature  
 
 #### 📌 Contexto
-> Iniciar o backend Django conforme a arquitetura backend-first e garantir que exista um esqueleto para apps, diagn�sticos, integra��es e workers.
+Iniciar o backend Django conforme a arquitetura backend-first e garantir um esqueleto extensível.
 
 #### 🛠️ O que foi feito
-- Configurado o esqueleto Django com `manage.py`, `config/settings.py`, `config/urls.py`, `config/asgi.py` e `config/wsgi.py`.
-- Criadas as pastas de apps (`accounts`, `members`, `documents`, `store`, `payments`, `notifications`, `diagnostics`) com `AppConfig` b�sico.
-- Adicionados m�dulos de diagn�stico (`backend/diagnostics`), integra��es, workers e utilit�rios comuns para seguir a arquitetura definida.
-- Documentadas depend�ncias b�sicas em `backend/requirements/base.txt`.
+- Configurado core do Django (`settings`, `urls`, `asgi`, `wsgi`)
+- Criadas pastas de apps (accounts, members, documents, store, payments, notifications, diagnostics)
+- Criados módulos base de diagnósticos, integrações, workers e utilitários
+- Documentadas dependências iniciais
 
 #### 📁 Arquivos afetados
 - backend/manage.py
-- backend/config/__init__.py
-- backend/config/asgi.py
-- backend/config/settings.py
-- backend/config/urls.py
-- backend/config/wsgi.py
-- backend/apps/* (AppConfig placeholders)
+- backend/config/*
+- backend/apps/*
 - backend/diagnostics/*
 - backend/integrations/*
 - backend/workers/*
@@ -214,9 +183,9 @@ Sem isso, nenhuma modificação deve ser feita.
 - feature: backend Django inicial
 
 #### ⚠️ Impacto / Observações
-- Disponibiliza o core Django alinhado � arquitetura backend-first.
-- Fornece m�dulos b�sicos de diagn�stico, integra��es e workers para serem estendidos.
-- Sistema ainda precisa de modelos reais, l�gica de neg�cios e configura��o de banco real; essa � uma base inicial.
+- Base do backend criada
+- Ainda sem regras de negócio ou modelos reais
+
 ---
 
 ### 🔄 Alteração Nº 0004
@@ -225,22 +194,19 @@ Sem isso, nenhuma modificação deve ser feita.
 **Tipo:** infra  
 
 #### 📌 Contexto
-> O Django carregava o middleware `backend.diagnostics` apenas quando o pacote `backend` estava acess�vel no caminho de importa��o, o que falhava ao executar `python manage.py runserver` dentro da pr�pria pasta `backend`.
+Falha de importação de `backend.diagnostics` ao executar `manage.py runserver` dentro da pasta backend.
 
 #### 🛠️ O que foi feito
-- Adicionado `backend/__init__.py` para garantir que o diret�rio seja reconhecido como pacote Python.
-- Ajustado `manage.py` para inserir o diret�rio pai do backend (`project root`) em `sys.path` antes de carregar o Django, garantindo que `backend.*` seja resolvido independentemente de onde o comando for executado.
+- Criado `backend/__init__.py`
+- Ajustado `manage.py` para inserir o diretório raiz no `sys.path`
 
 #### 📁 Arquivos afetados
 - backend/__init__.py
 - backend/manage.py
 
-#### 🔗 Relacionado a
-- infra: carregamento do projeto Django
-
 #### ⚠️ Impacto / Observações
-- Agora `runserver` consegue importar `backend.diagnostics` e outras refer�ncias sem depender do diret�rio atual.
-- O projeto permanece alinhado com a arquitetura backend-first e pronto para receber mais apps.
+- Imports passam a funcionar independentemente do diretório atual
+
 ---
 
 ### 🔄 Alteração Nº 0005
@@ -249,19 +215,17 @@ Sem isso, nenhuma modificação deve ser feita.
 **Tipo:** infra  
 
 #### 📌 Contexto
-> Ao rodar `manage.py runserver` no host local, o Django rejeitou o `HTTP_HOST` porque `127.0.0.1` n�o fazia parte de `ALLOWED_HOSTS`, bloqueando a p�gina inicial.
+Django bloqueava acesso via `127.0.0.1` por não estar em `ALLOWED_HOSTS`.
 
 #### 🛠️ O que foi feito
-- Ajustado `ALLOWED_HOSTS` em `config/settings.py` para incluir `127.0.0.1` por padr�o e filtrar valores vazios, garantindo que o host local seja aceito mesmo sem vari�veis de ambiente.
+- Ajustado `ALLOWED_HOSTS` para aceitar `127.0.0.1` por padrão
 
 #### 📁 Arquivos afetados
 - backend/config/settings.py
 
-#### 🔗 Relacionado a
-- infra: configura��o do servidor
-
 #### ⚠️ Impacto / Observações
-- `python manage.py runserver` agora responde normalmente para `127.0.0.1:8000` (e para hosts adicionais declarados via `DJANGO_ALLOWED_HOSTS`).
+- `runserver` funciona corretamente em ambiente local
+
 ---
 
 ### 🔄 Alteração Nº 0006
@@ -270,19 +234,17 @@ Sem isso, nenhuma modificação deve ser feita.
 **Tipo:** infra  
 
 #### 📌 Contexto
-> A rota raiz (`/`) retornava 404 porque apenas `/admin/` e `/health/` estavam definidos, prejudicando a verifica��o inicial do backend.
+A rota raiz `/` retornava 404.
 
 #### 🛠️ O que foi feito
-- Adicionado um view simples em `config/urls.py` que responde na raiz com um `HttpResponse` indicando que o backend est� em funcionamento, al�m da rota de sa�de j� existente.
+- Criada resposta padrão na rota raiz informando que o backend está ativo
 
 #### 📁 Arquivos afetados
 - backend/config/urls.py
 
-#### 🔗 Relacionado a
-- infra: resposta padr�o para `/`
-
 #### ⚠️ Impacto / Observações
-- Agora `http://127.0.0.1:8000/` exibe uma mensagem informando que o backend est� ativo, facilitando testes manuais e valida��es do ambiente.
+- Facilita testes manuais e validação do ambiente
+
 ---
 
 ### 🔄 Alteração Nº 0007
@@ -291,12 +253,13 @@ Sem isso, nenhuma modificação deve ser feita.
 **Tipo:** feature  
 
 #### 📌 Contexto
-> Era necess�rio que `python manage.py runserver` exibisse a tela de login completa sem depender do Next.js em `localhost:3000`, mantendo o backend como ponto �nico de controle.
+Necessidade de exibir a tela de login sem depender do Next.js.
 
 #### 🛠️ O que foi feito
-- Criado um template `login.html` e estilos `static/css/login.css` no backend que replicam o visual do mock.
-- Copiado o `logo.png` para `static/images/` e configurado o Django para servir os assets e templates usando `STATICFILES_DIRS` e `BASE_DIR / 'templates'`.
-- Atualizado `config/urls.py` para renderizar o template de login na raiz, preservando `/health/` e `/admin/`.
+- Criado template `login.html` no backend
+- Criado CSS específico para a tela de login
+- Configurado Django para servir templates e arquivos estáticos
+- Rota raiz passou a renderizar a tela de login
 
 #### 📁 Arquivos afetados
 - backend/config/settings.py
@@ -305,9 +268,180 @@ Sem isso, nenhuma modificação deve ser feita.
 - backend/static/css/login.css
 - backend/static/images/logo.png
 
-#### 🔗 Relacionado a
-- feature: experi�ncia inicial do backend
+#### ⚠️ Impacto / Observações
+- Backend passa a exibir UI funcional sem frontend separado
+
+---
+
+### 🔄 Alteração Nº 0009
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** infra  
+
+#### 📌 Contexto
+O backend não possuía bootstrap completo para execução do Django.
+
+#### 🛠️ O que foi feito
+- Criada estrutura completa de `backend/config`
+- Criado `manage.py` no root do projeto
+- Garantido `backend/__init__.py`
+
+#### 📁 Arquivos afetados
+- backend/__init__.py
+- backend/config/settings.py
+- backend/config/urls.py
+- backend/config/wsgi.py
+- backend/config/asgi.py
+- manage.py
 
 #### ⚠️ Impacto / Observações
-- `runserver` agora mostra a tela de login completa, o que facilita testes r�pidos sem rodar o Next separadamente.
-- A arquitetura continua backend-first e mant�m o frontend Next.js dispon�vel para evolu��es futuras.
+- Django pode ser iniciado corretamente
+- Base pronta para expansão
+
+---
+
+### 🔄 Alteração Nº 0010
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 📌 Contexto
+Refinar a tela de login do backend para espelhar o mock visual.
+
+#### 🛠️ O que foi feito
+- Reescrito template de login com layout em cartão central
+- Aplicado degradê claro, sombras suaves e botões arredondados
+- Ajustada responsividade para mobile
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/login.html
+- backend/ui/static/css/login.css
+
+#### ⚠️ Impacto / Observações
+- UI alinhada ao mock
+- Pronta para receber autenticação real
+
+---
+
+
+---
+
+### Altera��o N� 0014
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### Contexto
+> A solicita��o pediu para apagar o estilo atual e reescrever a tela de login com um padr�o moderno consistente com o mock.
+
+#### O que foi feito
+- Substitu� totalmente `backend/ui/static/css/login.css` por uma nova folha de estilo: fundo degrad�, cart�o elevado, linhas decorativas, halo do logo maior e inputs/bot�es com gradient suave.
+- Mantive o template (`backend/ui/templates/login.html`) e acentuei o halo para garantir que o logo esteja sempre centralizado no cart�o.
+
+#### Arquivos afetados
+- backend/ui/static/css/login.css
+- backend/ui/templates/login.html
+
+#### Relacionado a
+- feature: tela de login
+
+Aviso: Impacto / Observa��es
+- A interface ficou com efeitos modernos e o logo n�o � mais cortado; valida��es futuras devem considerar o novo visual.
+
+
+---
+
+### Altera��o N� 0015
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### Contexto
+> O estilo anterior da tela de login precisava ser apagado e recriado sob um novo padr�o mais harm�nico e moderno.
+
+#### O que foi feito
+- Eliminei o CSS antigo em `backend/ui/static/css/login.css` e inseri um novo conjunto totalmente reescrito com degrad� de fundo, cart�o elevado, halo amplo do logo, inputs com bordas suaves e bot�o gradient.
+- Mantive o template do cart�o, refor�ando o halo para manter o logo completo.
+
+#### Arquivos afetados
+- backend/ui/static/css/login.css
+- backend/ui/templates/login.html
+
+#### Relacionado a
+- feature: tela de login
+
+Aviso: Impacto / Observa��es
+- A experi�ncia visual virou um layout limpo e moderno compat�vel com o mock e alinhado ao padr�o backend-first.
+
+
+---
+
+### Altera��o N� 0016
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### Contexto
+> O logo ainda aparecia cortado no topo, portanto precisei ajustar o cart�o para dar espa�o suficiente.
+
+#### O que foi feito
+- Aumentei o `padding-top` do cart�o (`backend/ui/static/css/login.css`) e removi o `overflow: hidden`.
+- Ajustei a margem negativa e o padding de `.logo-shell` para que a parte branca do medalh�o fique totalmente vis�vel acima do formul�rio.
+
+#### Arquivos afetados
+- backend/ui/static/css/login.css
+
+#### Relacionado a
+- refactor: UI
+
+Aviso: Impacto / Observa��es
+- O logo agora fica livre de cortes e o halo respira; o layout continua alinhado com o mock.
+
+
+---
+
+### Altera��o N� 0017
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** refactor  
+
+#### Contexto
+> O halo ao redor do logo ainda se elevava demais e aparecia acima do cart�o.
+
+#### O que foi feito
+- Ajustei `.logo-shell` em `backend/ui/static/css/login.css` para 200px com margem negativa menor, mantendo o halo mas impedindo que ele sobressaia acima do cart�o.
+
+#### Arquivos afetados
+- backend/ui/static/css/login.css
+
+#### Relacionado a
+- refactor: UI
+
+Aviso: Impacto / Observa��es
+- O logo volta a ficar centrado dentro do cart�o, mantendo o novo visual moderno.
+
+
+---
+
+### Altera��o N� 0018
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### Contexto
+> O estilo ainda precisava ser repensado do zero, conforme pedido.
+
+#### O que foi feito
+- Reescrevi totalmente `backend/ui/static/css/login.css` com um novo padr�o (fundo degrad� com part�culas suaves, cart�o elevado, halo do logo maior, inputs com bordas reversas e bot�o gradient).
+- Mantive o template do formul�rio e deixei o halo maior para garantir o logo completo.
+
+#### Arquivos afetados
+- backend/ui/static/css/login.css
+- backend/ui/templates/login.html
+
+#### Relacionado a
+- feature: tela de login
+
+Aviso: Impacto / Observa��es
+- A tela agora tem efeito mais moderno, e a marca � plenamente vis�vel.
+

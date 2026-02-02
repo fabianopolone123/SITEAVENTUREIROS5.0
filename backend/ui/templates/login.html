@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clube de Aventureiros | Login</title>
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+  <div class="page-wrapper">
+    <div class="login-card">
+      <span class="accent-line"></span>
+      <span class="accent-line secondary"></span>
+      <div class="logo-shell">
+        <div class="logo-glow">
+          <img src="{% static 'images/logo.png' %}" alt="Logo do Clube de Aventureiros">
+        </div>
+      </div>
+      <p class="tagline">ESPAÇO DO CLUBE</p>
+      <h1>Clube de Aventureiros<br>Pinhal Junior</h1>
+      <form method="post" action="" autocomplete="off">
+        <div class="form-group">
+          <label for="username">Nome de usuário</label>
+          <input id="username" name="username" type="text" placeholder="Digite o seu nome" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="password">Senha secreta</label>
+          <input id="password" name="password" type="password" placeholder="Digite sua senha" autocomplete="current-password">
+        </div>
+        <button class="login-btn" type="submit">Entrar</button>
+      </form>
+      <p class="small-text">novo por aqui?</p>
+      <a class="cta-link" href="#">Cadastre-se</a>
+      <a class="secondary-link" href="#">Esqueci meu usuário ou senha</a>
+    </div>
+  </div>
+</body>
+</html>
