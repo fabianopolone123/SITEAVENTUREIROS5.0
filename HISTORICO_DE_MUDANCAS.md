@@ -632,3 +632,47 @@ Aviso: Impacto / Observações
 
 #### ⚠️ Impacto / Observações
 - Agora é possível ver os alertas pendentes desde a primeira tela, o que ajuda a comunicar as obrigações antes de iniciar o fluxo.
+---
+
+### 🎯 Alteração Nº 0026
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> Após habilitar o destaque visual das etapas, a área de “Pendências detectadas” aparecia apenas quando havia itens e desaparecia totalmente ao limpar o checklist, deixando o topo sem informações.
+
+#### ✅ O que foi feito
+- Mantive o bloco de pendências sempre presente (tanto na etapa de escolha quanto nas demais), exibindo uma mensagem padrão “Nenhuma pendência no momento” quando não há itens, para nunca deixar o topo em branco.
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/base.html
+
+#### 🔗 Relacionado a
+- feature: visibilidade persistente de pendências
+
+#### ⚠️ Impacto / Observações
+- Mesmo que não existam pendências ativas, o usuário vê imediatamente a área de checklist, reforçando os próximos passos sem criar falsos vazios visuais.
+-
+
+---
+
+### 🎯 Alteração Nº 0027
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** feature  
+
+#### 🗂️ Contexto
+> A tela inicial “Escolha do cadastro” voltou a ficar poluída após exibirmos o resumo das pendências e o usuário pediu o layout limpo como o card original.
+
+#### ✅ O que foi feito
+- Mantive o painel de pendências apenas nas demais etapas do wizard, removendo-o da primeira tela para reproduzir o visual compacto de “Escolha do cadastro”, mantendo a lógica de renderizar pendências assim que o usuário sair dessa etapa.
+
+#### 📁 Arquivos afetados
+- backend/ui/templates/cadastro_aventureiro/base.html
+
+#### 🔗 Relacionado a
+- feature: aparências do wizard
+
+#### ⚠️ Impacto / Observações
+- O topo fica limpo na fase inicial, reaparecendo pendências a partir da etapa seguinte, sem perder o checklist quando o usuário estiver preenchendo os formulários.

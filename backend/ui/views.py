@@ -85,7 +85,7 @@ def cadastro_responsavel(request):
             request,
             responsible,
             'responsavel',
-            {'form': form},
+            {'form': form, 'form_errors': form.errors},
         ),
     )
 
@@ -139,6 +139,7 @@ def cadastro_dados_aventureiro(request, pk=None):
         {
             'form': form,
             'adventurer': adventurer,
+            'form_errors': form.errors,
         },
     )
     return render(request, 'cadastro_aventureiro/dados.html', context)
@@ -169,6 +170,7 @@ def cadastro_ficha_medica(request, pk):
         {
             'form': form,
             'adventurer': adventurer,
+            'form_errors': form.errors,
         },
     )
     return render(request, 'cadastro_aventureiro/ficha.html', context)
@@ -206,6 +208,7 @@ def cadastro_termo_imagem(request, pk):
             'form': form,
             'adventurer': adventurer,
             'term_text': TERM_TEXT,
+            'form_errors': form.errors,
         },
     )
     return render(request, 'cadastro_aventureiro/termo.html', context)
