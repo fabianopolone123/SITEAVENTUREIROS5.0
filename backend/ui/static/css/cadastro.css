@@ -587,6 +587,7 @@ body {
 .signature-layer {
   width: 100%;
   height: 180px;
+  touch-action: none;
   border-radius: 12px;
   background: #f4f7ff;
   cursor: crosshair;

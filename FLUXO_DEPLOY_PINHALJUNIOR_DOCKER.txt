@@ -1,0 +1,233 @@
+========================================
+FLUXO DE DEPLOY – PINHALJUNIOR (DOCKER)
+========================================
+
+Este arquivo descreve o processo oficial de atualização do projeto
+Django PINHALJUNIOR rodando em PRODUÇÃO com:
+
+- Docker Compose
+- PostgreSQL em container
+- Gunicorn em container
+- Nginx no host
+- HTTPS com Certbot
+- Static e Media servidos pelo Nginx
+
+⚠️ REGRA DE OURO
+NUNCA editar arquivos do projeto diretamente no VPS.
+Toda alteração DEVE vir via Git (PC → GitHub → VPS).
+
+========================================
+1. VISÃO GERAL DO FLUXO
+========================================
+
+PC LOCAL
+  └─ git add / commit / push
+        └─ GitHub
+              └─ VPS
+                    └─ docker compose pull/build
+                          └─ migrate / collectstatic
+                                └─ containers atualizados
+
+========================================
+2. DEPLOY NO PC LOCAL (DESENVOLVIMENTO)
+========================================
+
+Entrar na pasta do projeto no computador local:
+
+git status
+git add .
+git commit -m "descrição da alteração"
+git push origin main
+
+Verificação antes de subir:
+git status
+git diff
+git diff --staged
+
+========================================
+3. DEPLOY NO VPS (PRODUÇÃO)
+========================================
+
+Entrar no servidor:
+
+ssh root@SEU_IP
+
+Ir para a pasta do projeto:
+
+cd /opt/pinhaljr/SITEAVENTUREIROS5.0
+
+Atualizar código:
+
+git pull origin main
+
+========================================
+4. ATUALIZAR CONTAINERS
+========================================
+
+Sempre que houver alteração no código Python, templates ou settings:
+
+docker compose -f docker-compose.prod.yml up -d --build
+
+Verificar containers:
+
+docker compose -f docker-compose.prod.yml ps
+
+========================================
+5. AÇÕES PÓS-DEPLOY (CONFORME NECESSIDADE)
+========================================
+
+----------------------------------------
+5.1 Alterações em models / banco de dados
+----------------------------------------
+
+docker compose -f docker-compose.prod.yml exec web python manage.py migrate
+
+----------------------------------------
+5.2 Alterações em arquivos estáticos
+----------------------------------------
+
+docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --noinput
+
+----------------------------------------
+5.3 Criar superusuário (uma vez só)
+----------------------------------------
+
+docker compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
+
+========================================
+6. BACKUP DO BANCO (AUTOMÁTICO)
+========================================
+
+Backup diário configurado via cron:
+
+Script:
+ /usr/local/bin/backup_pinhaljunior_db.sh
+
+Destino dos backups:
+ /opt/backups/postgres/
+
+Formato:
+ pinhaljunior_YYYY-MM-DD.sql
+
+Retenção:
+ 14 dias (limpeza automática)
+
+Teste manual:
+ sudo /usr/local/bin/backup_pinhaljunior_db.sh
+
+========================================
+7. VERIFICAÇÕES RÁPIDAS
+========================================
+
+Containers:
+docker compose -f docker-compose.prod.yml ps
+
+Logs da aplicação:
+docker compose -f docker-compose.prod.yml logs --tail=100 web
+
+Django responde localmente:
+curl -I http://127.0.0.1:8000
+
+Site responde externamente:
+curl -I https://pinhaljunior.com.br
+
+Static funcionando:
+curl -I https://pinhaljunior.com.br/static/admin/css/base.css
+
+========================================
+8. O QUE NÃO FAZER
+========================================
+
+❌ NÃO editar arquivos dentro do container
+❌ NÃO rodar migrate sem saber o que mudou
+❌ NÃO apagar volumes Docker sem backup
+❌ NÃO servir static diretamente pelo Django em produção
+❌ NÃO usar chmod aleatório sem entender o impacto
+
+========================================
+9. FLUXO RESUMIDO (COLA E USA)
+========================================
+
+PC LOCAL:
+git add .
+git commit -m update
+git push origin main
+
+VPS:
+cd /opt/pinhaljr/SITEAVENTUREIROS5.0
+git pull
+docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml exec web python manage.py migrate        # se necessário
+docker compose -f docker-compose.prod.yml exec web python manage.py collectstatic --noinput  # se necessário
+
+========================================
+10. STATUS FINAL ESPERADO
+========================================
+
+✔ Código atualizado
+✔ Containers rodando
+✔ PostgreSQL ativo
+✔ Gunicorn ativo
+✔ Nginx servindo static e media
+✔ HTTPS válido
+✔ Backup diário funcionando
+
+
+segue abaixo o conteudo do deploy automatico .sh
+ot@srv1280642:/usr/local/bin#
+root@srv1280642:/usr/local/bin# cat deploy_pinhaljunior_docker.sh
+#!/usr/bin/env bash
+set -euo pipefail
+
+LOCK="/tmp/deploy_pinhaljunior_docker.lock"
+exec 9>"$LOCK"
+if ! flock -n 9; then
+  echo "ERRO: deploy já em execução (lock: $LOCK)"
+  exit 1
+fi
+
+PROJECT_DIR="/opt/pinhaljr/SITEAVENTUREIROS5.0"
+COMPOSE="docker compose -f docker-compose.prod.yml"
+
+require() { command -v "$1" >/dev/null 2>&1 || { echo "ERRO: comando '$1' não encontrado"; exit 1; }; }
+
+require git
+require docker
+require curl
+
+if [[ "$(id -u)" -ne 0 ]]; then
+  echo "ERRO: rode como root (sudo)."
+  exit 1
+fi
+
+cd "$PROJECT_DIR"
+
+echo "==> (1) Git pull"
+git fetch origin
+git reset --hard origin/main
+git clean -fd
+
+echo "==> (2) Subindo containers (build)"
+$COMPOSE up -d --build
+
+echo "==> (3) Status containers"
+$COMPOSE ps
+
+echo "==> (4) Migrate"
+$COMPOSE exec -T web python manage.py migrate
+
+echo "==> (5) Collectstatic"
+$COMPOSE exec -T web python manage.py collectstatic --noinput
+
+echo "==> (6) Health-check local"
+curl -fsS -I http://127.0.0.1:8000 | head -n 10
+
+echo "==> (7) Health-check externo"
+curl -fsS -I https://pinhaljunior.com.br | head -n 10
+
+echo "OK: deploy concluído."
+root@srv1280642:/usr/local/bin#
+
+========================================
+FIM DO ARQUIVO
+========================================

@@ -471,3 +471,27 @@ ield-error e o novo layout dos card/responsÃ¡vel com destaque vermelho suave q
 #### ☑️ Impacto / Observações
 - Agora o responsável e cada aventureiro expandem as informações na mesma tela, permitem edição de todos os campos simultaneamente via POST e mantêm os botões de documentos prontos para receber o comportamento futuro.
 
+---
+
+### ✍️ Alteração Nº 0074
+**Data:** 2026-02-02  
+**Autor:** Codex  
+**Tipo:** bugfix  
+
+#### ✍️ Contexto
+> O canvas de assinatura não estava bloqueando o scroll em telas touch, fazendo a página subir/baixar e impedindo o desenho.
+
+#### ⚙️ O que foi feito
+- Atualizei o script em `cadastro_aventureiro/base.html` para chamar `preventDefault` e usar pointer capture durante o desenho, garantindo que o toque fique preso ao canvas.
+- Adicionei `touch-action: none` à `.signature-layer` em `cadastro.css`, impedindo gestos de scroll/pinch sobre o quadro.
+
+#### 📁 Arquivos afetados
+- HISTORICO_DE_MUDANCAS.md
+- backend/ui/templates/cadastro_aventureiro/base.html
+- backend/ui/static/css/cadastro.css
+
+#### ⚠️ Relacionado a
+- bugfix: assinatura
+
+#### ☑️ Impacto / Observações
+- O formulário de assinatura agora fica fixo no lugar no celular, permitindo desenhar sem que a página role.

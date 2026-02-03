@@ -135,21 +135,26 @@
         ctx.strokeStyle = '#202020';
         ctx.lineWidth = 2.5;
         ctx.lineCap = 'round';
+        canvas.style.touchAction = 'none';
         let drawing = false;
 
         const pointerDown = (event) => {
           drawing = true;
+          event.preventDefault();
           ctx.beginPath();
           ctx.moveTo(event.offsetX, event.offsetY);
+          canvas.setPointerCapture?.(event.pointerId);
         };
         const pointerMove = (event) => {
           if (!drawing) return;
+          event.preventDefault();
           ctx.lineTo(event.offsetX, event.offsetY);
           ctx.stroke();
         };
         const pointerUp = () => {
           if (!drawing) return;
           drawing = false;
+          canvas.releasePointerCapture?.(event.pointerId);
           if (target) {
             target.value = canvas.toDataURL();
           }
@@ -158,6 +163,7 @@
         canvas.addEventListener('pointerdown', pointerDown);
         canvas.addEventListener('pointermove', pointerMove);
         canvas.addEventListener('pointerup', pointerUp);
+        canvas.addEventListener('pointercancel', pointerUp);
         canvas.addEventListener('pointerout', pointerUp);
 
         const parentElement = canvas.parentElement;
